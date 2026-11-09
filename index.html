@@ -234,6 +234,46 @@ textarea{height:auto;padding:10px 12px;resize:vertical;min-height:80px;line-heig
 .wordmark-ar{font-family:"IBM Plex Sans Arabic";color:var(--muted);font-size:20px;margin:6px 0 28px}
 .auth .btn{width:100%;justify-content:center}
 .linkbtn{color:var(--accent);font-size:14px;margin-top:14px}
+
+/* ===== iPhone / touch fixes ===== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button,a,[role=button]{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+/* iOS zooms the page when an input is under 16px — keep all fields at 16px */
+input[type=text],input[type=email],input[type=password],input[type=search],input[type=datetime-local],input[type=date],input[type=time],select,textarea{font-size:16px}
+input.title-input{font-size:20px}
+select.addsel{font-size:16px}
+/* iOS date/time inputs ignore height and overflow their box */
+input[type=date],input[type=datetime-local],input[type=time]{-webkit-appearance:none;appearance:none;display:flex;align-items:center;min-height:40px;line-height:normal;text-align:start}
+input::-webkit-date-and-time-value{text-align:start;margin:0}
+select{-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 16px) 50%,calc(100% - 11px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-inline-end:28px}
+[dir=rtl] select{background-position:16px 50%,11px 50%}
+/* use the real visible height on iOS (address bar aware) */
+.tg{height:calc(100dvh - 240px - env(safe-area-inset-bottom))}
+.sheet{max-height:92dvh}
+.sheet-body{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.tg-scroll{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+@media (max-width:600px){
+  .main{padding:12px 12px calc(110px + env(safe-area-inset-bottom))}
+  h1,.cal-title{font-size:20px}
+  .page-head{gap:8px}
+  .page-head .seg{width:100%}
+  .page-head .seg button{flex:1}
+  .searchbar{max-width:none;flex:1 1 100%;order:3}
+  .cal-head{gap:8px}
+  .cal-head .seg{flex:1}
+  .cal-head .seg button{flex:1}
+  .tg{height:calc(100dvh - 250px - env(safe-area-inset-bottom));min-height:360px}
+  .tg-day .dn{font-size:15px;width:28px;height:28px}
+  .ev{padding:2px 4px;font-size:11px}
+  .row>*{min-width:130px}
+  .sheet-body{padding:6px 14px 16px}
+  .sheet-foot{flex-wrap:wrap}
+  .notes-grid{columns:2 150px;column-gap:10px}
+  .ncard{padding:12px}
+  .clock{font-size:40px}
+  .bar{grid-template-columns:minmax(70px,96px) 1fr auto}
+  .toast{bottom:calc(140px + env(safe-area-inset-bottom))}
+}
 @media (prefers-reduced-motion:reduce){ .sheet{animation:none} .dot{animation:none} .rot{transition:none} }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
@@ -242,7 +282,7 @@ textarea{height:auto;padding:10px 12px;resize:vertical;min-height:80px;line-heig
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head>
 <body>
-<div id="root"></div>
+<div id="root"><p style="padding:40px;text-align:center;color:#5C6B70;font-family:system-ui">Loading…</p></div>
 <script type="text/babel" data-presets="react">
 // ================= CONFIG (project: daftar) =================
 const SUPABASE_URL = 'https://tdjxbmpiopacmbuwjlze.supabase.co';
