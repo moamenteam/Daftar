@@ -1,0 +1,1293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0F6B63">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Daftar">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<title>Daftar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF2F0; --surface:#FFFFFF; --surface-2:#F4F7F6; --ink:#16232B; --muted:#5C6B70; --line:#D7DFDC;
+  --accent:#0F6B63; --accent-ink:#FFFFFF; --accent-soft:#D6EAE6; --now:#E0A526; --now-ink:#2A1D03; --danger:#B83A26;
+  --hour:52px; color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#0F1618; --surface:#172124; --surface-2:#1D292D; --ink:#E4ECEA; --muted:#93A3A6; --line:#2A383C;
+    --accent:#4FC1B3; --accent-ink:#06201D; --accent-soft:#1E3B38; --now:#F0B940; --now-ink:#2A1D03; --danger:#E56B57; color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 "IBM Plex Sans","IBM Plex Sans Arabic",system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding-top:env(safe-area-inset-top)}
+[dir=rtl] body{font-family:"IBM Plex Sans Arabic","IBM Plex Sans",system-ui,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0;padding:0;text-align:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.num,.clock{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)} .grow{flex:1;min-width:0}
+.ellip{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+[dir=rtl] .flip{transform:scaleX(-1)}
+.ic{flex:none}
+
+/* shell */
+.main{padding:16px 16px calc(110px + env(safe-area-inset-bottom));max-width:1180px;width:100%;margin:0 auto}
+.nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-around;background:var(--surface);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:20}
+.nav .brand{display:none}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--muted);padding:6px 8px;border-radius:10px;min-width:58px}
+.nav button.on{color:var(--accent);font-weight:600}
+@media (min-width:900px){
+  .shell{display:grid;grid-template-columns:224px 1fr;min-height:100vh}
+  .nav{position:sticky;top:0;height:100vh;flex-direction:column;justify-content:flex-start;gap:2px;border-top:0;border-inline-end:1px solid var(--line);padding:22px 12px}
+  .nav .brand{display:block;padding:0 12px 18px}
+  .nav .brand b{display:block;font-size:22px;letter-spacing:-.02em}
+  .nav .brand span{font-family:"IBM Plex Sans Arabic";color:var(--muted);font-size:14px}
+  .nav button{flex-direction:row;gap:12px;font-size:14px;padding:10px 12px;width:100%}
+  .nav button.on{background:var(--accent-soft);color:var(--ink)}
+  .main{padding:26px 32px 96px}
+}
+.page-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+h1{font-size:24px;font-weight:600;letter-spacing:-.01em;margin:0;flex:1;min-width:140px}
+
+/* controls */
+.btn{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border-radius:10px;font-weight:500;border:1px solid var(--line);background:var(--surface);white-space:nowrap}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.danger{color:var(--danger)}
+.btn.ghost{background:transparent;border-color:transparent}
+.btn.sm{height:32px;padding:0 10px;font-size:14px}
+.btn.big{height:46px;padding:0 20px;font-size:16px}
+.btn.dark{background:var(--now-ink);color:var(--now);border-color:transparent}
+.icon-btn{width:36px;height:36px;display:inline-grid;place-items:center;border-radius:10px;color:var(--muted);flex:none}
+.icon-btn:hover{background:var(--surface-2);color:var(--ink)}
+.icon-btn[aria-pressed=true]{color:var(--accent)}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:2px;max-width:100%;overflow-x:auto}
+.seg button{padding:6px 12px;border-radius:8px;font-size:14px;color:var(--muted);white-space:nowrap}
+.seg button.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.count{font-size:12px;opacity:.7;margin-inline-start:2px}
+.field{display:grid;gap:6px;margin-bottom:14px;min-width:0}
+.field>span{font-size:13px;color:var(--muted);font-weight:500}
+input[type=text],input[type=email],input[type=password],input[type=search],input[type=datetime-local],input[type=date],input[type=time],select,textarea{width:100%;min-width:0;height:40px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
+textarea{height:auto;padding:10px 12px;resize:vertical;min-height:80px;line-height:1.55;margin-bottom:12px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row>*{flex:1;min-width:150px}
+.title-input{font-size:20px;font-weight:600;border:0 !important;background:transparent !important;padding:0 !important;height:auto !important;margin-bottom:12px}
+.switch{display:inline-flex;align-items:center;gap:8px;margin-bottom:12px;font-size:14px}
+.switch input{width:18px;height:18px;accent-color:var(--accent)}
+.swatches{display:flex;gap:10px;flex-wrap:wrap;padding:2px}
+.sw{width:26px;height:26px;border-radius:50%;background:var(--c);border:1px solid rgba(0,0,0,.08)}
+.sw.none{border:1.5px dashed var(--muted)}
+.sw.on{box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--c)}
+.sw.none.on{box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tag{display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 4px 0 10px;border-radius:8px;background:var(--accent-soft);font-size:13px}
+[dir=rtl] .tag{padding:0 10px 0 4px}
+.tag-x{width:22px;height:22px;display:grid;place-items:center;border-radius:6px;color:var(--muted)}
+.addsel{width:auto !important;height:30px !important;font-size:13px;padding:0 8px !important}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+.linkrow{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;width:100%;background:var(--surface-2);margin-bottom:8px}
+.crumb{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin:0 10px 10px 0;max-width:100%}
+.crumb span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.empty{padding:28px 16px;text-align:center;color:var(--muted);margin:0}
+.hint{font-size:13px;color:var(--muted);margin:0 0 12px}
+.warn{color:var(--danger)}
+
+/* sheet */
+.backdrop{position:fixed;inset:0;background:rgba(8,18,20,.45);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+.sheet{background:var(--surface);width:100%;max-height:92vh;border-radius:18px 18px 0 0;display:flex;flex-direction:column;animation:up .18s ease-out;padding-bottom:env(safe-area-inset-bottom)}
+@media (min-width:700px){ .backdrop{align-items:center;padding:24px} .sheet{max-width:580px;border-radius:16px;max-height:88vh} }
+@keyframes up{from{transform:translateY(20px);opacity:0}}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;padding:12px 12px 4px 18px}
+[dir=rtl] .sheet-head{padding:12px 18px 4px 12px}
+.sheet-head h2{font-size:14px;font-weight:600;color:var(--muted);margin:0}
+.sheet-body{padding:6px 18px 18px;overflow:auto}
+.sheet-foot{display:flex;gap:8px;align-items:center;padding:10px 14px;border-top:1px solid var(--line)}
+.spacer{flex:1}
+.section{margin-top:20px}
+.section h3{font-size:13px;font-weight:600;color:var(--muted);margin:0 0 8px;display:flex;gap:8px}
+
+/* calendar */
+.cal-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.cal-nav{display:flex;align-items:center;gap:2px}
+.cal-title{font-size:21px}
+.tg{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;height:calc(100vh - 220px);min-height:440px}
+.tg-head,.tg-allday,.tg-body{display:grid;grid-template-columns:52px repeat(var(--n),minmax(0,1fr))}
+@media (max-width:600px){.tg-head,.tg-allday,.tg-body{grid-template-columns:40px repeat(var(--n),minmax(0,1fr))}.tg-hour{font-size:10px}}
+.tg-head,.tg-allday{border-bottom:1px solid var(--line)}
+.tg-day{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0 6px}
+.tg-day .wd{font-size:12px;color:var(--muted)}
+.tg-day .dn{font-size:17px;font-weight:600;width:32px;height:32px;display:grid;place-items:center;border-radius:50%;font-variant-numeric:tabular-nums}
+.tg-day.today .dn{background:var(--accent);color:var(--accent-ink)}
+.tg-adcell{padding:4px 3px;display:flex;flex-direction:column;gap:3px;border-inline-start:1px solid var(--line);min-width:0}
+.tg-gutter{font-size:11px;color:var(--muted);position:relative}
+.tg-allday .tg-gutter{display:grid;place-items:center;font-size:10px;text-align:center;line-height:1.2}
+.tg-scroll{flex:1;overflow:auto}
+.tg-body{position:relative}
+.tg-hour{position:absolute;inset-inline-end:6px;transform:translateY(-50%);white-space:nowrap}
+.tg-col{position:relative;border-inline-start:1px solid var(--line);background-image:linear-gradient(to bottom,var(--line) 1px,transparent 1px);background-size:100% var(--hour);cursor:cell}
+.ev{position:absolute;padding:3px 6px;border-radius:7px;background:color-mix(in srgb,var(--c) 20%,var(--surface));border-inline-start:3px solid var(--c);overflow:hidden;font-size:12px;line-height:1.3;display:flex;flex-direction:column;align-items:stretch;z-index:2}
+.ev b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;gap:3px;align-items:center}
+.ev small{color:var(--muted)}
+.ev.done b{text-decoration:line-through;opacity:.6}
+.now{position:absolute;left:0;right:0;height:2px;background:var(--now);z-index:3;pointer-events:none}
+.now::before{content:"";position:absolute;inset-inline-start:-5px;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--now)}
+.chip{display:flex;align-items:center;gap:4px;width:100%;padding:2px 6px;border-radius:6px;font-size:12px;background:color-mix(in srgb,var(--c,var(--accent)) 20%,var(--surface));min-width:0;line-height:1.5}
+.chip span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.chip small{color:var(--muted);flex:none}
+.chip.done span{text-decoration:line-through;opacity:.6}
+.chip.task{background:transparent;border:1px dashed var(--muted)}
+.mg{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.mg-wd,.mg-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.mg-wd div{padding:8px 4px;font-size:12px;color:var(--muted);text-align:center;border-bottom:1px solid var(--line)}
+.mcell{min-height:104px;padding:4px;border-inline-start:1px solid var(--line);border-top:1px solid var(--line);display:flex;flex-direction:column;gap:2px;cursor:pointer;min-width:0}
+.mg-grid .mcell:nth-child(7n+1){border-inline-start:0}
+.mg-grid .mcell:nth-child(-n+7){border-top:0}
+.mcell.out{background:var(--surface-2);color:var(--muted)}
+.mnum{font-size:13px;font-weight:600;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;font-variant-numeric:tabular-nums}
+.mcell.today .mnum{background:var(--accent);color:var(--accent-ink)}
+.more{font-size:11px;color:var(--muted);padding-inline-start:4px}
+@media (max-width:600px){ .mcell{min-height:70px;padding:2px} .mcell .chip{font-size:10px;padding:1px 3px} .mcell .chip small{display:none} .hide-sm{display:none} .cal-title{order:-1;flex-basis:100%} }
+
+/* tasks */
+.tlist{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 0}
+.tlist.inset{background:var(--surface-2)}
+.trow{display:flex;align-items:center;gap:10px;padding:7px 10px 7px 12px;min-height:48px}
+.trow:hover{background:color-mix(in srgb,var(--surface-2) 70%,transparent)}
+.chk{width:22px;height:22px;border-radius:7px;border:2px solid var(--muted);display:grid;place-items:center;flex:none;color:var(--accent-ink)}
+.chk.on{background:var(--accent);border-color:var(--accent)}
+.title-row{display:flex;align-items:center;gap:12px}
+.title-row .title-input{margin-bottom:0}
+.title-row+textarea{margin-top:12px}
+.trow-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.ttl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.struck{text-decoration:line-through;color:var(--muted)}
+.meta{display:flex;gap:10px;font-size:12px;color:var(--muted);align-items:center;flex-wrap:wrap}
+.meta>span{display:inline-flex;align-items:center;gap:3px}
+.meta .od{color:var(--danger);font-weight:600}
+.prog{width:40px;height:4px;border-radius:2px;background:var(--line);overflow:hidden;display:inline-block}
+.prog i{display:block;height:100%;background:var(--accent)}
+.prio-1{color:#3B6FD4} .prio-2{color:#C98A12} .prio-3{color:var(--danger)}
+.subtree{margin-inline-start:22px;border-inline-start:2px solid var(--line)}
+.addrow{display:flex;align-items:center;gap:8px;padding:4px 12px;color:var(--muted)}
+.addrow input{border:0 !important;background:transparent !important;height:38px;padding:0 !important;color:var(--ink)}
+.rot{transition:transform .15s} .rot.open{transform:rotate(180deg)}
+
+/* notes */
+.searchbar{max-width:320px}
+.notes-grid{columns:2 200px;column-gap:12px}
+@media (min-width:900px){.notes-grid{columns:3 230px}}
+.ncard{break-inside:avoid;margin-bottom:12px;width:100%;background:color-mix(in srgb,var(--c,var(--surface)) 15%,var(--surface));border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:6px;position:relative}
+.ncard h3{margin:0;font-size:16px;font-weight:600;padding-inline-end:16px}
+.ncard p{margin:0;color:var(--muted);font-size:14px;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap}
+.pinmark{position:absolute;top:10px;inset-inline-end:10px;color:var(--accent)}
+.note-body{min-height:34vh;border:0 !important;background:transparent !important;padding:0 !important;font-size:16px;line-height:1.65;field-sizing:content;resize:none}
+
+/* timer */
+.tcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}
+.tcard.live{background:var(--now);color:var(--now-ink);border-color:transparent}
+.tcard.live .sub{opacity:.75;font-size:14px}
+.live-name{font-size:18px;font-weight:600;margin-top:2px}
+.clock{font-size:48px;font-weight:600;letter-spacing:-.02em;line-height:1.1;margin:8px 0 14px}
+.card-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.card-head h2{font-size:16px;margin:0}
+.tlog{list-style:none;margin:0;padding:0}
+.tlog li{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.tlog li:last-child{border-bottom:0}
+.tlog b{display:block;font-weight:500;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tlog small{color:var(--muted)}
+.week-days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;height:120px;margin-bottom:16px}
+.wdbar{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--muted)}
+.wdtrack{flex:1;width:100%;display:flex;align-items:flex-end;justify-content:center}
+.wdtrack i{width:70%;max-width:28px;background:var(--accent);border-radius:4px 4px 0 0;min-height:2px}
+.wdbar.today span{color:var(--ink);font-weight:600}
+.bar{display:grid;grid-template-columns:minmax(80px,120px) 1fr auto;gap:10px;align-items:center;font-size:14px;margin-bottom:8px}
+.track{height:10px;background:var(--surface-2);border-radius:5px;overflow:hidden}
+.track i{display:block;height:100%;background:var(--accent);border-radius:5px}
+.grid2{display:grid;gap:16px}
+@media (min-width:900px){.grid2{grid-template-columns:1fr 1fr}}
+
+/* timer pill: the one loud element */
+.pill{position:fixed;z-index:30;left:50%;transform:translateX(-50%);bottom:calc(72px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:6px;background:var(--now);color:var(--now-ink);border-radius:999px;padding:5px;box-shadow:0 8px 24px rgba(0,0,0,.2);max-width:calc(100vw - 32px)}
+.pill-main{display:flex;align-items:center;gap:10px;padding:0 6px 0 10px;font-weight:600;min-width:0}
+.pill .lbl{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:42vw}
+.pill .stop{width:34px;height:34px;border-radius:50%;background:var(--now-ink);color:var(--now);display:grid;place-items:center;flex:none}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--now-ink);animation:blink 1.6s infinite;flex:none}
+@keyframes blink{50%{opacity:.25}}
+@media (min-width:900px){.pill{left:auto;right:28px;transform:none;bottom:28px}}
+
+/* settings & misc */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 6px;margin-bottom:14px}
+.card h2{font-size:16px;margin:0 0 6px}
+.card .actions{margin-bottom:12px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(128px + env(safe-area-inset-bottom));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;z-index:60;font-size:14px;max-width:90vw}
+.auth{min-height:100vh;display:grid;place-items:center;padding:24px}
+.auth-card{width:100%;max-width:380px}
+.wordmark{font-size:44px;font-weight:700;letter-spacing:-.03em;margin:0;line-height:1}
+.wordmark-ar{font-family:"IBM Plex Sans Arabic";color:var(--muted);font-size:20px;margin:6px 0 28px}
+.auth .btn{width:100%;justify-content:center}
+.linkbtn{color:var(--accent);font-size:14px;margin-top:14px}
+@media (prefers-reduced-motion:reduce){ .sheet{animation:none} .dot{animation:none} .rot{transition:none} }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.24.7/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+// ================= CONFIG (project: daftar) =================
+const SUPABASE_URL = 'https://tdjxbmpiopacmbuwjlze.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_KoMPvHtf68BdrvnHV1YHhQ_JMr6L22d';
+const VAPID_PUBLIC_KEY = 'BITYDuszuJYY5V6StJP4Tq97csiWJpGVkdJWcrIPetGh7QyX5jp6miJqwuEErq4XOeXSA2lZoYFW8yF7xFkQjnM';
+// ==========================================================
+
+const { useState, useEffect, useMemo, useRef, useCallback, createContext, useContext } = React;
+const CONFIGURED = !SUPABASE_URL.includes('YOUR-PROJECT');
+const sb = CONFIGURED ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
+
+// ---------------- i18n ----------------
+const STR = {
+  en: {
+    calendar:'Calendar', tasks:'Tasks', notes:'Notes', timer:'Timer', settings:'Settings', loading:'Loading…',
+    signIn:'Sign in', signUp:'Create account', email:'Email', password:'Password', haveAccount:'Have an account? Sign in', noAccount:'New here? Create an account', checkEmail:'Check your email to confirm your account, then sign in.', setupNeeded:'Add your Supabase URL and keys at the top of index.html to start.',
+    today:'Today', day:'Day', week:'Week', month:'Month', allDay:'All day', prev:'Previous', next:'Next',
+    newEvent:'New event', editEvent:'Event', title:'Title', start:'Start', end:'End', repeat:'Repeat', none:'None', daily:'Daily', weekly:'Weekly', monthly:'Monthly', color:'Color', alerts:'Alerts', addAlert:'Add alert', linkTo:'Link to', note:'Note', task:'Task', subtask:'Subtask', category:'Category', save:'Save', delete:'Delete', done:'Done', open:'Open', add:'Add', noLink:'Nothing', untitled:'Untitled', notFound:'This item no longer exists.',
+    atStart:'At start time', minBefore:'{n} min before', hourBefore:'{n} h before', dayBefore:'{n} day before', minUnit:'min', hourUnit:'h', dayUnit:'day', startingNow:'Starting now', inX:'In {d}',
+    addTask:'Add a task', addSubtask:'Add subtask', subtasks:'Subtasks', details:'Details', due:'Due', priority:'Priority', status:'Status', todo:'To do', doing:'In progress', upcoming:'Upcoming', all:'All', completed:'Done', p0:'None', p1:'Low', p2:'Medium', p3:'High',
+    addToCalendar:'Add to calendar', remindMe:'Remind me', startTimer:'Start timer', moveUp:'Move up', moveDown:'Move down', noTasks:'Nothing here. Add a task above.',
+    newNote:'New note', searchNotes:'Search notes', noNotes:'No notes yet. Tap “New note” to write one.', pin:'Pin', unpin:'Unpin', tasksInNote:'Tasks in this note', writeHere:'Write here…',
+    reminders:'Reminders', addReminder:'Add reminder', noReminders:'No reminders set.', in1h:'In 1 hour', tonight:'Tonight 9 PM', tomorrowAm:'Tomorrow 9 AM', orPick:'Or pick a time', futureTime:'Pick a time in the future.', reminderSet:'Reminder set', taskReminder:'Task reminder', noteReminder:'Note reminder',
+    whatWorking:'What are you working on?', startBtn:'Start', stop:'Stop', running:'Running', todayLog:'Today', thisWeek:'This week', noEntries:'No time tracked today.', uncategorized:'Uncategorized', recent:'Recent',
+    general:'General', language:'Language', weekStart:'Week starts on', account:'Account', notifications:'Notifications', notifOn:'Notifications are on for this device.', notifOff:'Notifications are off for this device.', turnOn:'Turn on notifications', testLocal:'Show test notification', testPush:'Send test push (arrives within a minute)', iosHint:'On iPhone: tap Share → Add to Home Screen, then open Daftar from your home screen to turn on notifications.', notifOnToast:'Notifications turned on', testTitle:'Test notification', testBody:'Notifications are working.', defaultAlerts:'Default event alerts', quietHours:'Quiet hours', quietHint:'Notifications in this window arrive without sound.', from:'From', to:'To', signOut:'Sign out', pushUnsupported:'This browser does not support push notifications.', permDenied:'Notification permission was denied. Allow it in your browser settings.', vapidMissing:'Add your VAPID public key at the top of index.html first.',
+    saved:'Saved', confirmDelete:'Delete this? This cannot be undone.', confirmDeleteTask:'Delete this task and all its subtasks?', testSent:'Test push queued. It arrives within a minute.', needTitle:'Add a title first.', endAfterStart:'End must be after start.',
+  },
+  ar: {
+    calendar:'التقويم', tasks:'المهام', notes:'الملاحظات', timer:'المؤقت', settings:'الإعدادات', loading:'جارٍ التحميل…',
+    signIn:'تسجيل الدخول', signUp:'إنشاء حساب', email:'البريد الإلكتروني', password:'كلمة المرور', haveAccount:'لديك حساب؟ سجّل الدخول', noAccount:'جديد هنا؟ أنشئ حسابًا', checkEmail:'تحقق من بريدك لتأكيد الحساب ثم سجّل الدخول.', setupNeeded:'أضف رابط Supabase والمفاتيح في أعلى ملف index.html للبدء.',
+    today:'اليوم', day:'يوم', week:'أسبوع', month:'شهر', allDay:'طوال اليوم', prev:'السابق', next:'التالي',
+    newEvent:'حدث جديد', editEvent:'الحدث', title:'العنوان', start:'البداية', end:'النهاية', repeat:'التكرار', none:'بدون', daily:'يوميًا', weekly:'أسبوعيًا', monthly:'شهريًا', color:'اللون', alerts:'التنبيهات', addAlert:'إضافة تنبيه', linkTo:'ربط بـ', note:'ملاحظة', task:'مهمة', subtask:'مهمة فرعية', category:'التصنيف', save:'حفظ', delete:'حذف', done:'تم', open:'فتح', add:'إضافة', noLink:'لا شيء', untitled:'بدون عنوان', notFound:'هذا العنصر لم يعد موجودًا.',
+    atStart:'عند البدء', minBefore:'قبل {n} دقيقة', hourBefore:'قبل {n} ساعة', dayBefore:'قبل {n} يوم', minUnit:'دقيقة', hourUnit:'ساعة', dayUnit:'يوم', startingNow:'يبدأ الآن', inX:'بعد {d}',
+    addTask:'أضف مهمة', addSubtask:'أضف مهمة فرعية', subtasks:'المهام الفرعية', details:'التفاصيل', due:'موعد الاستحقاق', priority:'الأولوية', status:'الحالة', todo:'لم تبدأ', doing:'قيد التنفيذ', upcoming:'القادمة', all:'الكل', completed:'المنجزة', p0:'بدون', p1:'منخفضة', p2:'متوسطة', p3:'عالية',
+    addToCalendar:'أضف إلى التقويم', remindMe:'ذكّرني', startTimer:'ابدأ المؤقت', moveUp:'نقل لأعلى', moveDown:'نقل لأسفل', noTasks:'لا شيء هنا. أضف مهمة بالأعلى.',
+    newNote:'ملاحظة جديدة', searchNotes:'ابحث في الملاحظات', noNotes:'لا توجد ملاحظات بعد. اضغط «ملاحظة جديدة» للبدء.', pin:'تثبيت', unpin:'إلغاء التثبيت', tasksInNote:'مهام هذه الملاحظة', writeHere:'اكتب هنا…',
+    reminders:'التذكيرات', addReminder:'إضافة تذكير', noReminders:'لا توجد تذكيرات.', in1h:'بعد ساعة', tonight:'الليلة 9 م', tomorrowAm:'غدًا 9 ص', orPick:'أو اختر وقتًا', futureTime:'اختر وقتًا في المستقبل.', reminderSet:'تم ضبط التذكير', taskReminder:'تذكير بمهمة', noteReminder:'تذكير بملاحظة',
+    whatWorking:'على ماذا تعمل؟', startBtn:'ابدأ', stop:'إيقاف', running:'يعمل الآن', todayLog:'اليوم', thisWeek:'هذا الأسبوع', noEntries:'لم يُسجَّل وقت اليوم.', uncategorized:'بدون تصنيف', recent:'الأخيرة',
+    general:'عام', language:'اللغة', weekStart:'بداية الأسبوع', account:'الحساب', notifications:'الإشعارات', notifOn:'الإشعارات مفعّلة على هذا الجهاز.', notifOff:'الإشعارات غير مفعّلة على هذا الجهاز.', turnOn:'تفعيل الإشعارات', testLocal:'عرض إشعار تجريبي', testPush:'إرسال إشعار تجريبي (يصل خلال دقيقة)', iosHint:'على الآيفون: اضغط مشاركة ← إضافة إلى الشاشة الرئيسية، ثم افتح دفتر من الشاشة الرئيسية لتفعيل الإشعارات.', notifOnToast:'تم تفعيل الإشعارات', testTitle:'إشعار تجريبي', testBody:'الإشعارات تعمل.', defaultAlerts:'التنبيهات الافتراضية للأحداث', quietHours:'ساعات الهدوء', quietHint:'تصل الإشعارات خلال هذه الفترة بدون صوت.', from:'من', to:'إلى', signOut:'تسجيل الخروج', pushUnsupported:'هذا المتصفح لا يدعم الإشعارات.', permDenied:'تم رفض إذن الإشعارات. فعّله من إعدادات المتصفح.', vapidMissing:'أضف مفتاح VAPID العام في أعلى ملف index.html أولًا.',
+    saved:'تم الحفظ', confirmDelete:'حذف هذا العنصر؟ لا يمكن التراجع.', confirmDeleteTask:'حذف هذه المهمة وكل مهامها الفرعية؟', testSent:'سيصل الإشعار التجريبي خلال دقيقة.', needTitle:'أضف عنوانًا أولًا.', endAfterStart:'يجب أن تكون النهاية بعد البداية.',
+  },
+};
+
+// ---------------- helpers ----------------
+const MIN = 60000, DAY = 86400000, HOUR = 52;
+const COLORS = ['#0F6B63', '#3B6FD4', '#8A4FA8', '#C98A12', '#C24A3A', '#3E8E41', '#5F7380'];
+const ALERTS = [0, 5, 10, 15, 30, 60, 120, 1440];
+const pad = n => String(n).padStart(2, '0');
+const startOfDay = d => { const x = new Date(d); x.setHours(0, 0, 0, 0); return x; };
+const endOfDay = d => { const x = startOfDay(d); x.setHours(23, 59, 0, 0); return x; };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const addMonths = (d, n) => { const x = new Date(d); x.setMonth(x.getMonth() + n); return x; };
+const startOfWeek = (d, ws = 0) => { const x = startOfDay(d); return addDays(x, -((x.getDay() - ws + 7) % 7)); };
+const sameDay = (a, b) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+const nextHour = d => { const x = new Date(d); x.setMinutes(0, 0, 0); x.setHours(x.getHours() + 1); return x; };
+const toInput = d => d ? `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}` : '';
+const toDateInput = d => toInput(d).slice(0, 10);
+const fromInput = s => s ? new Date(s.length === 10 ? s + 'T00:00' : s) : null;
+const advance = (d, rule) => rule === 'DAILY' ? addDays(d, 1) : rule === 'WEEKLY' ? addDays(d, 7) : rule === 'MONTHLY' ? addMonths(d, 1) : null;
+const fmtDur = ms => { const m = Math.max(0, Math.round(ms / MIN)); const h = Math.floor(m / 60); return h ? `${h}h ${pad(m % 60)}m` : `${m}m`; };
+const fmtClock = ms => { const s = Math.max(0, Math.floor(ms / 1000)); return `${Math.floor(s / 3600)}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}`; };
+const byPos = (a, b) => (a.position || 0) - (b.position || 0);
+const pick = (o, keys) => Object.fromEntries(keys.filter(k => k in o).map(k => [k, o[k]]));
+const b64ToU8 = s => { const p = '='.repeat((4 - s.length % 4) % 4); const b = atob((s + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from(b, c => c.charCodeAt(0)); };
+async function q(p) { const { data, error } = await p; if (error) throw error; return data; }
+
+function makeFmt(lang) {
+  const loc = lang === 'ar' ? 'ar-u-nu-latn-ca-gregory' : 'en-US';
+  const f = o => new Intl.DateTimeFormat(loc, o);
+  const time = f({ hour: 'numeric', minute: '2-digit' }), date = f({ weekday: 'short', day: 'numeric', month: 'short' }),
+    dateLong = f({ weekday: 'long', day: 'numeric', month: 'long' }), wd = f({ weekday: 'short' }), wdLong = f({ weekday: 'long' }),
+    my = f({ month: 'long', year: 'numeric' }), dt = f({ weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }), hour = f({ hour: 'numeric' });
+  return { time: d => time.format(d), date: d => date.format(d), dateLong: d => dateLong.format(d), wd: d => wd.format(d), wdLong: d => wdLong.format(d), my: d => my.format(d), dt: d => dt.format(d), hour: d => hour.format(d) };
+}
+
+function alertLabel(m, t) {
+  if (m === 0) return t('atStart');
+  if (m < 60) return t('minBefore').replace('{n}', m);
+  if (m < 1440) return t('hourBefore').replace('{n}', m / 60);
+  return t('dayBefore').replace('{n}', m / 1440);
+}
+const shortSpan = (m, t) => m < 60 ? `${m} ${t('minUnit')}` : m < 1440 ? `${m / 60} ${t('hourUnit')}` : `${m / 1440} ${t('dayUnit')}`;
+
+// One reminder row per alert; for repeating events the cron job rolls it forward.
+function eventReminders(ev, t, F) {
+  const now = Date.now();
+  return (ev.alert_minutes || []).map(m => {
+    let occ = new Date(ev.start_at);
+    if (ev.all_day) occ = new Date(occ.getTime() + 9 * 60 * MIN); // all-day alerts are relative to 9:00
+    if (ev.repeat_rule) { let g = 0; while (occ.getTime() - m * MIN <= now && g++ < 5000) occ = advance(occ, ev.repeat_rule); }
+    const at = occ.getTime() - m * MIN;
+    if (at <= now) return null;
+    const body = (m === 0 ? t('startingNow') : t('inX').replace('{d}', shortSpan(m, t))) + (ev.all_day ? '' : ` · ${F.time(occ)}`);
+    return { event_id: ev.id, title: ev.title, body, remind_at: new Date(at).toISOString(), repeat_rule: ev.repeat_rule || null };
+  }).filter(Boolean);
+}
+
+// Expand repeating events inside [from, to)
+function occurrences(ev, from, to) {
+  const s0 = new Date(ev.start_at), e0 = new Date(ev.end_at), len = e0 - s0;
+  if (!ev.repeat_rule) return (s0 < to && e0 > from) ? [{ ...ev, _key: ev.id, _s: s0, _e: e0 }] : [];
+  const out = [];
+  let s = s0;
+  if (ev.repeat_rule !== 'MONTHLY' && from > s0) {
+    const step = ev.repeat_rule === 'DAILY' ? 1 : 7;
+    const k = Math.floor((startOfDay(from) - startOfDay(s0)) / (step * DAY)) - 1;
+    if (k > 0) s = addDays(s0, k * step);
+  }
+  for (let i = 0; i < 500 && s < to; i++) {
+    const e = new Date(s.getTime() + len);
+    if (e > from) out.push({ ...ev, _key: ev.id + '|' + s.getTime(), _s: s, _e: e });
+    s = advance(s, ev.repeat_rule);
+  }
+  return out;
+}
+
+// Side-by-side layout for overlapping events in one day column
+function layoutDay(items) {
+  const sorted = items.slice().sort((a, b) => a.s - b.s || b.e - a.e);
+  const out = []; let cluster = [], end = -1;
+  const flush = () => {
+    const cols = [];
+    cluster.forEach(it => { let c = cols.findIndex(x => x <= it.s); if (c < 0) { c = cols.length; cols.push(it.e); } else cols[c] = it.e; it.col = c; });
+    cluster.forEach(it => { it.cols = cols.length; out.push(it); });
+    cluster = []; end = -1;
+  };
+  sorted.forEach(it => { if (cluster.length && it.s >= end) flush(); cluster.push(it); end = Math.max(end, it.e); });
+  if (cluster.length) flush();
+  return out;
+}
+
+function flattenTasks(tasks) {
+  const out = [];
+  const ids = new Set(tasks.map(x => x.id));
+  const walk = (pid, d) => tasks.filter(x => (x.parent_id && ids.has(x.parent_id) ? x.parent_id : null) === pid).sort(byPos)
+    .forEach(x => { out.push({ task: x, depth: d }); walk(x.id, d + 1); });
+  walk(null, 0);
+  return out;
+}
+
+function useNow(ms, on = true) {
+  const [n, setN] = useState(() => new Date());
+  useEffect(() => { if (!on) return; setN(new Date()); const i = setInterval(() => setN(new Date()), ms); return () => clearInterval(i); }, [ms, on]);
+  return n;
+}
+
+// ---------------- icons ----------------
+const ICONS = {
+  cal: 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',
+  check: 'M4 4h16v16H4zM8 12l3 3 5-6',
+  note: 'M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5',
+  timer: 'M12 9v4l3 2M9 2h6M12 21a8 8 0 1 0 0-16 8 8 0 0 0 0 16z',
+  gear: 'M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1M17 6a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM11 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM19 18a2 2 0 1 1-4 0 2 2 0 0 1 4 0z',
+  plus: 'M12 5v14M5 12h14',
+  bell: 'M6 16v-5a6 6 0 1 1 12 0v5l2 2H4zM10 21h4',
+  link: 'M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1',
+  trash: 'M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13',
+  left: 'M15 6l-6 6 6 6', right: 'M9 6l6 6-6 6', up: 'M6 15l6-6 6 6', down: 'M6 9l6 6 6-6',
+  x: 'M6 6l12 12M18 6L6 18',
+  play: 'M7 4l13 8-13 8z', stop: 'M6 6h12v12H6z',
+  pin: 'M9 3h6l-1 6 4 4H6l4-4zM12 13v8',
+  flag: 'M5 21V4h11l-2 4 2 4H5',
+  tick: 'M5 12.5l4.5 4.5L19 7', square: 'M5 5h14v14H5z',
+};
+function Icon({ n, size = 20, flip, className = '' }) {
+  const filled = n === 'play' || n === 'stop';
+  return <svg className={'ic ' + (flip ? 'flip ' : '') + className} width={size} height={size} viewBox="0 0 24 24" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={ICONS[n]} /></svg>;
+}
+
+// ---------------- app ----------------
+const Ctx = createContext(null);
+const useApp = () => useContext(Ctx);
+
+function App() {
+  const [session, setSession] = useState(undefined);
+  const [lang, setLang] = useState(() => localStorage.getItem('lang') || 'en');
+  const t = useCallback(k => (STR[lang] && STR[lang][k]) || STR.en[k] || k, [lang]);
+  useEffect(() => { document.documentElement.lang = lang; document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'; localStorage.setItem('lang', lang); }, [lang]);
+  useEffect(() => {
+    if (!sb) return;
+    sb.auth.getSession().then(({ data }) => setSession(data.session));
+    const { data: { subscription } } = sb.auth.onAuthStateChange((_e, s) => setSession(s));
+    return () => subscription.unsubscribe();
+  }, []);
+  if (!CONFIGURED) return <div className="auth"><div className="auth-card"><h1 className="wordmark">Daftar</h1><p className="wordmark-ar">دفتر</p><p className="hint">{t('setupNeeded')}</p></div></div>;
+  if (session === undefined) return <p className="empty">{t('loading')}</p>;
+  if (!session) return <Auth t={t} lang={lang} setLang={setLang} />;
+  return <Main t={t} lang={lang} setLang={setLang} session={session} />;
+}
+
+function Auth({ t, lang, setLang }) {
+  const [mode, setMode] = useState('in');
+  const [email, setEmail] = useState('');
+  const [pw, setPw] = useState('');
+  const [msg, setMsg] = useState('');
+  const [busy, setBusy] = useState(false);
+  const submit = async e => {
+    e.preventDefault(); setBusy(true); setMsg('');
+    const { data, error } = mode === 'in' ? await sb.auth.signInWithPassword({ email, password: pw }) : await sb.auth.signUp({ email, password: pw });
+    setBusy(false);
+    if (error) setMsg(error.message); else if (mode === 'up' && !data.session) setMsg(t('checkEmail'));
+  };
+  return <div className="auth"><form className="auth-card" onSubmit={submit}>
+    <h1 className="wordmark">Daftar</h1><p className="wordmark-ar">دفتر</p>
+    <label className="field"><span>{t('email')}</span><input type="email" autoComplete="email" required value={email} onChange={e => setEmail(e.target.value)} /></label>
+    <label className="field"><span>{t('password')}</span><input type="password" autoComplete={mode === 'in' ? 'current-password' : 'new-password'} required minLength={6} value={pw} onChange={e => setPw(e.target.value)} /></label>
+    {msg && <p className="hint warn">{msg}</p>}
+    <button className="btn primary big" disabled={busy}>{mode === 'in' ? t('signIn') : t('signUp')}</button>
+    <div className="row" style={{ marginTop: 6 }}>
+      <button type="button" className="linkbtn" onClick={() => setMode(mode === 'in' ? 'up' : 'in')}>{mode === 'in' ? t('noAccount') : t('haveAccount')}</button>
+      <button type="button" className="linkbtn" style={{ textAlign: 'end' }} onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}>{lang === 'ar' ? 'English' : 'العربية'}</button>
+    </div>
+  </form></div>;
+}
+
+function Main({ t, lang, setLang, session }) {
+  const [data, setData] = useState({ notes: [], tasks: [], events: [], entries: [], reminders: [], settings: null });
+  const [ready, setReady] = useState(false);
+  const [tab, setTabRaw] = useState(() => localStorage.getItem('tab') || 'calendar');
+  const [stack, setStack] = useState([]);
+  const [toastMsg, setToastMsg] = useState('');
+  const toastTimer = useRef(null);
+  const F = useMemo(() => makeFmt(lang), [lang]);
+  const dataRef = useRef(data); dataRef.current = data;
+  const tRef = useRef(t); tRef.current = t;
+  const FRef = useRef(F); FRef.current = F;
+  const uid = session.user.id;
+
+  const setTab = k => { setTabRaw(k); localStorage.setItem('tab', k); };
+  const toast = useCallback(m => { setToastMsg(m); clearTimeout(toastTimer.current); toastTimer.current = setTimeout(() => setToastMsg(''), 3200); }, []);
+  const push = useCallback(m => setStack(s => [...s, { ...m, key: Date.now() + Math.random() }]), []);
+  const pop = useCallback(() => setStack(s => s.slice(0, -1)), []);
+
+  const loadAll = useCallback(async () => {
+    const since = addDays(startOfDay(new Date()), -35).toISOString();
+    try {
+      const [notes, tasks, events, entries, reminders, settingsRow] = await Promise.all([
+        q(sb.from('notes').select('*').order('pinned', { ascending: false }).order('updated_at', { ascending: false })),
+        q(sb.from('tasks').select('*').order('position')),
+        q(sb.from('events').select('*')),
+        q(sb.from('time_entries').select('*').or(`ended_at.is.null,started_at.gte."${since}"`).order('started_at', { ascending: false })),
+        q(sb.from('reminders').select('*').is('sent_at', null).order('remind_at')),
+        q(sb.from('user_settings').select('*').maybeSingle()),
+      ]);
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      let settings = settingsRow;
+      if (!settings || settings.tz !== tz) settings = await q(sb.from('user_settings').upsert({ user_id: uid, tz }).select().single());
+      setData({ notes, tasks, events, entries, reminders, settings });
+      setReady(true);
+    } catch (e) { toast(e.message); }
+  }, [toast, uid]);
+
+  useEffect(() => { loadAll(); }, [loadAll]);
+  useEffect(() => {
+    const h = () => { if (document.visibilityState === 'visible') loadAll(); };
+    document.addEventListener('visibilitychange', h);
+    return () => document.removeEventListener('visibilitychange', h);
+  }, [loadAll]);
+  useEffect(() => { document.body.style.overflow = stack.length ? 'hidden' : ''; }, [stack.length]);
+
+  const act = useMemo(() => {
+    const wrap = fn => async (...a) => {
+      try { const r = await fn(...a); await loadAll(); return r ?? true; }
+      catch (e) { toast(e.message); return null; }
+    };
+    const stopRunning = () => q(sb.from('time_entries').update({ ended_at: new Date().toISOString() }).is('ended_at', null));
+    return {
+      createNote: wrap(() => q(sb.from('notes').insert({ title: '', body: '' }).select().single())),
+      saveNote: wrap(n => q(sb.from('notes').update({ ...pick(n, ['title', 'body', 'color', 'pinned']), updated_at: new Date().toISOString() }).eq('id', n.id))),
+      deleteNote: wrap(id => q(sb.from('notes').delete().eq('id', id))),
+      saveTask: wrap(tk => {
+        const row = pick(tk, ['title', 'details', 'status', 'priority', 'due_at', 'parent_id', 'note_id', 'position']);
+        if (tk.id) return q(sb.from('tasks').update(row).eq('id', tk.id));
+        return q(sb.from('tasks').insert({ ...row, position: row.position ?? Date.now() }).select().single());
+      }),
+      toggleTask: wrap(tk => q(sb.from('tasks').update({ status: tk.status === 'done' ? 'todo' : 'done' }).eq('id', tk.id))),
+      deleteTask: wrap(id => q(sb.from('tasks').delete().eq('id', id))),
+      moveTask: wrap(async (tk, dir) => {
+        const sib = dataRef.current.tasks.filter(x => (x.parent_id || null) === (tk.parent_id || null) && (tk.parent_id || (x.note_id || null) === (tk.note_id || null))).sort(byPos);
+        const i = sib.findIndex(x => x.id === tk.id), j = i + dir;
+        if (i < 0 || j < 0 || j >= sib.length) return;
+        const a = sib[i], b = sib[j];
+        const pa = a.position, pb = b.position === pa ? pa + dir : b.position;
+        await q(sb.from('tasks').update({ position: pb }).eq('id', a.id));
+        await q(sb.from('tasks').update({ position: pa }).eq('id', b.id));
+      }),
+      saveEvent: wrap(async ev => {
+        const row = pick(ev, ['title', 'start_at', 'end_at', 'all_day', 'color', 'category', 'alert_minutes', 'repeat_rule', 'note_id', 'task_id']);
+        const saved = ev.id ? await q(sb.from('events').update(row).eq('id', ev.id).select().single()) : await q(sb.from('events').insert(row).select().single());
+        await q(sb.from('reminders').delete().eq('event_id', saved.id).is('sent_at', null));
+        const rems = eventReminders(saved, tRef.current, FRef.current);
+        if (rems.length) await q(sb.from('reminders').insert(rems));
+        return saved;
+      }),
+      deleteEvent: wrap(id => q(sb.from('events').delete().eq('id', id))),
+      addReminder: wrap(r => q(sb.from('reminders').insert(r))),
+      deleteReminder: wrap(id => q(sb.from('reminders').delete().eq('id', id))),
+      startTimer: wrap(async o => { await stopRunning(); return q(sb.from('time_entries').insert({ label: o.label || null, task_id: o.task_id || null, category: o.category || null }).select().single()); }),
+      stopTimer: wrap(() => stopRunning()),
+      deleteEntry: wrap(id => q(sb.from('time_entries').delete().eq('id', id))),
+      saveSettings: wrap(patch => q(sb.from('user_settings').update({ ...patch, updated_at: new Date().toISOString() }).eq('user_id', uid))),
+      testPush: wrap(() => q(sb.from('reminders').insert({ title: tRef.current('testTitle'), body: tRef.current('testBody'), remind_at: new Date().toISOString() }))),
+      enablePush: wrap(async () => {
+        if (VAPID_PUBLIC_KEY.startsWith('YOUR')) throw new Error(tRef.current('vapidMissing'));
+        if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) throw new Error(tRef.current('pushUnsupported'));
+        const perm = await Notification.requestPermission();
+        if (perm !== 'granted') throw new Error(tRef.current('permDenied'));
+        const reg = await navigator.serviceWorker.ready;
+        let sub = await reg.pushManager.getSubscription();
+        if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToU8(VAPID_PUBLIC_KEY) });
+        const j = sub.toJSON();
+        await q(sb.from('push_subscriptions').upsert({ user_id: uid, endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth }, { onConflict: 'endpoint' }));
+      }),
+    };
+  }, [loadAll, toast, uid]);
+
+  // Open an item from a notification tap: "event:<id>" | "task:<id>" | "note:<id>"
+  const openTarget = useCallback(str => {
+    if (!str) return;
+    const [type, id] = str.split(':');
+    if (!id || !['event', 'task', 'note'].includes(type)) return;
+    if (type === 'event') setTab('calendar');
+    push({ type, id });
+  }, [push]);
+  useEffect(() => {
+    if (!ready) return;
+    const m = location.hash.match(/open=([^&]+)/);
+    if (m) { openTarget(decodeURIComponent(m[1])); history.replaceState(null, '', location.pathname + location.search); }
+  }, [ready]);
+  useEffect(() => {
+    if (!('serviceWorker' in navigator)) return;
+    const h = e => { if (e.data && e.data.type === 'open') loadAll().then(() => openTarget(e.data.open)); };
+    navigator.serviceWorker.addEventListener('message', h);
+    return () => navigator.serviceWorker.removeEventListener('message', h);
+  }, [loadAll, openTarget]);
+
+  const ctx = { t, lang, setLang, F, data, act, push, pop, toast, setTab, session };
+  const NAV = [['calendar', 'cal'], ['tasks', 'check'], ['notes', 'note'], ['timer', 'timer'], ['settings', 'gear']];
+  const View = { calendar: CalendarView, tasks: TasksView, notes: NotesView, timer: TimerView, settings: SettingsView }[tab] || CalendarView;
+
+  return <Ctx.Provider value={ctx}>
+    <div className="shell">
+      <nav className="nav" aria-label="Main">
+        <div className="brand"><b>Daftar</b><span>دفتر</span></div>
+        {NAV.map(([k, ic]) => <button key={k} className={tab === k ? 'on' : ''} aria-current={tab === k ? 'page' : undefined} onClick={() => setTab(k)}><Icon n={ic} size={22} /><span>{t(k)}</span></button>)}
+      </nav>
+      <main className="main">{ready ? <View /> : <p className="empty">{t('loading')}</p>}</main>
+    </div>
+    <TimerPill tab={tab} />
+    {stack.map((m, i) => <ModalHost key={m.key} m={m} hidden={i < stack.length - 1} />)}
+    {toastMsg && <div className="toast" role="status">{toastMsg}</div>}
+  </Ctx.Provider>;
+}
+
+// ---------------- modal plumbing ----------------
+function ModalHost({ m, hidden }) {
+  const C = { event: EventModal, task: TaskModal, note: NoteModal, reminder: ReminderModal }[m.type];
+  if (!C) return null;
+  return <div style={hidden ? { display: 'none' } : undefined}><C m={m} hidden={hidden} /></div>;
+}
+
+function Sheet({ title, onClose, hidden, children, footer }) {
+  const closeRef = useRef(onClose); closeRef.current = onClose;
+  useEffect(() => {
+    if (hidden) return;
+    const h = e => { if (e.key === 'Escape') closeRef.current(); };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, [hidden]);
+  return <div className="backdrop" onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
+    <div className="sheet" role="dialog" aria-modal="true" aria-label={title}>
+      <header className="sheet-head"><h2>{title}</h2><button className="icon-btn" onClick={onClose} aria-label="Close"><Icon n="x" /></button></header>
+      <div className="sheet-body">{children}</div>
+      {footer && <footer className="sheet-foot">{footer}</footer>}
+    </div>
+  </div>;
+}
+
+function AlertEditor({ value, onChange }) {
+  const { t } = useApp();
+  const v = value || [];
+  return <div className="tags">
+    {v.map(m => <span key={m} className="tag"><Icon n="bell" size={14} />{alertLabel(m, t)}<button type="button" className="tag-x" onClick={() => onChange(v.filter(x => x !== m))} aria-label={t('delete')}><Icon n="x" size={14} /></button></span>)}
+    <select className="addsel" value="" onChange={e => { if (e.target.value === '') return; onChange([...new Set([...v, Number(e.target.value)])].sort((a, b) => a - b)); }}>
+      <option value="">+ {t('addAlert')}</option>
+      {ALERTS.filter(a => !v.includes(a)).map(a => <option key={a} value={a}>{alertLabel(a, t)}</option>)}
+    </select>
+  </div>;
+}
+
+function ReminderList({ list }) {
+  const { t, F, act } = useApp();
+  if (!list.length) return <p className="hint">{t('noReminders')}</p>;
+  return <div>{list.map(r => <div key={r.id} className="linkrow">
+    <Icon n="bell" size={18} />
+    <span className="grow">{F.dt(new Date(r.remind_at))}{r.repeat_rule ? ` · ${t(r.repeat_rule.toLowerCase())}` : ''}</span>
+    <button className="icon-btn" onClick={() => act.deleteReminder(r.id)} aria-label={t('delete')}><Icon n="x" size={16} /></button>
+  </div>)}</div>;
+}
+
+// ---------------- event modal ----------------
+function EventModal({ m, hidden }) {
+  const { t, data, act, pop, push, toast } = useApp();
+  const existing = m.id ? data.events.find(e => e.id === m.id) : null;
+  const [f, setF] = useState(() => {
+    if (existing) return { ...existing, category: existing.category || '' };
+    const s = m.draft && m.draft.start_at ? new Date(m.draft.start_at) : nextHour(new Date());
+    return { title: '', all_day: false, color: COLORS[0], alert_minutes: (data.settings && data.settings.default_alerts) || [10], repeat_rule: null, note_id: null, task_id: null, category: '', end_at: new Date(s.getTime() + 60 * MIN).toISOString(), ...(m.draft || {}), start_at: s.toISOString() };
+  });
+  const [lt, setLt] = useState(() => f.task_id ? 'task' : f.note_id ? 'note' : '');
+  const flat = useMemo(() => flattenTasks(data.tasks), [data.tasks]);
+  const cats = useMemo(() => [...new Set([...data.events.map(e => e.category), ...data.entries.map(e => e.category)].filter(Boolean))], [data.events, data.entries]);
+
+  if (m.id && !existing) return <Sheet title={t('editEvent')} onClose={pop} hidden={hidden}><p className="empty">{t('notFound')}</p></Sheet>;
+
+  const set = (k, v) => setF(p => ({ ...p, [k]: v }));
+  const s = new Date(f.start_at), e = new Date(f.end_at);
+  const linked = lt === 'task' ? data.tasks.find(x => x.id === f.task_id) : lt === 'note' ? data.notes.find(x => x.id === f.note_id) : null;
+
+  const toggleAllDay = on => {
+    if (on) { const d = startOfDay(s); setF(p => ({ ...p, all_day: true, start_at: d.toISOString(), end_at: addDays(d, 1).toISOString() })); }
+    else { const d = new Date(startOfDay(s).getTime() + 9 * 60 * MIN); setF(p => ({ ...p, all_day: false, start_at: d.toISOString(), end_at: new Date(d.getTime() + 60 * MIN).toISOString() })); }
+  };
+  const onStart = v => {
+    const ns = fromInput(v); if (!ns || isNaN(ns)) return;
+    const dur = e - s;
+    setF(p => ({ ...p, start_at: ns.toISOString(), end_at: new Date(ns.getTime() + (dur > 0 ? dur : (p.all_day ? DAY : 60 * MIN))).toISOString() }));
+  };
+  const onEnd = v => { let ne = fromInput(v); if (!ne || isNaN(ne)) return; if (f.all_day) ne = addDays(ne, 1); set('end_at', ne.toISOString()); };
+  const pickLink = (type, id) => {
+    const item = type === 'task' ? data.tasks.find(x => x.id === id) : data.notes.find(x => x.id === id);
+    setF(p => ({ ...p, task_id: type === 'task' ? (id || null) : null, note_id: type === 'note' ? (id || null) : null, title: p.title || (item && item.title) || '' }));
+  };
+  const save = async () => {
+    if (!f.title.trim()) return toast(t('needTitle'));
+    if (e <= s) return toast(t('endAfterStart'));
+    const r = await act.saveEvent({ ...f, title: f.title.trim(), category: (f.category || '').trim() || null });
+    if (r) { toast(t('saved')); pop(); }
+  };
+  const del = async () => { if (!confirm(t('confirmDelete'))) return; if (await act.deleteEvent(existing.id)) pop(); };
+  const timer = () => act.startTimer({ label: f.title, task_id: f.task_id, category: f.category });
+
+  return <Sheet title={existing ? t('editEvent') : t('newEvent')} onClose={pop} hidden={hidden}
+    footer={<>
+      {existing && <button className="btn danger ghost" onClick={del}><Icon n="trash" size={18} />{t('delete')}</button>}
+      <span className="spacer" />
+      {existing && <button className="btn" onClick={timer}><Icon n="play" size={14} />{t('startTimer')}</button>}
+      <button className="btn primary" onClick={save}>{t('save')}</button>
+    </>}>
+    <input type="text" className="title-input" dir="auto" placeholder={t('title')} value={f.title} onChange={ev => set('title', ev.target.value)} autoFocus={!existing} />
+    <label className="switch"><input type="checkbox" checked={f.all_day} onChange={ev => toggleAllDay(ev.target.checked)} />{t('allDay')}</label>
+    <div className="row">
+      <label className="field"><span>{t('start')}</span><input type={f.all_day ? 'date' : 'datetime-local'} value={f.all_day ? toDateInput(s) : toInput(s)} onChange={ev => onStart(ev.target.value)} /></label>
+      <label className="field"><span>{t('end')}</span><input type={f.all_day ? 'date' : 'datetime-local'} value={f.all_day ? toDateInput(addDays(e, -1)) : toInput(e)} onChange={ev => onEnd(ev.target.value)} /></label>
+    </div>
+    <div className="row">
+      <label className="field"><span>{t('repeat')}</span>
+        <select value={f.repeat_rule || ''} onChange={ev => set('repeat_rule', ev.target.value || null)}>
+          <option value="">{t('none')}</option><option value="DAILY">{t('daily')}</option><option value="WEEKLY">{t('weekly')}</option><option value="MONTHLY">{t('monthly')}</option>
+        </select></label>
+      <label className="field"><span>{t('category')}</span><input type="text" dir="auto" list="cats-ev" value={f.category || ''} onChange={ev => set('category', ev.target.value)} /></label>
+    </div>
+    <datalist id="cats-ev">{cats.map(c => <option key={c} value={c} />)}</datalist>
+    <div className="field"><span>{t('alerts')}</span><AlertEditor value={f.alert_minutes} onChange={v => set('alert_minutes', v)} /></div>
+    <div className="field"><span>{t('color')}</span>
+      <div className="swatches">{COLORS.map(c => <button type="button" key={c} className={'sw' + (f.color === c ? ' on' : '')} style={{ '--c': c }} onClick={() => set('color', c)} aria-label={c} aria-pressed={f.color === c} />)}</div>
+    </div>
+    <div className="field"><span>{t('linkTo')}</span>
+      <div className="row">
+        <select value={lt} onChange={ev => { setLt(ev.target.value); setF(p => ({ ...p, task_id: null, note_id: null })); }}>
+          <option value="">{t('noLink')}</option><option value="task">{t('task')}</option><option value="note">{t('note')}</option>
+        </select>
+        {lt === 'task' && <select value={f.task_id || ''} onChange={ev => pickLink('task', ev.target.value)}>
+          <option value="">—</option>
+          {flat.map(({ task, depth }) => <option key={task.id} value={task.id}>{'\u00A0\u00A0\u00A0'.repeat(depth) + (depth ? '↳ ' : '') + task.title}</option>)}
+        </select>}
+        {lt === 'note' && <select value={f.note_id || ''} onChange={ev => pickLink('note', ev.target.value)}>
+          <option value="">—</option>
+          {data.notes.map(n => <option key={n.id} value={n.id}>{n.title || (n.body || '').slice(0, 40) || t('untitled')}</option>)}
+        </select>}
+      </div>
+    </div>
+    {linked && <button className="linkrow" onClick={() => push({ type: lt, id: linked.id })}>
+      <Icon n={lt === 'task' ? 'check' : 'note'} size={18} />
+      <span className={'grow ellip' + (lt === 'task' && linked.status === 'done' ? ' struck' : '')} dir="auto">{linked.title || t('untitled')}</span>
+      <span className="muted">{t('open')}</span>
+    </button>}
+  </Sheet>;
+}
+
+// ---------------- tasks ----------------
+function AddTask({ parentId = null, noteId = null, dueAt = null }) {
+  const { t, act } = useApp();
+  const [v, setV] = useState('');
+  const add = async () => { const title = v.trim(); if (!title) return; setV(''); await act.saveTask({ title, parent_id: parentId, note_id: noteId, due_at: dueAt }); };
+  return <div className="addrow">
+    <Icon n="plus" size={18} />
+    <input type="text" dir="auto" value={v} placeholder={parentId ? t('addSubtask') : t('addTask')} onChange={e => setV(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) add(); }} enterKeyHint="done" />
+    {v.trim() && <button className="btn sm primary" onClick={add}>{t('add')}</button>}
+  </div>;
+}
+
+function TaskTree({ parentId = null, noteId = null }) {
+  const { data } = useApp();
+  const kids = data.tasks.filter(x => parentId ? x.parent_id === parentId : (!x.parent_id && x.note_id === noteId)).sort(byPos);
+  return <>{kids.map(k => <TaskRow key={k.id} task={k} />)}<AddTask parentId={parentId} noteId={parentId ? null : noteId} /></>;
+}
+
+function TaskRow({ task, showNote }) {
+  const { t, data, act, push, F } = useApp();
+  const [open, setOpen] = useState(false);
+  const kids = data.tasks.filter(x => x.parent_id === task.id).sort(byPos);
+  const done = task.status === 'done';
+  const kd = kids.filter(k => k.status === 'done').length;
+  const ev = data.events.find(e => e.task_id === task.id);
+  const rem = data.reminders.some(r => r.task_id === task.id);
+  const note = showNote && task.note_id && data.notes.find(n => n.id === task.note_id);
+  const d = task.due_at && new Date(task.due_at);
+  const endish = d && d.getHours() === 23 && d.getMinutes() === 59;
+  const dueTxt = d ? (sameDay(d, new Date()) ? t('today') : F.date(d)) + (endish ? '' : ' ' + F.time(d)) : '';
+  const overdue = d && !done && d < new Date();
+  return <>
+    <div className="trow">
+      <button className={'chk' + (done ? ' on' : '')} onClick={() => act.toggleTask(task)} aria-label={task.title} aria-pressed={done}>{done && <Icon n="tick" size={14} />}</button>
+      <button className="trow-main" onClick={() => push({ type: 'task', id: task.id })}>
+        <span className={'ttl' + (done ? ' struck' : '')} dir="auto">{task.title}</span>
+        {(dueTxt || kids.length > 0 || ev || rem || note || task.priority > 0) && <span className="meta">
+          {task.priority > 0 && <span className={'prio-' + task.priority}><Icon n="flag" size={13} /></span>}
+          {dueTxt && <span className={overdue ? 'od' : ''}>{dueTxt}</span>}
+          {kids.length > 0 && <span><span className="prog"><i style={{ width: (kd / kids.length * 100) + '%' }} /></span>{kd}/{kids.length}</span>}
+          {ev && <span><Icon n="cal" size={13} />{F.time(new Date(ev.start_at))}</span>}
+          {rem && <span><Icon n="bell" size={13} /></span>}
+          {note && <span className="ellip" dir="auto"><Icon n="note" size={13} />{note.title || t('untitled')}</span>}
+        </span>}
+      </button>
+      {kids.length > 0 && <button className="icon-btn" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={t('subtasks')}><Icon n="down" size={18} className={'rot' + (open ? ' open' : '')} /></button>}
+    </div>
+    {open && <div className="subtree">{kids.map(k => <TaskRow key={k.id} task={k} />)}<AddTask parentId={task.id} /></div>}
+  </>;
+}
+
+function TasksView() {
+  const { t, data } = useApp();
+  const [filter, setFilter] = useState('today');
+  const now = new Date(), eod = addDays(startOfDay(now), 1);
+  const top = data.tasks.filter(x => !x.parent_id);
+  const match = {
+    today: x => x.status !== 'done' && x.due_at && new Date(x.due_at) < eod,
+    upcoming: x => x.status !== 'done' && x.due_at && new Date(x.due_at) >= eod,
+    all: x => x.status !== 'done',
+    completed: x => x.status === 'done',
+  };
+  const sorter = filter === 'today' || filter === 'upcoming' ? (a, b) => new Date(a.due_at) - new Date(b.due_at)
+    : filter === 'completed' ? (a, b) => new Date(b.completed_at || 0) - new Date(a.completed_at || 0) : byPos;
+  const list = top.filter(match[filter]).sort(sorter);
+  const dueFor = filter === 'today' ? endOfDay(now) : filter === 'upcoming' ? endOfDay(addDays(now, 1)) : null;
+  return <div>
+    <div className="page-head">
+      <h1>{t('tasks')}</h1>
+      <div className="seg">{Object.keys(match).map(k => <button key={k} className={filter === k ? 'on' : ''} onClick={() => setFilter(k)}>{t(k)}{k !== 'completed' && <span className="count">{top.filter(match[k]).length}</span>}</button>)}</div>
+    </div>
+    <div className="tlist">
+      {filter !== 'completed' && <AddTask dueAt={dueFor && dueFor.toISOString()} />}
+      {list.length ? list.map(x => <TaskRow key={x.id} task={x} showNote />) : <p className="empty">{t('noTasks')}</p>}
+    </div>
+  </div>;
+}
+
+function TaskModal({ m, hidden }) {
+  const { t, data, act, pop, push, F, toast } = useApp();
+  const task = data.tasks.find(x => x.id === m.id);
+  const [f, setF] = useState(null);
+  if (!task) return <Sheet title={t('task')} onClose={pop} hidden={hidden}><p className="empty">{t('notFound')}</p></Sheet>;
+
+  const cur = f || task;
+  const set = (k, v) => setF({ ...cur, [k]: v });
+  const persist = async () => {
+    if (!f) return true;
+    if (!f.title.trim()) { toast(t('needTitle')); return false; }
+    const r = await act.saveTask({ ...f, title: f.title.trim() });
+    if (r) setF(null);
+    return !!r;
+  };
+  const close = async () => { if (await persist()) pop(); };
+  const go = async target => { if (await persist()) push(target); };
+
+  const kids = data.tasks.filter(x => x.parent_id === task.id);
+  const ev = data.events.find(e => e.task_id === task.id);
+  const rems = data.reminders.filter(r => r.task_id === task.id);
+  const parent = task.parent_id && data.tasks.find(x => x.id === task.parent_id);
+  const note = task.note_id && data.notes.find(n => n.id === task.note_id);
+  const toCal = () => {
+    const d = cur.due_at && new Date(cur.due_at);
+    const s = d && d > new Date() && !(d.getHours() === 23 && d.getMinutes() === 59) ? d : nextHour(new Date());
+    go({ type: 'event', draft: { title: cur.title, task_id: task.id, start_at: s.toISOString(), end_at: new Date(s.getTime() + 60 * MIN).toISOString() } });
+  };
+  const del = async () => { if (!confirm(kids.length ? t('confirmDeleteTask') : t('confirmDelete'))) return; if (await act.deleteTask(task.id)) pop(); };
+
+  return <Sheet title={parent ? t('subtask') : t('task')} onClose={close} hidden={hidden}
+    footer={<><button className="btn danger ghost" onClick={del}><Icon n="trash" size={18} />{t('delete')}</button><span className="spacer" /><button className="btn primary" onClick={close}>{t('done')}</button></>}>
+    {parent && <button className="crumb" onClick={() => go({ type: 'task', id: parent.id })}><Icon n="up" size={14} /><span dir="auto">{parent.title}</span></button>}
+    {note && <button className="crumb" onClick={() => go({ type: 'note', id: note.id })}><Icon n="note" size={14} /><span dir="auto">{note.title || t('untitled')}</span></button>}
+    <div className="title-row">
+      <button className={'chk' + (cur.status === 'done' ? ' on' : '')} onClick={() => set('status', cur.status === 'done' ? 'todo' : 'done')} aria-pressed={cur.status === 'done'} aria-label={t('done')}>{cur.status === 'done' && <Icon n="tick" size={14} />}</button>
+      <input type="text" className="title-input" dir="auto" value={cur.title} onChange={e => set('title', e.target.value)} placeholder={t('title')} />
+    </div>
+    <textarea dir="auto" placeholder={t('details')} value={cur.details || ''} onChange={e => set('details', e.target.value)} />
+    <div className="row">
+      <label className="field"><span>{t('due')}</span><input type="datetime-local" value={cur.due_at ? toInput(new Date(cur.due_at)) : ''} onChange={e => set('due_at', e.target.value ? fromInput(e.target.value).toISOString() : null)} /></label>
+      <label className="field"><span>{t('status')}</span>
+        <select value={cur.status} onChange={e => set('status', e.target.value)}><option value="todo">{t('todo')}</option><option value="doing">{t('doing')}</option><option value="done">{t('completed')}</option></select>
+      </label>
+    </div>
+    <div className="field"><span>{t('priority')}</span>
+      <div className="seg">{[0, 1, 2, 3].map(p => <button key={p} className={cur.priority === p ? 'on' : ''} onClick={() => set('priority', p)}>{t('p' + p)}</button>)}</div>
+    </div>
+
+    <div className="section">
+      <h3>{t('subtasks')}{kids.length > 0 && <span className="num">{kids.filter(k => k.status === 'done').length}/{kids.length}</span>}</h3>
+      <div className="tlist inset"><TaskTree parentId={task.id} /></div>
+    </div>
+
+    <div className="section">
+      <h3>{t('calendar')}</h3>
+      {ev ? <button className="linkrow" onClick={() => go({ type: 'event', id: ev.id })}><Icon n="cal" size={18} /><span className="grow">{F.dt(new Date(ev.start_at))}</span><span className="muted">{t('open')}</span></button>
+        : <button className="btn" onClick={toCal}><Icon n="cal" size={18} />{t('addToCalendar')}</button>}
+    </div>
+
+    <div className="section">
+      <h3>{t('reminders')}</h3>
+      <ReminderList list={rems} />
+      <div className="actions">
+        <button className="btn" onClick={() => go({ type: 'reminder', target: { task_id: task.id, title: cur.title } })}><Icon n="bell" size={18} />{t('remindMe')}</button>
+        <button className="btn" onClick={() => act.startTimer({ label: cur.title, task_id: task.id })}><Icon n="play" size={14} />{t('startTimer')}</button>
+        <button className="btn ghost" onClick={() => act.moveTask(task, -1)}><Icon n="up" size={16} />{t('moveUp')}</button>
+        <button className="btn ghost" onClick={() => act.moveTask(task, 1)}><Icon n="down" size={16} />{t('moveDown')}</button>
+      </div>
+    </div>
+  </Sheet>;
+}
+
+// ---------------- reminders ----------------
+function ReminderModal({ m, hidden }) {
+  const { t, data, act, pop, toast } = useApp();
+  const tg = m.target || {};
+  const [at, setAt] = useState(() => toInput(nextHour(new Date())));
+  const [rule, setRule] = useState('');
+  const list = data.reminders.filter(r => (tg.task_id && r.task_id === tg.task_id) || (tg.note_id && r.note_id === tg.note_id));
+  const today = startOfDay(new Date());
+  const presets = [
+    [t('in1h'), new Date(Date.now() + 60 * MIN)],
+    [t('tonight'), new Date(today.getTime() + 21 * 60 * MIN)],
+    [t('tomorrowAm'), new Date(addDays(today, 1).getTime() + 9 * 60 * MIN)],
+  ].filter(([, d]) => d > new Date());
+  const add = async when => {
+    const d = when || fromInput(at);
+    if (!d || isNaN(d) || d <= new Date()) return toast(t('futureTime'));
+    const r = await act.addReminder({ task_id: tg.task_id || null, note_id: tg.note_id || null, title: tg.title || t('untitled'), body: tg.task_id ? t('taskReminder') : t('noteReminder'), remind_at: d.toISOString(), repeat_rule: rule || null });
+    if (r) toast(t('reminderSet'));
+  };
+  return <Sheet title={t('remindMe')} onClose={pop} hidden={hidden} footer={<><span className="spacer" /><button className="btn primary" onClick={pop}>{t('done')}</button></>}>
+    <p className="hint ellip" dir="auto">{tg.title}</p>
+    <div className="actions" style={{ marginBottom: 16 }}>{presets.map(([label, d]) => <button key={label} className="btn" onClick={() => add(d)}><Icon n="bell" size={16} />{label}</button>)}</div>
+    <div className="row">
+      <label className="field"><span>{t('orPick')}</span><input type="datetime-local" value={at} onChange={e => setAt(e.target.value)} /></label>
+      <label className="field"><span>{t('repeat')}</span>
+        <select value={rule} onChange={e => setRule(e.target.value)}><option value="">{t('none')}</option><option value="DAILY">{t('daily')}</option><option value="WEEKLY">{t('weekly')}</option><option value="MONTHLY">{t('monthly')}</option></select>
+      </label>
+    </div>
+    <button className="btn primary" onClick={() => add()}><Icon n="plus" size={18} />{t('addReminder')}</button>
+    <div className="section"><h3>{t('reminders')}</h3><ReminderList list={list} /></div>
+  </Sheet>;
+}
+
+// ---------------- notes ----------------
+function NotesView() {
+  const { t, data, act, push, F } = useApp();
+  const [qs, setQs] = useState('');
+  const s = qs.trim().toLowerCase();
+  const list = data.notes.filter(n => !s || (n.title || '').toLowerCase().includes(s) || (n.body || '').toLowerCase().includes(s));
+  const create = async () => { const n = await act.createNote(); if (n && n.id) push({ type: 'note', id: n.id, isNew: true }); };
+  return <div>
+    <div className="page-head">
+      <h1>{t('notes')}</h1>
+      <input type="search" className="searchbar" dir="auto" placeholder={t('searchNotes')} value={qs} onChange={e => setQs(e.target.value)} />
+      <button className="btn primary" onClick={create}><Icon n="plus" size={18} />{t('newNote')}</button>
+    </div>
+    {list.length === 0 ? <p className="empty">{t('noNotes')}</p> : <div className="notes-grid">
+      {list.map(n => {
+        const tk = data.tasks.filter(x => x.note_id === n.id && !x.parent_id);
+        const dn = tk.filter(x => x.status === 'done').length;
+        const hasEv = data.events.some(e => e.note_id === n.id);
+        const hasRem = data.reminders.some(r => r.note_id === n.id);
+        return <button key={n.id} className="ncard" style={n.color ? { '--c': n.color } : undefined} onClick={() => push({ type: 'note', id: n.id })}>
+          {n.pinned && <span className="pinmark"><Icon n="pin" size={14} /></span>}
+          {n.title && <h3 dir="auto">{n.title}</h3>}
+          {n.body && <p dir="auto">{n.body}</p>}
+          {!n.title && !n.body && <h3 className="muted">{t('untitled')}</h3>}
+          <span className="meta">
+            {tk.length > 0 && <span><Icon n="check" size={13} />{dn}/{tk.length}</span>}
+            {hasEv && <span><Icon n="cal" size={13} /></span>}
+            {hasRem && <span><Icon n="bell" size={13} /></span>}
+            <span>{F.date(new Date(n.updated_at))}</span>
+          </span>
+        </button>;
+      })}
+    </div>}
+  </div>;
+}
+
+function NoteModal({ m, hidden }) {
+  const { t, data, act, pop, push, F } = useApp();
+  const note = data.notes.find(n => n.id === m.id);
+  const [f, setF] = useState(null);
+  if (!note) return <Sheet title={t('note')} onClose={pop} hidden={hidden}><p className="empty">{t('notFound')}</p></Sheet>;
+
+  const cur = f || note;
+  const set = (k, v) => setF({ ...cur, [k]: v });
+  const persist = async () => { if (!f) return true; const r = await act.saveNote(f); if (r) setF(null); return !!r; };
+  const tasksIn = data.tasks.filter(x => x.note_id === note.id && !x.parent_id);
+  const close = async () => {
+    if (m.isNew && !(cur.title || '').trim() && !(cur.body || '').trim() && !tasksIn.length) { await act.deleteNote(note.id); pop(); return; }
+    if (await persist()) pop();
+  };
+  const go = async target => { if (await persist()) push(target); };
+  const evs = data.events.filter(e => e.note_id === note.id);
+  const rems = data.reminders.filter(r => r.note_id === note.id);
+  const toCal = () => {
+    const s = nextHour(new Date());
+    go({ type: 'event', draft: { title: cur.title || t('untitled'), note_id: note.id, color: cur.color || COLORS[0], start_at: s.toISOString(), end_at: new Date(s.getTime() + 60 * MIN).toISOString() } });
+  };
+  const del = async () => { if (!confirm(t('confirmDelete'))) return; if (await act.deleteNote(note.id)) pop(); };
+
+  return <Sheet title={t('note')} onClose={close} hidden={hidden}
+    footer={<>
+      <button className="btn danger ghost" onClick={del}><Icon n="trash" size={18} />{t('delete')}</button>
+      <span className="spacer" />
+      <button className="icon-btn" onClick={() => set('pinned', !cur.pinned)} aria-pressed={!!cur.pinned} title={cur.pinned ? t('unpin') : t('pin')} aria-label={cur.pinned ? t('unpin') : t('pin')}><Icon n="pin" /></button>
+      <button className="btn primary" onClick={close}>{t('done')}</button>
+    </>}>
+    <input type="text" className="title-input" dir="auto" placeholder={t('title')} value={cur.title || ''} onChange={e => set('title', e.target.value)} autoFocus={!!m.isNew} />
+    <textarea className="note-body" dir="auto" placeholder={t('writeHere')} value={cur.body || ''} onChange={e => set('body', e.target.value)} />
+    <div className="swatches">{[null, ...COLORS].map(c => <button type="button" key={c || 'none'} className={'sw' + (c ? '' : ' none') + ((cur.color || null) === c ? ' on' : '')} style={{ '--c': c || 'var(--surface-2)' }} onClick={() => set('color', c)} aria-label={c || t('none')} />)}</div>
+
+    <div className="section"><h3>{t('tasksInNote')}</h3><div className="tlist inset"><TaskTree noteId={note.id} /></div></div>
+
+    <div className="section">
+      <h3>{t('calendar')}</h3>
+      {evs.map(ev => <button key={ev.id} className="linkrow" onClick={() => go({ type: 'event', id: ev.id })}><Icon n="cal" size={18} /><span className="grow ellip" dir="auto">{ev.title}</span><span className="muted">{F.dt(new Date(ev.start_at))}</span></button>)}
+      <button className="btn" onClick={toCal}><Icon n="cal" size={18} />{t('addToCalendar')}</button>
+    </div>
+
+    <div className="section">
+      <h3>{t('reminders')}</h3>
+      <ReminderList list={rems} />
+      <button className="btn" onClick={() => go({ type: 'reminder', target: { note_id: note.id, title: cur.title || t('untitled') } })}><Icon n="bell" size={18} />{t('remindMe')}</button>
+    </div>
+  </Sheet>;
+}
+
+// ---------------- calendar ----------------
+function EventChip({ e }) {
+  const { push, F } = useApp();
+  return <button className={'chip' + (e._done ? ' done' : '')} style={{ '--c': e.color || COLORS[0] }} title={e.title}
+    onClick={ev => { ev.stopPropagation(); push({ type: 'event', id: e.id }); }}>
+    {!e.all_day && <small className="num">{F.time(e._s)}</small>}<span dir="auto">{e.title}</span>
+  </button>;
+}
+function TaskChip({ task }) {
+  const { push } = useApp();
+  const done = task.status === 'done';
+  return <button className={'chip task' + (done ? ' done' : '')} title={task.title} onClick={ev => { ev.stopPropagation(); push({ type: 'task', id: task.id }); }}>
+    <Icon n={done ? 'tick' : 'square'} size={12} /><span dir="auto">{task.title}</span>
+  </button>;
+}
+
+function CalendarView() {
+  const { t, data, push, F } = useApp();
+  const ws = (data.settings && data.settings.week_start) ?? 0;
+  const [view, setView] = useState(() => localStorage.getItem('calView') || (window.innerWidth < 720 ? 'day' : 'week'));
+  const [anchor, setAnchor] = useState(() => startOfDay(new Date()));
+  useEffect(() => { localStorage.setItem('calView', view); }, [view]);
+
+  const [from, to] = useMemo(() => {
+    if (view === 'day') return [anchor, addDays(anchor, 1)];
+    if (view === 'week') { const s = startOfWeek(anchor, ws); return [s, addDays(s, 7)]; }
+    const s = startOfWeek(new Date(anchor.getFullYear(), anchor.getMonth(), 1), ws);
+    return [s, addDays(s, 42)];
+  }, [view, anchor, ws]);
+  const days = useMemo(() => Array.from({ length: Math.round((to - from) / DAY) }, (_, i) => addDays(from, i)), [from, to]);
+  const events = useMemo(() => data.events.flatMap(ev => occurrences(ev, from, to)).map(o => {
+    const tk = o.task_id && data.tasks.find(x => x.id === o.task_id);
+    return { ...o, _done: !!(tk && tk.status === 'done') };
+  }), [data.events, data.tasks, from, to]);
+  const chips = useMemo(() => data.tasks.filter(x => {
+    if (!x.due_at || data.events.some(e => e.task_id === x.id)) return false;
+    const d = new Date(x.due_at); return d >= from && d < to;
+  }), [data.tasks, data.events, from, to]);
+
+  const shift = dir => setAnchor(a => view === 'day' ? addDays(a, dir) : view === 'week' ? addDays(a, 7 * dir) : new Date(a.getFullYear(), a.getMonth() + dir, 1));
+  const goToday = () => { const n = new Date(); setAnchor(view === 'month' ? new Date(n.getFullYear(), n.getMonth(), 1) : startOfDay(n)); };
+  const newEvent = start => {
+    let s = start;
+    if (!s) { const now = new Date(); s = (now >= from && now < to && view !== 'month') ? nextHour(now) : new Date(anchor.getTime() + 9 * 60 * MIN); }
+    push({ type: 'event', draft: { start_at: s.toISOString(), end_at: new Date(s.getTime() + 60 * MIN).toISOString() } });
+  };
+  const title = view === 'day' ? F.dateLong(anchor) : view === 'month' ? F.my(anchor) : F.my(days[3]);
+
+  return <div>
+    <div className="cal-head">
+      <h1 className="cal-title">{title}</h1>
+      <div className="cal-nav">
+        <button className="icon-btn" onClick={() => shift(-1)} aria-label={t('prev')}><Icon n="left" flip /></button>
+        <button className="btn sm" onClick={goToday}>{t('today')}</button>
+        <button className="icon-btn" onClick={() => shift(1)} aria-label={t('next')}><Icon n="right" flip /></button>
+      </div>
+      <div className="seg">{['day', 'week', 'month'].map(v => <button key={v} className={view === v ? 'on' : ''} onClick={() => { setView(v); if (v === 'month') setAnchor(a => new Date(a.getFullYear(), a.getMonth(), 1)); }}>{t(v)}</button>)}</div>
+      <button className="btn primary" onClick={() => newEvent()} aria-label={t('newEvent')}><Icon n="plus" size={18} /><span className="hide-sm">{t('newEvent')}</span></button>
+    </div>
+    {view === 'month'
+      ? <MonthGrid days={days} events={events} chips={chips} month={anchor.getMonth()} onDay={d => { setAnchor(d); setView('day'); }} />
+      : <TimeGrid days={days} events={events} chips={chips} onSlot={newEvent} />}
+  </div>;
+}
+
+function TimeGrid({ days, events, chips, onSlot }) {
+  const { t, F, push } = useApp();
+  const scroller = useRef(null);
+  const now = useNow(60000);
+  useEffect(() => { if (scroller.current) scroller.current.scrollTop = Math.max(0, (new Date().getHours() - 1) * HOUR); }, []);
+  const cols = days.map(d => {
+    const de = addDays(d, 1);
+    const timed = events.filter(e => !e.all_day && e._s < de && e._e > d).map(e => {
+      const s = Math.max(0, (Math.max(e._s, d) - d) / MIN);
+      const en = Math.min(1440, (Math.min(e._e, de) - d) / MIN);
+      return { ev: e, s, e: Math.max(en, s + 25) };
+    });
+    return { d, timed: layoutDay(timed), allDay: events.filter(e => e.all_day && e._s < de && e._e > d), taskChips: chips.filter(x => sameDay(new Date(x.due_at), d)) };
+  });
+  const hasTop = cols.some(c => c.allDay.length || c.taskChips.length);
+  const hours = Array.from({ length: 24 }, (_, h) => h);
+
+  return <div className="tg" style={{ '--n': days.length, '--hour': HOUR + 'px' }}>
+    <div className="tg-head">
+      <div />
+      {cols.map(c => <div key={c.d.getTime()} className={'tg-day' + (sameDay(c.d, now) ? ' today' : '')}><span className="wd">{F.wd(c.d)}</span><span className="dn">{c.d.getDate()}</span></div>)}
+    </div>
+    {hasTop && <div className="tg-allday">
+      <div className="tg-gutter">{t('allDay')}</div>
+      {cols.map(c => <div key={c.d.getTime()} className="tg-adcell">
+        {c.allDay.map(e => <EventChip key={e._key} e={e} />)}
+        {c.taskChips.map(x => <TaskChip key={x.id} task={x} />)}
+      </div>)}
+    </div>}
+    <div className="tg-scroll" ref={scroller}>
+      <div className="tg-body" style={{ height: 24 * HOUR }}>
+        <div className="tg-gutter">{hours.map(h => <div key={h} className="tg-hour" style={{ top: h * HOUR }}>{h ? F.hour(new Date(2000, 0, 1, h)) : ''}</div>)}</div>
+        {cols.map(c => <div key={c.d.getTime()} className="tg-col" onClick={e => {
+          if (e.target !== e.currentTarget) return;
+          const mins = Math.min(1410, Math.floor(e.nativeEvent.offsetY / HOUR * 2) * 30);
+          onSlot(new Date(c.d.getTime() + mins * MIN));
+        }}>
+          {c.timed.map(it => <button key={it.ev._key} className={'ev' + (it.ev._done ? ' done' : '')}
+            style={{ top: it.s / 60 * HOUR, height: (it.e - it.s) / 60 * HOUR - 2, insetInlineStart: `calc(${it.col} * 100% / ${it.cols})`, width: `calc(100% / ${it.cols} - 3px)`, '--c': it.ev.color || COLORS[0] }}
+            onClick={() => push({ type: 'event', id: it.ev.id })}>
+            <b dir="auto">{(it.ev.task_id || it.ev.note_id) && <Icon n="link" size={11} />}{it.ev.title}</b>
+            {it.e - it.s >= 45 && <small className="num">{F.time(it.ev._s)} – {F.time(it.ev._e)}</small>}
+          </button>)}
+          {sameDay(c.d, now) && <div className="now" style={{ top: (now - startOfDay(now)) / MIN / 60 * HOUR }} />}
+        </div>)}
+      </div>
+    </div>
+  </div>;
+}
+
+function MonthGrid({ days, events, chips, month, onDay }) {
+  const { F } = useApp();
+  const today = new Date();
+  return <div className="mg">
+    <div className="mg-wd">{days.slice(0, 7).map(d => <div key={d.getTime()}>{F.wd(d)}</div>)}</div>
+    <div className="mg-grid">{days.map(d => {
+      const de = addDays(d, 1);
+      const evs = events.filter(e => e._s < de && e._e > d).sort((a, b) => (b.all_day - a.all_day) || (a._s - b._s));
+      const items = [...evs.map(e => ({ k: e._key, el: <EventChip e={e} /> })), ...chips.filter(x => sameDay(new Date(x.due_at), d)).map(x => ({ k: x.id, el: <TaskChip task={x} /> }))];
+      return <div key={d.getTime()} className={'mcell' + (d.getMonth() !== month ? ' out' : '') + (sameDay(d, today) ? ' today' : '')} role="button" tabIndex={0}
+        onClick={() => onDay(d)} onKeyDown={e => { if (e.key === 'Enter') onDay(d); }}>
+        <span className="mnum">{d.getDate()}</span>
+        {items.slice(0, 3).map(i => <React.Fragment key={i.k}>{i.el}</React.Fragment>)}
+        {items.length > 3 && <span className="more">+{items.length - 3}</span>}
+      </div>;
+    })}</div>
+  </div>;
+}
+
+// ---------------- timer ----------------
+function TimerPill({ tab }) {
+  const { data, act, t, setTab } = useApp();
+  const running = data.entries.find(e => !e.ended_at);
+  const now = useNow(1000, !!running);
+  if (!running || tab === 'timer') return null;
+  const name = running.label || ((data.tasks.find(x => x.id === running.task_id) || {}).title) || t('untitled');
+  return <div className="pill">
+    <button className="pill-main" onClick={() => setTab('timer')}><span className="dot" /><span className="lbl" dir="auto">{name}</span><span className="num">{fmtClock(now - new Date(running.started_at))}</span></button>
+    <button className="stop" onClick={() => act.stopTimer()} aria-label={t('stop')}><Icon n="stop" size={12} /></button>
+  </div>;
+}
+
+function TimerView() {
+  const { t, data, act, F } = useApp();
+  const running = data.entries.find(e => !e.ended_at);
+  const now = useNow(1000);
+  const [label, setLabel] = useState('');
+  const [taskId, setTaskId] = useState('');
+  const [cat, setCat] = useState('');
+  const flat = useMemo(() => flattenTasks(data.tasks.filter(x => x.status !== 'done')), [data.tasks]);
+  const tTitle = id => (data.tasks.find(x => x.id === id) || {}).title;
+  const name = e => e.label || tTitle(e.task_id) || t('untitled');
+  const dur = e => (e.ended_at ? new Date(e.ended_at) : now) - new Date(e.started_at);
+  const ws = (data.settings && data.settings.week_start) ?? 0;
+  const d0 = startOfDay(now), w0 = startOfWeek(now, ws);
+  const today = data.entries.filter(e => new Date(e.started_at) >= d0);
+  const week = data.entries.filter(e => new Date(e.started_at) >= w0);
+  const sum = list => list.reduce((a, e) => a + dur(e), 0);
+  const byCat = Object.entries(week.reduce((acc, e) => { const k = e.category || t('uncategorized'); acc[k] = (acc[k] || 0) + dur(e); return acc; }, {})).sort((a, b) => b[1] - a[1]);
+  const maxCat = Math.max(1, ...byCat.map(x => x[1]));
+  const wdays = Array.from({ length: 7 }, (_, i) => addDays(w0, i)).map(d => ({ d, ms: sum(week.filter(e => sameDay(new Date(e.started_at), d))) }));
+  const maxDay = Math.max(1, ...wdays.map(x => x.ms));
+  const recent = [];
+  data.entries.forEach(e => { if (e.ended_at && recent.length < 6 && !recent.some(r => name(r) === name(e))) recent.push(e); });
+  const cats = [...new Set(data.entries.map(e => e.category).filter(Boolean))];
+  const start = async o => { if (await act.startTimer(o)) { setLabel(''); setTaskId(''); } };
+  const startForm = () => start({ label: label.trim() || tTitle(taskId) || t('untitled'), task_id: taskId || null, category: cat.trim() || null });
+
+  return <div>
+    <div className="page-head"><h1>{t('timer')}</h1></div>
+    {running ? <div className="tcard live">
+      <div className="sub">{t('running')}{running.category ? ` · ${running.category}` : ''}</div>
+      <div className="live-name" dir="auto">{name(running)}</div>
+      <div className="clock">{fmtClock(dur(running))}</div>
+      <button className="btn dark big" onClick={() => act.stopTimer()}><Icon n="stop" size={14} />{t('stop')}</button>
+    </div> : <div className="tcard">
+      <label className="field"><span>{t('whatWorking')}</span><input type="text" dir="auto" value={label} onChange={e => setLabel(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) startForm(); }} /></label>
+      <div className="row">
+        <label className="field"><span>{t('task')}</span>
+          <select value={taskId} onChange={e => setTaskId(e.target.value)}>
+            <option value="">{t('noLink')}</option>
+            {flat.map(({ task, depth }) => <option key={task.id} value={task.id}>{'\u00A0\u00A0\u00A0'.repeat(depth) + (depth ? '↳ ' : '') + task.title}</option>)}
+          </select></label>
+        <label className="field"><span>{t('category')}</span><input type="text" dir="auto" list="cats-tm" value={cat} onChange={e => setCat(e.target.value)} /></label>
+      </div>
+      <datalist id="cats-tm">{cats.map(c => <option key={c} value={c} />)}</datalist>
+      <button className="btn primary big" onClick={startForm}><Icon n="play" size={14} />{t('startBtn')}</button>
+      {recent.length > 0 && <div className="section"><h3>{t('recent')}</h3>
+        <div className="actions">{recent.map(e => <button key={e.id} className="btn sm" onClick={() => start({ label: e.label, task_id: e.task_id, category: e.category })}><Icon n="play" size={12} /><span dir="auto">{name(e)}</span></button>)}</div>
+      </div>}
+    </div>}
+
+    <div className="grid2">
+      <div className="tcard">
+        <div className="card-head"><h2>{t('todayLog')}</h2><span className="num">{fmtDur(sum(today))}</span></div>
+        {today.length ? <ul className="tlog">{today.map(e => <li key={e.id}>
+          <span className="grow"><b dir="auto">{name(e)}</b><small>{F.time(new Date(e.started_at))} – {e.ended_at ? F.time(new Date(e.ended_at)) : t('running')}{e.category ? ` · ${e.category}` : ''}</small></span>
+          <span className="num">{fmtDur(dur(e))}</span>
+          <button className="icon-btn" onClick={() => { if (confirm(t('confirmDelete'))) act.deleteEntry(e.id); }} aria-label={t('delete')}><Icon n="trash" size={16} /></button>
+        </li>)}</ul> : <p className="empty">{t('noEntries')}</p>}
+      </div>
+      <div className="tcard">
+        <div className="card-head"><h2>{t('thisWeek')}</h2><span className="num">{fmtDur(sum(week))}</span></div>
+        <div className="week-days">{wdays.map(x => <div key={x.d.getTime()} className={'wdbar' + (sameDay(x.d, now) ? ' today' : '')} title={fmtDur(x.ms)}>
+          <div className="wdtrack"><i style={{ height: (x.ms / maxDay * 100) + '%' }} /></div><span>{F.wd(x.d)}</span>
+        </div>)}</div>
+        {byCat.map(([k, ms]) => <div key={k} className="bar"><span className="ellip" dir="auto">{k}</span><span className="track"><i style={{ width: (ms / maxCat * 100) + '%' }} /></span><span className="num">{fmtDur(ms)}</span></div>)}
+      </div>
+    </div>
+  </div>;
+}
+
+// ---------------- settings ----------------
+function SettingsView() {
+  const { t, lang, setLang, data, act, toast, F, session } = useApp();
+  const s = data.settings || {};
+  const [perm, setPerm] = useState(() => ('Notification' in window) ? Notification.permission : 'unsupported');
+  const [subbed, setSubbed] = useState(false);
+  useEffect(() => {
+    (async () => {
+      try { const reg = await navigator.serviceWorker.getRegistration(); const sub = reg && await reg.pushManager.getSubscription(); setSubbed(!!sub); } catch (e) { }
+    })();
+  }, []);
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  const on = perm === 'granted' && subbed;
+  const turnOn = async () => {
+    const r = await act.enablePush();
+    if ('Notification' in window) setPerm(Notification.permission);
+    if (r) { setSubbed(true); toast(t('notifOnToast')); }
+  };
+  const testLocal = async () => {
+    try { const reg = await navigator.serviceWorker.ready; await reg.showNotification(t('testTitle'), { body: t('testBody'), icon: 'icon-192.png' }); } catch (e) { toast(e.message); }
+  };
+  return <div>
+    <div className="page-head"><h1>{t('settings')}</h1></div>
+    <section className="card">
+      <h2>{t('notifications')}</h2>
+      <p className="hint">{on ? t('notifOn') : t('notifOff')}</p>
+      {isIOS && !standalone && <p className="hint warn">{t('iosHint')}</p>}
+      <div className="actions">
+        {!on && <button className="btn primary" onClick={turnOn}><Icon n="bell" size={18} />{t('turnOn')}</button>}
+        {perm === 'granted' && <button className="btn" onClick={testLocal}>{t('testLocal')}</button>}
+        {on && <button className="btn" onClick={async () => { if (await act.testPush()) toast(t('testSent')); }}>{t('testPush')}</button>}
+      </div>
+    </section>
+    <section className="card">
+      <h2>{t('defaultAlerts')}</h2>
+      <div style={{ marginBottom: 14 }}><AlertEditor value={s.default_alerts || [10]} onChange={v => act.saveSettings({ default_alerts: v })} /></div>
+    </section>
+    <section className="card">
+      <h2>{t('quietHours')}</h2>
+      <p className="hint">{t('quietHint')}</p>
+      <div className="row">
+        <label className="field"><span>{t('from')}</span><input type="time" value={(s.quiet_start || '').slice(0, 5)} onChange={e => act.saveSettings({ quiet_start: e.target.value || null })} /></label>
+        <label className="field"><span>{t('to')}</span><input type="time" value={(s.quiet_end || '').slice(0, 5)} onChange={e => act.saveSettings({ quiet_end: e.target.value || null })} /></label>
+      </div>
+    </section>
+    <section className="card">
+      <h2>{t('general')}</h2>
+      <div className="row">
+        <label className="field"><span>{t('language')}</span>
+          <select value={lang} onChange={e => { setLang(e.target.value); act.saveSettings({ lang: e.target.value }); }}><option value="en">English</option><option value="ar">العربية</option></select></label>
+        <label className="field"><span>{t('weekStart')}</span>
+          <select value={s.week_start ?? 0} onChange={e => act.saveSettings({ week_start: Number(e.target.value) })}>
+            {[6, 0, 1].map(d => <option key={d} value={d}>{F.wdLong(new Date(2024, 0, 7 + d))}</option>)}
+          </select></label>
+      </div>
+    </section>
+    <section className="card">
+      <h2>{t('account')}</h2>
+      <p className="hint">{session.user.email}</p>
+      <div className="actions"><button className="btn" onClick={() => sb.auth.signOut()}>{t('signOut')}</button></div>
+    </section>
+  </div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
