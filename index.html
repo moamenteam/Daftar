@@ -274,6 +274,75 @@ select{-webkit-appearance:none;appearance:none;background-image:linear-gradient(
   .bar{grid-template-columns:minmax(70px,96px) 1fr auto}
   .toast{bottom:calc(140px + env(safe-area-inset-bottom))}
 }
+/* ===== calendar v2 ===== */
+.cal-title-btn{position:relative;display:inline-flex;align-items:center;gap:4px;flex:1;min-width:140px;cursor:pointer}
+.cal-title-btn .cal-title{flex:none;min-width:0;margin:0}
+input.jump{position:absolute !important;inset:0;opacity:0;width:100% !important;height:100% !important;min-height:0 !important;cursor:pointer;padding:0 !important;border:0 !important}
+.cal-filters{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;scrollbar-width:none}
+.cal-filters::-webkit-scrollbar{display:none}
+.fchip{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:13px;white-space:nowrap;flex:none}
+.fchip i{width:10px;height:10px;border-radius:50%;background:var(--c);flex:none}
+.fchip i.sq{border-radius:3px;background:transparent;border:1.5px solid var(--c)}
+.fchip.off{opacity:.5}
+.fchip.off i{background:transparent;border:1.5px solid var(--c)}
+.fchip.ghost{border-style:dashed;color:var(--muted)}
+.tg{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.tg-day{cursor:pointer}
+.tg-adcell{cursor:cell;min-height:30px}
+.ev{cursor:grab}
+.ev.lifted,.tk.lifted{opacity:.3}
+.ev.ghost{opacity:.95;box-shadow:0 8px 20px rgba(0,0,0,.25);z-index:5;pointer-events:none;outline:2px solid var(--c)}
+.rz{position:absolute;left:0;right:0;bottom:0;height:10px;cursor:ns-resize}
+.rz::after{content:"";position:absolute;left:50%;bottom:3px;width:18px;height:3px;margin-left:-9px;border-radius:2px;background:var(--c);opacity:.55}
+.tk{position:absolute;display:flex;align-items:center;gap:4px;padding:0 6px;border-radius:7px;border:1px dashed var(--muted);background:var(--surface);font-size:12px;overflow:hidden;z-index:2;cursor:grab;min-height:20px}
+.tk.done span{text-decoration:line-through;opacity:.6}
+.mini-chk{display:grid;place-items:center;flex:none;color:var(--muted);width:18px;height:18px}
+.chip.task .mini-chk{width:16px;height:16px}
+.sel{position:absolute;left:2px;right:4px;border-radius:7px;background:color-mix(in srgb,var(--accent) 22%,transparent);border:2px solid var(--accent);z-index:4;pointer-events:none;padding:2px 6px;font-size:12px}
+.fab{display:none}
+.seg.full{display:flex;width:100%}
+.seg.full button{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.chips-row{display:flex;flex-wrap:wrap;gap:6px}
+.pchip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface-2);font-size:14px}
+.pchip.on{border-color:var(--accent);background:var(--accent-soft);font-weight:600}
+.dot-c{width:10px;height:10px;border-radius:50%;background:var(--c,var(--muted));display:inline-block;flex:none}
+.dot-c.big{width:18px;height:18px}
+.custom-box{margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);display:grid;gap:12px}
+.inline-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.inline-row input[type=text]{flex:1;width:auto}
+input.num-in{width:76px !important;height:38px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:16px}
+select.auto,input.auto{width:auto !important;flex:none}
+.daypick{display:flex;gap:6px;flex-wrap:wrap}
+.daypick button{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-size:13px;font-weight:600}
+.daypick button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.sw.cal-default{border:2px dashed var(--c);background:color-mix(in srgb,var(--c) 30%,transparent)}
+.pv-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:16px}
+.pv-head .chk{margin-top:4px}
+.pv-dot{width:16px;height:16px;border-radius:5px;margin-top:7px;flex:none}
+.pv-title{font-size:20px;font-weight:600;margin:0 0 4px;color:var(--ink)}
+.pv-when{margin:0 0 8px}
+.pv-sub{display:flex;align-items:center;gap:8px;margin:0 0 6px;color:var(--muted);font-size:14px}
+.cal-edit{padding:12px 0;border-bottom:1px solid var(--line);margin-bottom:10px}
+.cal-edit .swatches{margin-top:10px}
+.sched{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.sday{display:grid;grid-template-columns:56px 1fr;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.sdate{display:flex;flex-direction:column;align-items:center;line-height:1.2;padding-top:4px}
+.sdate .wd,.sdate .mo{font-size:11px;color:var(--muted)}
+.sdate .dn{font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
+.sday.today .dn{color:var(--accent)}
+.sitems{display:grid;gap:6px;min-width:0}
+.sitem{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--c,var(--surface-2)) 14%,var(--surface));width:100%;min-width:0}
+.sitem .sbar{width:4px;align-self:stretch;border-radius:2px;background:var(--c);flex:none}
+.sitem b{display:block;font-weight:500;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.sitem small{display:block;color:var(--muted);font-size:12px}
+@media (max-width:600px){
+  .fab{display:grid;place-items:center;position:fixed;inset-inline-end:16px;bottom:calc(76px + env(safe-area-inset-bottom));width:56px;height:56px;border-radius:18px;background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:25}
+  .pill{left:auto;right:auto;inset-inline-start:12px;transform:none;max-width:calc(100vw - 96px)}
+  .cal-views{order:5;width:100%}
+  .cal-views button{flex:1;padding:6px 4px}
+  .rz{height:16px}
+  .tg{height:calc(100dvh - 300px - env(safe-area-inset-bottom))}
+}
 @media (prefers-reduced-motion:reduce){ .sheet{animation:none} .dot{animation:none} .rot{transition:none} }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
@@ -299,6 +368,9 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').ca
 // ---------------- i18n ----------------
 const STR = {
   en: {
+    v_day:'Day', v_3day:'3 days', v_week:'Week', v_month:'Month', v_schedule:'Schedule', create:'Create', event:'Event', newTask:'New task', addTitle:'Add title', moreOptions:'More options', calendarLbl:'Calendar', calendars:'Calendars', manageCals:'Manage calendars', noCalendar:'Other', calDefault:'Calendar color', newCal:'Add calendar', calName:'Calendar name', calDup:'Calendar names must be different.', calHint:'Tap a calendar chip on the Calendar tab to show or hide it.',
+    doesNotRepeat:'Does not repeat', weekdays:'Every workday (Sun–Thu)', weeklyOn:'Weekly on {d}', monthlyOn:'Monthly on day {n}', custom:'Custom…', every:'Every', daysU:'days', weeksU:'weeks', monthsU:'months', minutesU:'minutes', hoursU:'hours', beforeU:'before', ends:'Ends', never:'Never', onDate:'On date', afterN:'After', times:'times', everyNDays:'Every {n} days', everyNWeeks:'Every {n} weeks', everyNMonths:'Every {n} months', untilD:'until {d}', nTimes:'{n} times',
+    thisEvent:'This event', thisAndFollowing:'This and following events', allEvents:'All events', editEventQ:'Save repeating event', deleteEventQ:'Delete repeating event', moveEventQ:'Move repeating event', edit:'Edit', duplicate:'Duplicate', duplicated:'Duplicated', moved:'Updated', alertAtDue:'Notify me at the due time', customAlert:'Custom…', weekBefore:'{n} week before', weekUnit:'wk', loadMore:'Show more', nothingScheduled:'Nothing planned', defaultDuration:'Default event length', removeFromCal:'Remove date', timeBlock:'Block time', markDone:'Mark done', jumpTo:'Go to date', cancel:'Cancel',
     calendar:'Calendar', tasks:'Tasks', notes:'Notes', timer:'Timer', settings:'Settings', loading:'Loading…',
     signIn:'Sign in', signUp:'Create account', email:'Email', password:'Password', haveAccount:'Have an account? Sign in', noAccount:'New here? Create an account', checkEmail:'Check your email to confirm your account, then sign in.', setupNeeded:'Add your Supabase URL and keys at the top of index.html to start.',
     today:'Today', day:'Day', week:'Week', month:'Month', allDay:'All day', prev:'Previous', next:'Next',
@@ -313,6 +385,9 @@ const STR = {
     saved:'Saved', confirmDelete:'Delete this? This cannot be undone.', confirmDeleteTask:'Delete this task and all its subtasks?', testSent:'Test push queued. It arrives within a minute.', needTitle:'Add a title first.', endAfterStart:'End must be after start.',
   },
   ar: {
+    v_day:'يوم', v_3day:'3 أيام', v_week:'أسبوع', v_month:'شهر', v_schedule:'جدول', create:'إنشاء', event:'حدث', newTask:'مهمة جديدة', addTitle:'أضف عنوانًا', moreOptions:'خيارات أكثر', calendarLbl:'التقويم', calendars:'التقويمات', manageCals:'إدارة التقويمات', noCalendar:'أخرى', calDefault:'لون التقويم', newCal:'إضافة تقويم', calName:'اسم التقويم', calDup:'يجب أن تكون أسماء التقويمات مختلفة.', calHint:'اضغط على اسم التقويم في تبويب التقويم لإظهاره أو إخفائه.',
+    doesNotRepeat:'لا يتكرر', weekdays:'كل يوم عمل (الأحد–الخميس)', weeklyOn:'أسبوعيًا يوم {d}', monthlyOn:'شهريًا يوم {n}', custom:'مخصص…', every:'كل', daysU:'أيام', weeksU:'أسابيع', monthsU:'أشهر', minutesU:'دقائق', hoursU:'ساعات', beforeU:'قبل', ends:'ينتهي', never:'أبدًا', onDate:'في تاريخ', afterN:'بعد', times:'مرات', everyNDays:'كل {n} أيام', everyNWeeks:'كل {n} أسابيع', everyNMonths:'كل {n} أشهر', untilD:'حتى {d}', nTimes:'{n} مرات',
+    thisEvent:'هذا الحدث فقط', thisAndFollowing:'هذا الحدث والأحداث التالية', allEvents:'كل الأحداث', editEventQ:'حفظ حدث متكرر', deleteEventQ:'حذف حدث متكرر', moveEventQ:'نقل حدث متكرر', edit:'تعديل', duplicate:'تكرار', duplicated:'تم النسخ', moved:'تم التحديث', alertAtDue:'نبّهني في موعد الاستحقاق', customAlert:'مخصص…', weekBefore:'قبل {n} أسبوع', weekUnit:'أسبوع', loadMore:'عرض المزيد', nothingScheduled:'لا شيء مخطط', defaultDuration:'مدة الحدث الافتراضية', removeFromCal:'إزالة التاريخ', timeBlock:'حجز وقت', markDone:'تحديد كمنجز', jumpTo:'الانتقال إلى تاريخ', cancel:'إلغاء',
     calendar:'التقويم', tasks:'المهام', notes:'الملاحظات', timer:'المؤقت', settings:'الإعدادات', loading:'جارٍ التحميل…',
     signIn:'تسجيل الدخول', signUp:'إنشاء حساب', email:'البريد الإلكتروني', password:'كلمة المرور', haveAccount:'لديك حساب؟ سجّل الدخول', noAccount:'جديد هنا؟ أنشئ حسابًا', checkEmail:'تحقق من بريدك لتأكيد الحساب ثم سجّل الدخول.', setupNeeded:'أضف رابط Supabase والمفاتيح في أعلى ملف index.html للبدء.',
     today:'اليوم', day:'يوم', week:'أسبوع', month:'شهر', allDay:'طوال اليوم', prev:'السابق', next:'التالي',
@@ -356,49 +431,136 @@ function makeFmt(lang) {
   const f = o => new Intl.DateTimeFormat(loc, o);
   const time = f({ hour: 'numeric', minute: '2-digit' }), date = f({ weekday: 'short', day: 'numeric', month: 'short' }),
     dateLong = f({ weekday: 'long', day: 'numeric', month: 'long' }), wd = f({ weekday: 'short' }), wdLong = f({ weekday: 'long' }),
-    my = f({ month: 'long', year: 'numeric' }), dt = f({ weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }), hour = f({ hour: 'numeric' });
-  return { time: d => time.format(d), date: d => date.format(d), dateLong: d => dateLong.format(d), wd: d => wd.format(d), wdLong: d => wdLong.format(d), my: d => my.format(d), dt: d => dt.format(d), hour: d => hour.format(d) };
+    my = f({ month: 'long', year: 'numeric' }), dt = f({ weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }), hour = f({ hour: 'numeric' }), wdNarrow = f({ weekday: 'narrow' }), monShort = f({ month: 'short' });
+  return { time: d => time.format(d), date: d => date.format(d), dateLong: d => dateLong.format(d), wd: d => wd.format(d), wdLong: d => wdLong.format(d), my: d => my.format(d), dt: d => dt.format(d), hour: d => hour.format(d), wdNarrow: d => wdNarrow.format(d), monShort: d => monShort.format(d) };
 }
 
 function alertLabel(m, t) {
   if (m === 0) return t('atStart');
   if (m < 60) return t('minBefore').replace('{n}', m);
-  if (m < 1440) return t('hourBefore').replace('{n}', m / 60);
+  if (m < 1440) return t('hourBefore').replace('{n}', +(m / 60).toFixed(2));
+  if (m % 10080 === 0) return t('weekBefore').replace('{n}', m / 10080);
   return t('dayBefore').replace('{n}', m / 1440);
 }
-const shortSpan = (m, t) => m < 60 ? `${m} ${t('minUnit')}` : m < 1440 ? `${m / 60} ${t('hourUnit')}` : `${m / 1440} ${t('dayUnit')}`;
+const shortSpan = (m, t) => m < 60 ? `${m} ${t('minUnit')}` : m < 1440 ? `${+(m / 60).toFixed(2)} ${t('hourUnit')}` : m % 10080 === 0 ? `${m / 10080} ${t('weekUnit')}` : `${+(m / 1440).toFixed(2)} ${t('dayUnit')}`;
 
-// One reminder row per alert; for repeating events the cron job rolls it forward.
+// One reminder row per alert. Repeating events: the cron job rolls each row to the next occurrence.
 function eventReminders(ev, t, F) {
-  const now = Date.now();
   return (ev.alert_minutes || []).map(m => {
-    let occ = new Date(ev.start_at);
-    if (ev.all_day) occ = new Date(occ.getTime() + 9 * 60 * MIN); // all-day alerts are relative to 9:00
-    if (ev.repeat_rule) { let g = 0; while (occ.getTime() - m * MIN <= now && g++ < 5000) occ = advance(occ, ev.repeat_rule); }
-    const at = occ.getTime() - m * MIN;
-    if (at <= now) return null;
-    const body = (m === 0 ? t('startingNow') : t('inX').replace('{d}', shortSpan(m, t))) + (ev.all_day ? '' : ` · ${F.time(occ)}`);
-    return { event_id: ev.id, title: ev.title, body, remind_at: new Date(at).toISOString(), repeat_rule: ev.repeat_rule || null };
+    const n = nextAlertTime(ev, m);
+    if (!n) return null;
+    const body = (m === 0 ? t('startingNow') : t('inX').replace('{d}', shortSpan(m, t))) + (ev.all_day ? '' : ` · ${F.time(n.occ)}`);
+    return { event_id: ev.id, title: ev.title, body, remind_at: n.at.toISOString(), repeat_rule: ev.repeat_rule || null, offset_minutes: m };
   }).filter(Boolean);
 }
 
-// Expand repeating events inside [from, to)
-function occurrences(ev, from, to) {
-  const s0 = new Date(ev.start_at), e0 = new Date(ev.end_at), len = e0 - s0;
-  if (!ev.repeat_rule) return (s0 < to && e0 > from) ? [{ ...ev, _key: ev.id, _s: s0, _e: e0 }] : [];
-  const out = [];
-  let s = s0;
-  if (ev.repeat_rule !== 'MONTHLY' && from > s0) {
-    const step = ev.repeat_rule === 'DAILY' ? 1 : 7;
-    const k = Math.floor((startOfDay(from) - startOfDay(s0)) / (step * DAY)) - 1;
-    if (k > 0) s = addDays(s0, k * step);
+// ---------------- recurrence ----------------
+// Rules: legacy 'DAILY' | 'WEEKLY' | 'MONTHLY', or 'FREQ=WEEKLY;INTERVAL=2;BYDAY=SU,TU;UNTIL=2026-12-31' / ';COUNT=10'
+const RDAYS = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+const WORKWEEK = 'FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH';
+function parseRule(r) {
+  if (!r) return null;
+  if (r === 'DAILY' || r === 'WEEKLY' || r === 'MONTHLY') return { freq: r, interval: 1, byday: null, until: null, count: null };
+  const o = { freq: 'DAILY', interval: 1, byday: null, until: null, count: null };
+  r.split(';').forEach(p => {
+    const [k, v] = p.split('=');
+    if (k === 'FREQ' && ['DAILY', 'WEEKLY', 'MONTHLY'].includes(v)) o.freq = v;
+    else if (k === 'INTERVAL') o.interval = Math.max(1, parseInt(v, 10) || 1);
+    else if (k === 'BYDAY') o.byday = v.split(',').map(d => RDAYS.indexOf(d)).filter(i => i >= 0);
+    else if (k === 'UNTIL') o.until = v;
+    else if (k === 'COUNT') o.count = parseInt(v, 10) || null;
+  });
+  if (!o.byday || !o.byday.length || o.freq !== 'WEEKLY') o.byday = null;
+  return o;
+}
+function buildRule(o) {
+  if (!o) return null;
+  const p = ['FREQ=' + o.freq];
+  if (o.interval > 1) p.push('INTERVAL=' + o.interval);
+  if (o.freq === 'WEEKLY' && o.byday && o.byday.length) p.push('BYDAY=' + [...o.byday].sort((a, b) => a - b).map(i => RDAYS[i]).join(','));
+  if (o.until) p.push('UNTIL=' + o.until); else if (o.count) p.push('COUNT=' + o.count);
+  return p.join(';');
+}
+// Yields occurrence starts (local time) in order. `from` lets daily/weekly/monthly skip ahead.
+function* occStarts(s0, rule, from) {
+  const r = parseRule(rule);
+  if (!r) { yield s0; return; }
+  const end = r.until ? addDays(fromInput(r.until), 1) : null;
+  const max = r.count || Infinity;
+  let emitted = 0;
+  const atTime = d => { const x = new Date(d); x.setHours(s0.getHours(), s0.getMinutes(), 0, 0); return x; };
+  if (r.byday) {
+    const days = [...r.byday].sort((a, b) => a - b);
+    let wk = addDays(startOfDay(s0), -s0.getDay());
+    if (from && !r.count) {
+      const skip = Math.floor((startOfDay(from) - wk) / (7 * DAY * r.interval)) - 1;
+      if (skip > 0) wk = addDays(wk, skip * 7 * r.interval);
+    }
+    for (let g = 0; g < 4000; g++) {
+      for (const d of days) {
+        const dt = atTime(addDays(wk, d));
+        if (dt < s0) continue;
+        if ((end && dt >= end) || emitted >= max) return;
+        emitted++; yield dt;
+      }
+      wk = addDays(wk, 7 * r.interval);
+    }
+    return;
   }
-  for (let i = 0; i < 500 && s < to; i++) {
+  let k = 0;
+  if (from && !r.count && from > s0) {
+    if (r.freq === 'MONTHLY') k = Math.floor(((from.getFullYear() - s0.getFullYear()) * 12 + from.getMonth() - s0.getMonth()) / r.interval) - 1;
+    else k = Math.floor((startOfDay(from) - startOfDay(s0)) / ((r.freq === 'DAILY' ? 1 : 7) * r.interval * DAY)) - 1;
+    if (k < 0) k = 0;
+  }
+  for (let g = 0; g < 6000; g++, k++) {
+    const dt = r.freq === 'DAILY' ? addDays(s0, k * r.interval) : r.freq === 'WEEKLY' ? addDays(s0, 7 * k * r.interval) : addMonths(s0, k * r.interval);
+    if ((end && dt >= end) || emitted >= max) return;
+    emitted++; yield dt;
+  }
+}
+const dateKey = d => toDateInput(d);
+// Occurrences of an event overlapping [from, to)
+function occurrences(ev, from, to) {
+  const s0 = new Date(ev.start_at), len = new Date(ev.end_at) - s0;
+  if (!ev.repeat_rule) return (s0 < to && new Date(ev.end_at) > from) ? [{ ...ev, _key: ev.id, _s: s0, _e: new Date(ev.end_at), _rep: false }] : [];
+  const ex = new Set(ev.exdates || []);
+  const out = [];
+  let i = 0;
+  for (const s of occStarts(s0, ev.repeat_rule, new Date(from.getTime() - len - DAY))) {
+    if (s >= to || i++ > 1000) break;
     const e = new Date(s.getTime() + len);
-    if (e > from) out.push({ ...ev, _key: ev.id + '|' + s.getTime(), _s: s, _e: e });
-    s = advance(s, ev.repeat_rule);
+    if (e > from && !ex.has(dateKey(s))) out.push({ ...ev, _key: ev.id + '|' + s.getTime(), _s: s, _e: e, _rep: true });
   }
   return out;
+}
+// Next time an alert of `m` minutes should fire for this event (null if none in the future)
+function nextAlertTime(ev, m) {
+  const now = Date.now();
+  const s0 = new Date(ev.start_at);
+  const ex = new Set(ev.exdates || []);
+  let i = 0;
+  for (const s of occStarts(s0, ev.repeat_rule, new Date(now - DAY))) {
+    if (i++ > 3000) break;
+    if (ex.has(dateKey(s))) continue;
+    const fire = s.getTime() + (ev.all_day ? 9 * 60 * MIN : 0) - m * MIN;
+    if (fire > now) return { at: new Date(fire), occ: s };
+  }
+  return null;
+}
+function describeRule(rule, t, F) {
+  const r = parseRule(rule);
+  if (!r) return t('doesNotRepeat');
+  let base;
+  if (rule === WORKWEEK) base = t('weekdays');
+  else if (r.byday) base = (r.interval > 1 ? t('everyNWeeks').replace('{n}', r.interval) : t('weekly')) + ' · ' + r.byday.map(d => F.wd(new Date(2024, 0, 7 + d))).join(' ');
+  else {
+    const key = { DAILY: ['daily', 'everyNDays'], WEEKLY: ['weekly', 'everyNWeeks'], MONTHLY: ['monthly', 'everyNMonths'] }[r.freq];
+    base = r.interval > 1 ? t(key[1]).replace('{n}', r.interval) : t(key[0]);
+  }
+  if (r.until) base += ' · ' + t('untilD').replace('{d}', F.date(fromInput(r.until)));
+  else if (r.count) base += ' · ' + t('nTimes').replace('{n}', r.count);
+  return base;
 }
 
 // Side-by-side layout for overlapping events in one day column
@@ -448,6 +610,9 @@ const ICONS = {
   pin: 'M9 3h6l-1 6 4 4H6l4-4zM12 13v8',
   flag: 'M5 21V4h11l-2 4 2 4H5',
   tick: 'M5 12.5l4.5 4.5L19 7', square: 'M5 5h14v14H5z',
+  copy: 'M9 9h11v11H9zM5 15H4V4h11v1',
+  edit: 'M4 20h4L19 9l-4-4L4 16zM14 6l4 4',
+  repeat: 'M17 2l3 3-3 3M4 11V9a4 4 0 0 1 4-4h16M7 22l-3-3 3-3M20 13v2a4 4 0 0 1-4 4H4',
 };
 function Icon({ n, size = 20, flip, className = '' }) {
   const filled = n === 'play' || n === 'stop';
@@ -517,6 +682,7 @@ function Main({ t, lang, setLang, session }) {
   const toast = useCallback(m => { setToastMsg(m); clearTimeout(toastTimer.current); toastTimer.current = setTimeout(() => setToastMsg(''), 3200); }, []);
   const push = useCallback(m => setStack(s => [...s, { ...m, key: Date.now() + Math.random() }]), []);
   const pop = useCallback(() => setStack(s => s.slice(0, -1)), []);
+  const replace = useCallback(m => setStack(s => [...s.slice(0, -1), { ...m, key: Date.now() + Math.random() }]), []);
 
   const loadAll = useCallback(async () => {
     const since = addDays(startOfDay(new Date()), -35).toISOString();
@@ -550,6 +716,36 @@ function Main({ t, lang, setLang, session }) {
       try { const r = await fn(...a); await loadAll(); return r ?? true; }
       catch (e) { toast(e.message); return null; }
     };
+    const EV_FIELDS = ['title', 'start_at', 'end_at', 'all_day', 'color', 'category', 'alert_minutes', 'repeat_rule', 'note_id', 'task_id', 'exdates'];
+    const rawSaveEvent = async ev => {
+      const row = pick(ev, EV_FIELDS);
+      const saved = ev.id ? await q(sb.from('events').update(row).eq('id', ev.id).select().single()) : await q(sb.from('events').insert(row).select().single());
+      await q(sb.from('reminders').delete().eq('event_id', saved.id).is('sent_at', null));
+      const rems = eventReminders(saved, tRef.current, FRef.current);
+      if (rems.length) await q(sb.from('reminders').insert(rems));
+      return saved;
+    };
+    const withUntil = (rule, d) => { const r = parseRule(rule); return r ? buildRule({ ...r, until: dateKey(d), count: null }) : null; };
+    const applyOccurrenceChange = async (base, occS, form, scope) => {
+      const fS = new Date(form.start_at), fE = new Date(form.end_at);
+      if (scope === 'one') {
+        await rawSaveEvent({ ...base, exdates: [...new Set([...(base.exdates || []), dateKey(occS)])] });
+        return rawSaveEvent({ ...form, id: undefined, repeat_rule: null, exdates: [] });
+      }
+      if (scope === 'following' && new Date(base.start_at) < startOfDay(occS)) {
+        await rawSaveEvent({ ...base, repeat_rule: withUntil(base.repeat_rule, addDays(occS, -1)) });
+        const r = parseRule(form.repeat_rule);
+        return rawSaveEvent({ ...form, id: undefined, exdates: [], repeat_rule: r ? buildRule({ ...r, count: null }) : null });
+      }
+      // all events: apply the same shift to the series start
+      const delta = fS - occS, dur = fE - fS;
+      const ns = new Date(new Date(base.start_at).getTime() + delta);
+      let rule = form.repeat_rule;
+      const dayShift = Math.round((startOfDay(fS) - startOfDay(occS)) / DAY);
+      const r = parseRule(rule);
+      if (r && r.byday && dayShift % 7 && rule === base.repeat_rule) rule = buildRule({ ...r, byday: r.byday.map(d => (((d + dayShift) % 7) + 7) % 7) });
+      return rawSaveEvent({ ...form, id: base.id, start_at: ns.toISOString(), end_at: new Date(ns.getTime() + dur).toISOString(), exdates: base.exdates || [], repeat_rule: rule });
+    };
     const stopRunning = () => q(sb.from('time_entries').update({ ended_at: new Date().toISOString() }).is('ended_at', null));
     return {
       createNote: wrap(() => q(sb.from('notes').insert({ title: '', body: '' }).select().single())),
@@ -571,15 +767,26 @@ function Main({ t, lang, setLang, session }) {
         await q(sb.from('tasks').update({ position: pb }).eq('id', a.id));
         await q(sb.from('tasks').update({ position: pa }).eq('id', b.id));
       }),
-      saveEvent: wrap(async ev => {
-        const row = pick(ev, ['title', 'start_at', 'end_at', 'all_day', 'color', 'category', 'alert_minutes', 'repeat_rule', 'note_id', 'task_id']);
-        const saved = ev.id ? await q(sb.from('events').update(row).eq('id', ev.id).select().single()) : await q(sb.from('events').insert(row).select().single());
-        await q(sb.from('reminders').delete().eq('event_id', saved.id).is('sent_at', null));
-        const rems = eventReminders(saved, tRef.current, FRef.current);
-        if (rems.length) await q(sb.from('reminders').insert(rems));
+      saveEvent: wrap(ev => rawSaveEvent(ev)),
+      deleteEvent: wrap(id => q(sb.from('events').delete().eq('id', id))),
+      duplicateEvent: wrap(ev => rawSaveEvent({ ...ev, id: undefined, note_id: null, task_id: null })),
+      changeOccurrence: wrap((base, occS, form, scope) => applyOccurrenceChange(base, occS, form, scope)),
+      deleteOccurrence: wrap(async (base, occS, scope) => {
+        if (scope === 'one') return rawSaveEvent({ ...base, exdates: [...new Set([...(base.exdates || []), dateKey(occS)])] });
+        if (scope === 'following' && new Date(base.start_at) < startOfDay(occS)) return rawSaveEvent({ ...base, repeat_rule: withUntil(base.repeat_rule, addDays(occS, -1)) });
+        return q(sb.from('events').delete().eq('id', base.id));
+      }),
+      quickTask: wrap(async (tk, alertAtDue) => {
+        const saved = await q(sb.from('tasks').insert({ ...tk, position: Date.now() }).select().single());
+        if (alertAtDue && saved.due_at && new Date(saved.due_at) > new Date()) {
+          await q(sb.from('reminders').insert({ task_id: saved.id, title: saved.title, body: tRef.current('taskReminder'), remind_at: saved.due_at }));
+        }
         return saved;
       }),
-      deleteEvent: wrap(id => q(sb.from('events').delete().eq('id', id))),
+      saveCalendars: wrap(async (calendars, renames) => {
+        await q(sb.from('user_settings').update({ calendars, updated_at: new Date().toISOString() }).eq('user_id', uid));
+        for (const [a, b] of renames) await q(sb.from('events').update({ category: b }).eq('category', a));
+      }),
       addReminder: wrap(r => q(sb.from('reminders').insert(r))),
       deleteReminder: wrap(id => q(sb.from('reminders').delete().eq('id', id))),
       startTimer: wrap(async o => { await stopRunning(); return q(sb.from('time_entries').insert({ label: o.label || null, task_id: o.task_id || null, category: o.category || null }).select().single()); }),
@@ -621,7 +828,7 @@ function Main({ t, lang, setLang, session }) {
     return () => navigator.serviceWorker.removeEventListener('message', h);
   }, [loadAll, openTarget]);
 
-  const ctx = { t, lang, setLang, F, data, act, push, pop, toast, setTab, session };
+  const ctx = { t, lang, setLang, F, data, act, push, pop, replace, toast, setTab, session };
   const NAV = [['calendar', 'cal'], ['tasks', 'check'], ['notes', 'note'], ['timer', 'timer'], ['settings', 'gear']];
   const View = { calendar: CalendarView, tasks: TasksView, notes: NotesView, timer: TimerView, settings: SettingsView }[tab] || CalendarView;
 
@@ -641,7 +848,7 @@ function Main({ t, lang, setLang, session }) {
 
 // ---------------- modal plumbing ----------------
 function ModalHost({ m, hidden }) {
-  const C = { event: EventModal, task: TaskModal, note: NoteModal, reminder: ReminderModal }[m.type];
+  const C = { event: EventModal, task: TaskModal, note: NoteModal, reminder: ReminderModal, quick: QuickAdd, preview: EventPreview, tpreview: TaskPreview, scope: ScopeModal, cals: CalendarsModal }[m.type];
   if (!C) return null;
   return <div style={hidden ? { display: 'none' } : undefined}><C m={m} hidden={hidden} /></div>;
 }
@@ -666,12 +873,32 @@ function Sheet({ title, onClose, hidden, children, footer }) {
 function AlertEditor({ value, onChange }) {
   const { t } = useApp();
   const v = value || [];
-  return <div className="tags">
-    {v.map(m => <span key={m} className="tag"><Icon n="bell" size={14} />{alertLabel(m, t)}<button type="button" className="tag-x" onClick={() => onChange(v.filter(x => x !== m))} aria-label={t('delete')}><Icon n="x" size={14} /></button></span>)}
-    <select className="addsel" value="" onChange={e => { if (e.target.value === '') return; onChange([...new Set([...v, Number(e.target.value)])].sort((a, b) => a - b)); }}>
-      <option value="">+ {t('addAlert')}</option>
-      {ALERTS.filter(a => !v.includes(a)).map(a => <option key={a} value={a}>{alertLabel(a, t)}</option>)}
-    </select>
+  const [customOpen, setCustomOpen] = useState(false);
+  const [n, setN] = useState(30);
+  const [unit, setUnit] = useState(1);
+  const add = m => onChange([...new Set([...v, m])].sort((a, b) => a - b));
+  return <div>
+    <div className="tags">
+      {v.map(m => <span key={m} className="tag"><Icon n="bell" size={14} />{alertLabel(m, t)}<button type="button" className="tag-x" onClick={() => onChange(v.filter(x => x !== m))} aria-label={t('delete')}><Icon n="x" size={14} /></button></span>)}
+      <select className="addsel" value="" onChange={e => {
+        const val = e.target.value; if (val === '') return;
+        if (val === 'custom') { setCustomOpen(true); return; }
+        add(Number(val));
+      }}>
+        <option value="">+ {t('addAlert')}</option>
+        {ALERTS.filter(a => !v.includes(a)).map(a => <option key={a} value={a}>{alertLabel(a, t)}</option>)}
+        <option value="custom">{t('customAlert')}</option>
+      </select>
+    </div>
+    {customOpen && <div className="inline-row" style={{ marginTop: 8 }}>
+      <input type="number" inputMode="numeric" min="1" className="num-in" value={n} onChange={e => setN(Math.max(1, parseInt(e.target.value, 10) || 1))} />
+      <select className="auto" value={unit} onChange={e => setUnit(Number(e.target.value))}>
+        <option value={1}>{t('minutesU')}</option><option value={60}>{t('hoursU')}</option><option value={1440}>{t('daysU')}</option><option value={10080}>{t('weeksU')}</option>
+      </select>
+      <span>{t('beforeU')}</span>
+      <button type="button" className="btn sm primary" onClick={() => { add(n * unit); setCustomOpen(false); }}>{t('add')}</button>
+      <button type="button" className="icon-btn" onClick={() => setCustomOpen(false)} aria-label={t('cancel')}><Icon n="x" size={16} /></button>
+    </div>}
   </div>;
 }
 
@@ -680,7 +907,7 @@ function ReminderList({ list }) {
   if (!list.length) return <p className="hint">{t('noReminders')}</p>;
   return <div>{list.map(r => <div key={r.id} className="linkrow">
     <Icon n="bell" size={18} />
-    <span className="grow">{F.dt(new Date(r.remind_at))}{r.repeat_rule ? ` · ${t(r.repeat_rule.toLowerCase())}` : ''}</span>
+    <span className="grow">{F.dt(new Date(r.remind_at))}{r.repeat_rule ? ` · ${describeRule(r.repeat_rule, t, F)}` : ''}</span>
     <button className="icon-btn" onClick={() => act.deleteReminder(r.id)} aria-label={t('delete')}><Icon n="x" size={16} /></button>
   </div>)}</div>;
 }
@@ -690,19 +917,27 @@ function EventModal({ m, hidden }) {
   const { t, data, act, pop, push, toast } = useApp();
   const existing = m.id ? data.events.find(e => e.id === m.id) : null;
   const [f, setF] = useState(() => {
-    if (existing) return { ...existing, category: existing.category || '' };
+    if (existing) {
+      let s = new Date(existing.start_at), e = new Date(existing.end_at);
+      if (m.occStart) { const len = e - s; s = new Date(m.occStart); e = new Date(s.getTime() + len); }
+      return { ...existing, category: existing.category || '', start_at: s.toISOString(), end_at: e.toISOString() };
+    }
+    const dd = (data.settings && data.settings.default_duration) || 60;
     const s = m.draft && m.draft.start_at ? new Date(m.draft.start_at) : nextHour(new Date());
-    return { title: '', all_day: false, color: COLORS[0], alert_minutes: (data.settings && data.settings.default_alerts) || [10], repeat_rule: null, note_id: null, task_id: null, category: '', end_at: new Date(s.getTime() + 60 * MIN).toISOString(), ...(m.draft || {}), start_at: s.toISOString() };
+    const last = localStorage.getItem('lastCal');
+    return { title: '', all_day: false, color: null, alert_minutes: (data.settings && data.settings.default_alerts) || [10], repeat_rule: null, note_id: null, task_id: null, exdates: [], category: last || (getCals(data)[0] || {}).name || '', end_at: new Date(s.getTime() + dd * MIN).toISOString(), ...(m.draft || {}), start_at: s.toISOString() };
   });
   const [lt, setLt] = useState(() => f.task_id ? 'task' : f.note_id ? 'note' : '');
   const flat = useMemo(() => flattenTasks(data.tasks), [data.tasks]);
-  const cats = useMemo(() => [...new Set([...data.events.map(e => e.category), ...data.entries.map(e => e.category)].filter(Boolean))], [data.events, data.entries]);
 
   if (m.id && !existing) return <Sheet title={t('editEvent')} onClose={pop} hidden={hidden}><p className="empty">{t('notFound')}</p></Sheet>;
 
+  const cals = getCals(data);
   const set = (k, v) => setF(p => ({ ...p, [k]: v }));
   const s = new Date(f.start_at), e = new Date(f.end_at);
   const linked = lt === 'task' ? data.tasks.find(x => x.id === f.task_id) : lt === 'note' ? data.notes.find(x => x.id === f.note_id) : null;
+  const rep = existing && existing.repeat_rule && m.occStart;
+  const occS = m.occStart ? new Date(m.occStart) : null;
 
   const toggleAllDay = on => {
     if (on) { const d = startOfDay(s); setF(p => ({ ...p, all_day: true, start_at: d.toISOString(), end_at: addDays(d, 1).toISOString() })); }
@@ -721,36 +956,44 @@ function EventModal({ m, hidden }) {
   const save = async () => {
     if (!f.title.trim()) return toast(t('needTitle'));
     if (e <= s) return toast(t('endAfterStart'));
-    const r = await act.saveEvent({ ...f, title: f.title.trim(), category: (f.category || '').trim() || null });
-    if (r) { toast(t('saved')); pop(); }
+    const form = { ...f, title: f.title.trim(), category: f.category || null };
+    if (rep) {
+      push({ type: 'scope', title: t('editEventQ'), options: ['one', 'following', 'all'], onPick: async sc => { if (await act.changeOccurrence(existing, occS, form, sc)) { toast(t('saved')); pop(); } } });
+      return;
+    }
+    const r = await act.saveEvent(form);
+    if (r) { if (!existing) localStorage.setItem('lastCal', f.category || ''); toast(t('saved')); pop(); }
   };
-  const del = async () => { if (!confirm(t('confirmDelete'))) return; if (await act.deleteEvent(existing.id)) pop(); };
-  const timer = () => act.startTimer({ label: f.title, task_id: f.task_id, category: f.category });
+  const del = async () => {
+    if (rep) { push({ type: 'scope', title: t('deleteEventQ'), options: ['one', 'following', 'all'], onPick: async sc => { if (await act.deleteOccurrence(existing, occS, sc)) pop(); } }); return; }
+    if (!confirm(t('confirmDelete'))) return;
+    if (await act.deleteEvent(existing.id)) pop();
+  };
+  const calCol = calColor(cals, f.category) || COLORS[0];
 
   return <Sheet title={existing ? t('editEvent') : t('newEvent')} onClose={pop} hidden={hidden}
     footer={<>
       {existing && <button className="btn danger ghost" onClick={del}><Icon n="trash" size={18} />{t('delete')}</button>}
       <span className="spacer" />
-      {existing && <button className="btn" onClick={timer}><Icon n="play" size={14} />{t('startTimer')}</button>}
       <button className="btn primary" onClick={save}>{t('save')}</button>
     </>}>
-    <input type="text" className="title-input" dir="auto" placeholder={t('title')} value={f.title} onChange={ev => set('title', ev.target.value)} autoFocus={!existing} />
+    <input type="text" className="title-input" dir="auto" placeholder={t('addTitle')} value={f.title} onChange={ev => set('title', ev.target.value)} autoFocus={!existing} />
     <label className="switch"><input type="checkbox" checked={f.all_day} onChange={ev => toggleAllDay(ev.target.checked)} />{t('allDay')}</label>
     <div className="row">
       <label className="field"><span>{t('start')}</span><input type={f.all_day ? 'date' : 'datetime-local'} value={f.all_day ? toDateInput(s) : toInput(s)} onChange={ev => onStart(ev.target.value)} /></label>
       <label className="field"><span>{t('end')}</span><input type={f.all_day ? 'date' : 'datetime-local'} value={f.all_day ? toDateInput(addDays(e, -1)) : toInput(e)} onChange={ev => onEnd(ev.target.value)} /></label>
     </div>
-    <div className="row">
-      <label className="field"><span>{t('repeat')}</span>
-        <select value={f.repeat_rule || ''} onChange={ev => set('repeat_rule', ev.target.value || null)}>
-          <option value="">{t('none')}</option><option value="DAILY">{t('daily')}</option><option value="WEEKLY">{t('weekly')}</option><option value="MONTHLY">{t('monthly')}</option>
-        </select></label>
-      <label className="field"><span>{t('category')}</span><input type="text" dir="auto" list="cats-ev" value={f.category || ''} onChange={ev => set('category', ev.target.value)} /></label>
-    </div>
-    <datalist id="cats-ev">{cats.map(c => <option key={c} value={c} />)}</datalist>
+    {!f.all_day && <div className="chips-row" style={{ marginBottom: 14 }}>
+      {[15, 30, 45, 60, 90, 120].map(x => <button key={x} type="button" className={'pchip' + (Math.round((e - s) / MIN) === x ? ' on' : '')} onClick={() => set('end_at', new Date(s.getTime() + x * MIN).toISOString())}>{shortSpan(x, t)}</button>)}
+    </div>}
+    <div className="field"><span>{t('calendarLbl')}</span><CalendarPicker value={f.category || ''} onChange={v => set('category', v)} /></div>
+    <div className="field"><span>{t('repeat')}</span><RepeatPicker value={f.repeat_rule} onChange={v => set('repeat_rule', v)} start={s} /></div>
     <div className="field"><span>{t('alerts')}</span><AlertEditor value={f.alert_minutes} onChange={v => set('alert_minutes', v)} /></div>
     <div className="field"><span>{t('color')}</span>
-      <div className="swatches">{COLORS.map(c => <button type="button" key={c} className={'sw' + (f.color === c ? ' on' : '')} style={{ '--c': c }} onClick={() => set('color', c)} aria-label={c} aria-pressed={f.color === c} />)}</div>
+      <div className="swatches">
+        <button type="button" className={'sw cal-default' + (!f.color ? ' on' : '')} style={{ '--c': calCol }} onClick={() => set('color', null)} aria-label={t('calDefault')} title={t('calDefault')} />
+        {COLORS.map(c => <button type="button" key={c} className={'sw' + (f.color === c ? ' on' : '')} style={{ '--c': c }} onClick={() => set('color', c)} aria-label={c} aria-pressed={f.color === c} />)}
+      </div>
     </div>
     <div className="field"><span>{t('linkTo')}</span>
       <div className="row">
@@ -951,7 +1194,7 @@ function ReminderModal({ m, hidden }) {
     <div className="row">
       <label className="field"><span>{t('orPick')}</span><input type="datetime-local" value={at} onChange={e => setAt(e.target.value)} /></label>
       <label className="field"><span>{t('repeat')}</span>
-        <select value={rule} onChange={e => setRule(e.target.value)}><option value="">{t('none')}</option><option value="DAILY">{t('daily')}</option><option value="WEEKLY">{t('weekly')}</option><option value="MONTHLY">{t('monthly')}</option></select>
+        <select value={rule} onChange={e => setRule(e.target.value)}><option value="">{t('none')}</option><option value="DAILY">{t('daily')}</option><option value={WORKWEEK}>{t('weekdays')}</option><option value="WEEKLY">{t('weekly')}</option><option value="MONTHLY">{t('monthly')}</option></select>
       </label>
     </div>
     <button className="btn primary" onClick={() => add()}><Icon n="plus" size={18} />{t('addReminder')}</button>
@@ -1046,113 +1289,353 @@ function NoteModal({ m, hidden }) {
 }
 
 // ---------------- calendar ----------------
+const VIEWS = ['day', '3day', 'week', 'month', 'schedule'];
+const DRAG = { active: false };
+const DEFAULT_CALS = [{ name: 'Personal', color: '#0F6B63' }, { name: 'Work', color: '#3B6FD4' }];
+const getCals = data => (data.settings && Array.isArray(data.settings.calendars) && data.settings.calendars.length) ? data.settings.calendars : DEFAULT_CALS;
+const calColor = (cals, name) => { const c = cals.find(x => x.name === name); return c ? c.color : null; };
+const evColor = (ev, cals) => ev.color || calColor(cals, ev.category) || COLORS[0];
+const isEndish = iso => { const d = new Date(iso); return d.getHours() === 23 && d.getMinutes() === 59; };
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+function CalendarPicker({ value, onChange }) {
+  const { t, data } = useApp();
+  const cals = getCals(data);
+  return <div className="chips-row">
+    {cals.map(c => <button type="button" key={c.name} className={'pchip' + (value === c.name ? ' on' : '')} style={{ '--c': c.color }} onClick={() => onChange(c.name)}><i className="dot-c" />{c.name}</button>)}
+    <button type="button" className={'pchip' + (!value ? ' on' : '')} onClick={() => onChange('')}>{t('noCalendar')}</button>
+  </div>;
+}
+
+function RepeatPicker({ value, onChange, start }) {
+  const { t, F, data } = useApp();
+  const ws = (data.settings && data.settings.week_start) ?? 0;
+  const presets = [
+    ['', t('doesNotRepeat')],
+    ['DAILY', t('daily')],
+    [WORKWEEK, t('weekdays')],
+    ['FREQ=WEEKLY;BYDAY=' + RDAYS[start.getDay()], t('weeklyOn').replace('{d}', F.wdLong(start))],
+    ['MONTHLY', t('monthlyOn').replace('{n}', start.getDate())],
+  ];
+  const [custom, setCustom] = useState(() => !presets.some(p => p[0] === (value || '')));
+  const r = parseRule(value) || { freq: 'WEEKLY', interval: 1, byday: [start.getDay()], until: null, count: null };
+  const upd = patch => onChange(buildRule({ ...r, ...patch }));
+  const endMode = r.until ? 'until' : r.count ? 'count' : 'never';
+  const order = [0, 1, 2, 3, 4, 5, 6].map(i => (i + ws) % 7);
+  return <div>
+    <select value={custom ? 'custom' : (value || '')} onChange={e => {
+      const v = e.target.value;
+      if (v === 'custom') { setCustom(true); onChange(buildRule(r)); }
+      else { setCustom(false); onChange(v || null); }
+    }}>
+      {presets.map(([v, l]) => <option key={v || 'none'} value={v}>{l}</option>)}
+      <option value="custom">{t('custom')}</option>
+    </select>
+    {custom && <div className="custom-box">
+      <div className="inline-row">
+        <span>{t('every')}</span>
+        <input type="number" inputMode="numeric" min="1" max="99" className="num-in" value={r.interval} onChange={e => upd({ interval: Math.max(1, parseInt(e.target.value, 10) || 1) })} />
+        <select className="auto" value={r.freq} onChange={e => upd({ freq: e.target.value, byday: e.target.value === 'WEEKLY' ? (r.byday || [start.getDay()]) : null })}>
+          <option value="DAILY">{t('daysU')}</option><option value="WEEKLY">{t('weeksU')}</option><option value="MONTHLY">{t('monthsU')}</option>
+        </select>
+      </div>
+      {r.freq === 'WEEKLY' && <div className="daypick">{order.map(d => {
+        const on = (r.byday || []).includes(d);
+        return <button type="button" key={d} className={on ? 'on' : ''} aria-pressed={on} onClick={() => {
+          const cur = r.byday || [];
+          const nb = on ? cur.filter(x => x !== d) : [...cur, d];
+          upd({ byday: nb.length ? nb : [d] });
+        }}>{F.wdNarrow(new Date(2024, 0, 7 + d))}</button>;
+      })}</div>}
+      <div className="inline-row">
+        <span>{t('ends')}</span>
+        <select className="auto" value={endMode} onChange={e => {
+          const v = e.target.value;
+          upd(v === 'never' ? { until: null, count: null } : v === 'until' ? { until: dateKey(addMonths(start, 1)), count: null } : { until: null, count: 10 });
+        }}>
+          <option value="never">{t('never')}</option><option value="until">{t('onDate')}</option><option value="count">{t('afterN')}</option>
+        </select>
+        {endMode === 'until' && <input type="date" className="auto" value={r.until} onChange={e => e.target.value && upd({ until: e.target.value })} />}
+        {endMode === 'count' && <><input type="number" inputMode="numeric" min="1" className="num-in" value={r.count} onChange={e => upd({ count: Math.max(1, parseInt(e.target.value, 10) || 1) })} /><span>{t('times')}</span></>}
+      </div>
+    </div>}
+  </div>;
+}
+
 function EventChip({ e }) {
   const { push, F } = useApp();
-  return <button className={'chip' + (e._done ? ' done' : '')} style={{ '--c': e.color || COLORS[0] }} title={e.title}
-    onClick={ev => { ev.stopPropagation(); push({ type: 'event', id: e.id }); }}>
+  return <button className={'chip' + (e._done ? ' done' : '')} style={{ '--c': e._color }} title={e.title}
+    onClick={ev => { ev.stopPropagation(); push({ type: 'preview', id: e.id, occStart: e._s.getTime() }); }}>
     {!e.all_day && <small className="num">{F.time(e._s)}</small>}<span dir="auto">{e.title}</span>
   </button>;
 }
 function TaskChip({ task }) {
-  const { push } = useApp();
+  const { push, act } = useApp();
   const done = task.status === 'done';
-  return <button className={'chip task' + (done ? ' done' : '')} title={task.title} onClick={ev => { ev.stopPropagation(); push({ type: 'task', id: task.id }); }}>
-    <Icon n={done ? 'tick' : 'square'} size={12} /><span dir="auto">{task.title}</span>
-  </button>;
+  return <div className={'chip task' + (done ? ' done' : '')} title={task.title}>
+    <button className="mini-chk" onClick={ev => { ev.stopPropagation(); act.toggleTask(task); }} aria-pressed={done} aria-label={task.title}><Icon n={done ? 'tick' : 'square'} size={12} /></button>
+    <button className="grow ellip" style={{ textAlign: 'start' }} dir="auto" onClick={ev => { ev.stopPropagation(); push({ type: 'tpreview', id: task.id }); }}>{task.title}</button>
+  </div>;
+}
+
+function useSwipe(onSwipe, rtl) {
+  const st = useRef(null);
+  return {
+    onTouchStart: e => { const p = e.touches[0]; st.current = { x: p.clientX, y: p.clientY, t: Date.now() }; },
+    onTouchEnd: e => {
+      const s = st.current; st.current = null;
+      if (!s || DRAG.active || e.changedTouches.length !== 1) return;
+      const p = e.changedTouches[0], dx = p.clientX - s.x, dy = p.clientY - s.y;
+      if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.6 && Date.now() - s.t < 700) onSwipe((dx < 0 ? 1 : -1) * (rtl ? -1 : 1));
+    },
+  };
 }
 
 function CalendarView() {
-  const { t, data, push, F } = useApp();
+  const { t, data, push, F, act, lang, toast } = useApp();
   const ws = (data.settings && data.settings.week_start) ?? 0;
-  const [view, setView] = useState(() => localStorage.getItem('calView') || (window.innerWidth < 720 ? 'day' : 'week'));
+  const dd = (data.settings && data.settings.default_duration) || 60;
+  const [view, setView] = useState(() => { const v = localStorage.getItem('calView'); return VIEWS.includes(v) ? v : (window.innerWidth < 720 ? '3day' : 'week'); });
   const [anchor, setAnchor] = useState(() => startOfDay(new Date()));
+  const [schedDays, setSchedDays] = useState(30);
+  const [hiddenCals, setHiddenCals] = useState(() => { try { return JSON.parse(localStorage.getItem('hiddenCals') || '[]'); } catch (e) { return []; } });
   useEffect(() => { localStorage.setItem('calView', view); }, [view]);
+  useEffect(() => { localStorage.setItem('hiddenCals', JSON.stringify(hiddenCals)); }, [hiddenCals]);
+  const cals = getCals(data);
+  const toggleCal = name => setHiddenCals(h => h.includes(name) ? h.filter(x => x !== name) : [...h, name]);
+  const hasUncat = data.events.some(e => !e.category || !cals.some(c => c.name === e.category));
 
   const [from, to] = useMemo(() => {
     if (view === 'day') return [anchor, addDays(anchor, 1)];
+    if (view === '3day') return [anchor, addDays(anchor, 3)];
     if (view === 'week') { const s = startOfWeek(anchor, ws); return [s, addDays(s, 7)]; }
+    if (view === 'schedule') return [anchor, addDays(anchor, schedDays)];
     const s = startOfWeek(new Date(anchor.getFullYear(), anchor.getMonth(), 1), ws);
     return [s, addDays(s, 42)];
-  }, [view, anchor, ws]);
+  }, [view, anchor, ws, schedDays]);
   const days = useMemo(() => Array.from({ length: Math.round((to - from) / DAY) }, (_, i) => addDays(from, i)), [from, to]);
-  const events = useMemo(() => data.events.flatMap(ev => occurrences(ev, from, to)).map(o => {
-    const tk = o.task_id && data.tasks.find(x => x.id === o.task_id);
-    return { ...o, _done: !!(tk && tk.status === 'done') };
-  }), [data.events, data.tasks, from, to]);
-  const chips = useMemo(() => data.tasks.filter(x => {
+
+  const events = useMemo(() => data.events
+    .filter(ev => { const known = ev.category && cals.some(c => c.name === ev.category); return !hiddenCals.includes(known ? ev.category : '__none'); })
+    .flatMap(ev => occurrences(ev, from, to))
+    .map(o => { const tk = o.task_id && data.tasks.find(x => x.id === o.task_id); return { ...o, _color: evColor(o, cals), _done: !!(tk && tk.status === 'done') }; }),
+  [data.events, data.tasks, from, to, hiddenCals, cals]);
+  const tasks = useMemo(() => hiddenCals.includes('__tasks') ? [] : data.tasks.filter(x => {
     if (!x.due_at || data.events.some(e => e.task_id === x.id)) return false;
     const d = new Date(x.due_at); return d >= from && d < to;
-  }), [data.tasks, data.events, from, to]);
+  }), [data.tasks, data.events, from, to, hiddenCals]);
 
-  const shift = dir => setAnchor(a => view === 'day' ? addDays(a, dir) : view === 'week' ? addDays(a, 7 * dir) : new Date(a.getFullYear(), a.getMonth() + dir, 1));
+  const step = view === 'day' ? 1 : view === '3day' ? 3 : view === 'week' ? 7 : view === 'schedule' ? 30 : 0;
+  const shift = dir => setAnchor(a => step ? addDays(a, step * dir) : new Date(a.getFullYear(), a.getMonth() + dir, 1));
   const goToday = () => { const n = new Date(); setAnchor(view === 'month' ? new Date(n.getFullYear(), n.getMonth(), 1) : startOfDay(n)); };
-  const newEvent = start => {
-    let s = start;
-    if (!s) { const now = new Date(); s = (now >= from && now < to && view !== 'month') ? nextHour(now) : new Date(anchor.getTime() + 9 * 60 * MIN); }
-    push({ type: 'event', draft: { start_at: s.toISOString(), end_at: new Date(s.getTime() + 60 * MIN).toISOString() } });
-  };
-  const title = view === 'day' ? F.dateLong(anchor) : view === 'month' ? F.my(anchor) : F.my(days[3]);
+  const switchView = v => { setView(v); if (v === 'month') setAnchor(a => new Date(a.getFullYear(), a.getMonth(), 1)); else if (view === 'month') { const n = new Date(); setAnchor(a => (n.getMonth() === a.getMonth() && n.getFullYear() === a.getFullYear()) ? startOfDay(n) : a); } };
+  const swipe = useSwipe(shift, lang === 'ar');
 
-  return <div>
+  const openQuick = (s, e, allDay) => {
+    let st = s;
+    if (!st) { const now = new Date(); st = (view === 'schedule' || (now >= from && now < to && view !== 'month')) ? nextHour(now) : new Date(anchor.getTime() + 9 * 60 * MIN); }
+    push({ type: 'quick', draft: { start_at: st.toISOString(), end_at: (e || new Date(st.getTime() + dd * MIN)).toISOString(), all_day: !!allDay } });
+  };
+  const onMoveEvent = (occ, ns, ne) => {
+    const base = data.events.find(x => x.id === occ.id);
+    if (!base) return;
+    const form = { ...base, start_at: ns.toISOString(), end_at: ne.toISOString() };
+    if (base.repeat_rule) {
+      push({ type: 'scope', title: t('moveEventQ'), options: ['one', 'all'], onPick: async sc => { if (await act.changeOccurrence(base, occ._s, form, sc)) toast(t('moved')); } });
+    } else act.saveEvent(form).then(r => r && toast(t('moved')));
+  };
+  const onMoveTask = (task, due) => act.saveTask({ id: task.id, due_at: due.toISOString() }).then(r => r && toast(t('moved')));
+
+  const title = view === 'day' ? F.dateLong(anchor) : (view === 'month' || view === 'schedule') ? F.my(anchor) : F.my(days[Math.floor(days.length / 2)]);
+
+  return <div className="cal">
     <div className="cal-head">
-      <h1 className="cal-title">{title}</h1>
+      <label className="cal-title-btn" title={t('jumpTo')}>
+        <span className="cal-title">{title}</span><Icon n="down" size={16} />
+        <input type="date" className="jump" value={toDateInput(anchor)} aria-label={t('jumpTo')} onChange={e => { const d = fromInput(e.target.value); if (d && !isNaN(d)) setAnchor(view === 'month' ? new Date(d.getFullYear(), d.getMonth(), 1) : startOfDay(d)); }} />
+      </label>
       <div className="cal-nav">
         <button className="icon-btn" onClick={() => shift(-1)} aria-label={t('prev')}><Icon n="left" flip /></button>
         <button className="btn sm" onClick={goToday}>{t('today')}</button>
         <button className="icon-btn" onClick={() => shift(1)} aria-label={t('next')}><Icon n="right" flip /></button>
       </div>
-      <div className="seg">{['day', 'week', 'month'].map(v => <button key={v} className={view === v ? 'on' : ''} onClick={() => { setView(v); if (v === 'month') setAnchor(a => new Date(a.getFullYear(), a.getMonth(), 1)); }}>{t(v)}</button>)}</div>
-      <button className="btn primary" onClick={() => newEvent()} aria-label={t('newEvent')}><Icon n="plus" size={18} /><span className="hide-sm">{t('newEvent')}</span></button>
+      <div className="seg cal-views">{VIEWS.map(v => <button key={v} className={view === v ? 'on' : ''} onClick={() => switchView(v)}>{t('v_' + v)}</button>)}</div>
+      <button className="btn primary hide-sm" onClick={() => openQuick()}><Icon n="plus" size={18} />{t('create')}</button>
     </div>
-    {view === 'month'
-      ? <MonthGrid days={days} events={events} chips={chips} month={anchor.getMonth()} onDay={d => { setAnchor(d); setView('day'); }} />
-      : <TimeGrid days={days} events={events} chips={chips} onSlot={newEvent} />}
+    <div className="cal-filters">
+      {cals.map(c => <button key={c.name} className={'fchip' + (hiddenCals.includes(c.name) ? ' off' : '')} style={{ '--c': c.color }} onClick={() => toggleCal(c.name)} aria-pressed={!hiddenCals.includes(c.name)}><i />{c.name}</button>)}
+      {hasUncat && <button className={'fchip' + (hiddenCals.includes('__none') ? ' off' : '')} style={{ '--c': COLORS[0] }} onClick={() => toggleCal('__none')}><i />{t('noCalendar')}</button>}
+      <button className={'fchip' + (hiddenCals.includes('__tasks') ? ' off' : '')} style={{ '--c': 'var(--muted)' }} onClick={() => toggleCal('__tasks')}><i className="sq" />{t('tasks')}</button>
+      <button className="fchip ghost" onClick={() => push({ type: 'cals' })}><Icon n="gear" size={14} />{t('calendars')}</button>
+    </div>
+    <div {...swipe}>
+      {view === 'month' ? <MonthGrid days={days} events={events} tasks={tasks} month={anchor.getMonth()} onDay={d => { setAnchor(d); setView('day'); }} />
+        : view === 'schedule' ? <ScheduleView days={days} events={events} tasks={tasks} onMore={() => setSchedDays(n => n + 30)} />
+          : <TimeGrid days={days} events={events} tasks={tasks} onCreate={openQuick} onMoveEvent={onMoveEvent} onMoveTask={onMoveTask} onDay={d => { setAnchor(d); setView('day'); }} />}
+    </div>
+    <button className="fab" onClick={() => openQuick()} aria-label={t('create')}><Icon n="plus" size={26} /></button>
   </div>;
 }
 
-function TimeGrid({ days, events, chips, onSlot }) {
-  const { t, F, push } = useApp();
-  const scroller = useRef(null);
+function TimeGrid({ days, events, tasks, onCreate, onMoveEvent, onMoveTask, onDay }) {
+  const { t, F, push, act } = useApp();
+  const scroller = useRef(null), bodyRef = useRef(null);
   const now = useNow(60000);
+  const [drag, setDrag] = useState(null);
+  const dref = useRef(null);
+  const P = useRef({}); P.current = { days, onCreate, onMoveEvent, onMoveTask, push };
   useEffect(() => { if (scroller.current) scroller.current.scrollTop = Math.max(0, (new Date().getHours() - 1) * HOUR); }, []);
+  const SNAP = 15;
+  const fmtHM = mins => F.time(new Date(2000, 0, 1, 0, Math.round(mins)));
+
+  const H = useRef(null);
+  if (!H.current) {
+    const minAt = y => { const r = bodyRef.current.getBoundingClientRect(); return (y - r.top) / HOUR * 60; };
+    const colAt = x => { const els = bodyRef.current.querySelectorAll('.tg-col'); for (let i = 0; i < els.length; i++) { const r = els[i].getBoundingClientRect(); if (x >= r.left && x < r.right) return i; } return null; };
+    const blockTouch = e => { if (dref.current && dref.current.active) e.preventDefault(); };
+    const cleanup = () => {
+      const st = dref.current; if (st && st.timer) clearTimeout(st.timer);
+      dref.current = null; DRAG.active = false;
+      window.removeEventListener('pointermove', onMove); window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onCancel); window.removeEventListener('touchmove', blockTouch);
+    };
+    const update = (st, x, y) => {
+      const m = minAt(y);
+      if (st.mode === 'create') {
+        const a = Math.floor(st.m0 / SNAP) * SNAP, b = Math.floor(m / SNAP) * SNAP;
+        const s = clamp(Math.min(a, b), 0, 1440 - SNAP), e = clamp(Math.max(a, b) + SNAP, s + SNAP, 1440);
+        st.res = { col: st.col, s, e }; setDrag({ mode: 'create', col: st.col, s, e }); return;
+      }
+      const dm = Math.round((m - st.m0) / SNAP) * SNAP;
+      if (st.mode === 'resize') {
+        const e = clamp(st.e + dm, st.s + SNAP, 1440);
+        st.res = { col: st.col, s: st.s, e }; setDrag({ mode: 'resize', key: st.key, col: st.col, s: st.s, e, color: st.color, title: st.title }); return;
+      }
+      const c = colAt(x), col = c === null ? (st.res ? st.res.col : st.col) : c;
+      const len = st.e - st.s, s = clamp(st.s + dm, 0, Math.max(0, 1440 - len));
+      st.res = { col, s, e: s + len }; setDrag({ mode: 'move', key: st.key, col, s, e: s + len, color: st.color, title: st.title });
+    };
+    const autoScroll = y => { const sc = scroller.current; if (!sc) return; const r = sc.getBoundingClientRect(); if (y < r.top + 40) sc.scrollTop -= 14; else if (y > r.bottom - 40) sc.scrollTop += 14; };
+    const tap = st => {
+      const p = P.current;
+      if (st.mode === 'create') { const d = p.days[st.col]; p.onCreate(new Date(d.getTime() + Math.floor(st.m0 / 30) * 30 * MIN)); return; }
+      if (st.kind === 'task') p.push({ type: 'tpreview', id: st.item.id });
+      else p.push({ type: 'preview', id: st.item.id, occStart: st.item._s.getTime() });
+    };
+    const commit = (st, res) => {
+      const p = P.current;
+      if (!res) return;
+      if (st.mode === 'create') {
+        const d = p.days[res.col];
+        if (res.e - res.s <= SNAP) p.onCreate(new Date(d.getTime() + res.s * MIN));
+        else p.onCreate(new Date(d.getTime() + res.s * MIN), new Date(d.getTime() + res.e * MIN));
+        return;
+      }
+      const dayDelta = res.col - st.col, minDelta = res.s - st.s;
+      if (st.kind === 'task') {
+        if (!dayDelta && !minDelta) return;
+        p.onMoveTask(st.item, new Date(addDays(new Date(st.item.due_at), dayDelta).getTime() + minDelta * MIN)); return;
+      }
+      const ev = st.item;
+      if (st.mode === 'resize') {
+        if (res.e === st.e) return;
+        p.onMoveEvent(ev, ev._s, new Date(ev._e.getTime() + (res.e - st.e) * MIN)); return;
+      }
+      if (!dayDelta && !minDelta) return;
+      const ns = new Date(addDays(ev._s, dayDelta).getTime() + minDelta * MIN);
+      p.onMoveEvent(ev, ns, new Date(ns.getTime() + (ev._e - ev._s)));
+    };
+    function onMove(e) {
+      const st = dref.current; if (!st) return;
+      if (Math.abs(e.clientX - st.x0) > 6 || Math.abs(e.clientY - st.y0) > 6) st.moved = true;
+      if (!st.active) {
+        if (st.touch) { if (st.moved) { cleanup(); setDrag(null); } return; }
+        if (!st.moved) return;
+        st.active = true; DRAG.active = true;
+      }
+      autoScroll(e.clientY);
+      update(st, e.clientX, e.clientY);
+    }
+    function onUp() {
+      const st = dref.current; if (!st) return;
+      const wasActive = st.active, res = st.res;
+      cleanup(); setDrag(null);
+      if (!wasActive) { if (!st.moved) tap(st); return; }
+      commit(st, res);
+    }
+    function onCancel() { cleanup(); setDrag(null); }
+    const begin = (e, info) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      if (dref.current) cleanup();
+      const st = { ...info, x0: e.clientX, y0: e.clientY, m0: minAt(e.clientY), active: false, moved: false, touch: e.pointerType !== 'mouse', res: null };
+      dref.current = st;
+      if (st.touch) st.timer = setTimeout(() => {
+        if (dref.current !== st || st.moved) return;
+        st.active = true; DRAG.active = true;
+        if (navigator.vibrate) navigator.vibrate(12);
+        update(st, st.x0, st.y0);
+      }, 380);
+      window.addEventListener('pointermove', onMove); window.addEventListener('pointerup', onUp);
+      window.addEventListener('pointercancel', onCancel); window.addEventListener('touchmove', blockTouch, { passive: false });
+    };
+    H.current = { begin };
+  }
+  useEffect(() => () => { DRAG.active = false; }, []);
+
   const cols = days.map(d => {
     const de = addDays(d, 1);
     const timed = events.filter(e => !e.all_day && e._s < de && e._e > d).map(e => {
-      const s = Math.max(0, (Math.max(e._s, d) - d) / MIN);
-      const en = Math.min(1440, (Math.min(e._e, de) - d) / MIN);
-      return { ev: e, s, e: Math.max(en, s + 25) };
+      const s = Math.max(0, (Math.max(e._s, d) - d) / MIN), en = Math.min(1440, (Math.min(e._e, de) - d) / MIN);
+      return { kind: 'event', ev: e, key: e._key, s, e: Math.max(en, s + 20), realE: en };
     });
-    return { d, timed: layoutDay(timed), allDay: events.filter(e => e.all_day && e._s < de && e._e > d), taskChips: chips.filter(x => sameDay(new Date(x.due_at), d)) };
+    const tt = tasks.filter(x => !isEndish(x.due_at) && sameDay(new Date(x.due_at), d)).map(x => {
+      const s = (new Date(x.due_at) - d) / MIN; return { kind: 'task', task: x, key: 't' + x.id, s, e: Math.min(1440, s + 30) };
+    });
+    return { d, timed: layoutDay([...timed, ...tt]), allDay: events.filter(e => e.all_day && e._s < de && e._e > d), dayTasks: tasks.filter(x => isEndish(x.due_at) && sameDay(new Date(x.due_at), d)) };
   });
-  const hasTop = cols.some(c => c.allDay.length || c.taskChips.length);
   const hours = Array.from({ length: 24 }, (_, h) => h);
+  const pos = it => ({ top: it.s / 60 * HOUR, height: Math.max(20, (it.e - it.s) / 60 * HOUR - 2), insetInlineStart: `calc(${it.col} * 100% / ${it.cols})`, width: `calc(100% / ${it.cols} - 3px)` });
 
   return <div className="tg" style={{ '--n': days.length, '--hour': HOUR + 'px' }}>
     <div className="tg-head">
       <div />
-      {cols.map(c => <div key={c.d.getTime()} className={'tg-day' + (sameDay(c.d, now) ? ' today' : '')}><span className="wd">{F.wd(c.d)}</span><span className="dn">{c.d.getDate()}</span></div>)}
+      {cols.map(c => <button key={c.d.getTime()} className={'tg-day' + (sameDay(c.d, now) ? ' today' : '')} onClick={() => onDay(c.d)}><span className="wd">{F.wd(c.d)}</span><span className="dn">{c.d.getDate()}</span></button>)}
     </div>
-    {hasTop && <div className="tg-allday">
+    <div className="tg-allday">
       <div className="tg-gutter">{t('allDay')}</div>
-      {cols.map(c => <div key={c.d.getTime()} className="tg-adcell">
+      {cols.map(c => <div key={c.d.getTime()} className="tg-adcell" onClick={e => { if (e.target === e.currentTarget) onCreate(c.d, null, true); }}>
         {c.allDay.map(e => <EventChip key={e._key} e={e} />)}
-        {c.taskChips.map(x => <TaskChip key={x.id} task={x} />)}
+        {c.dayTasks.map(x => <TaskChip key={x.id} task={x} />)}
       </div>)}
-    </div>}
+    </div>
     <div className="tg-scroll" ref={scroller}>
-      <div className="tg-body" style={{ height: 24 * HOUR }}>
+      <div className="tg-body" ref={bodyRef} style={{ height: 24 * HOUR }}>
         <div className="tg-gutter">{hours.map(h => <div key={h} className="tg-hour" style={{ top: h * HOUR }}>{h ? F.hour(new Date(2000, 0, 1, h)) : ''}</div>)}</div>
-        {cols.map(c => <div key={c.d.getTime()} className="tg-col" onClick={e => {
-          if (e.target !== e.currentTarget) return;
-          const mins = Math.min(1410, Math.floor(e.nativeEvent.offsetY / HOUR * 2) * 30);
-          onSlot(new Date(c.d.getTime() + mins * MIN));
-        }}>
-          {c.timed.map(it => <button key={it.ev._key} className={'ev' + (it.ev._done ? ' done' : '')}
-            style={{ top: it.s / 60 * HOUR, height: (it.e - it.s) / 60 * HOUR - 2, insetInlineStart: `calc(${it.col} * 100% / ${it.cols})`, width: `calc(100% / ${it.cols} - 3px)`, '--c': it.ev.color || COLORS[0] }}
-            onClick={() => push({ type: 'event', id: it.ev.id })}>
-            <b dir="auto">{(it.ev.task_id || it.ev.note_id) && <Icon n="link" size={11} />}{it.ev.title}</b>
-            {it.e - it.s >= 45 && <small className="num">{F.time(it.ev._s)} – {F.time(it.ev._e)}</small>}
-          </button>)}
+        {cols.map((c, ci) => <div key={c.d.getTime()} className="tg-col" onPointerDown={e => { if (e.target === e.currentTarget) H.current.begin(e, { mode: 'create', col: ci }); }}>
+          {c.timed.map(it => {
+            const lifted = drag && drag.key === it.key && drag.mode !== 'create';
+            if (it.kind === 'task') {
+              const done = it.task.status === 'done';
+              return <div key={it.key} role="button" tabIndex={0} className={'tk' + (done ? ' done' : '') + (lifted ? ' lifted' : '')} style={pos(it)}
+                onKeyDown={e => { if (e.key === 'Enter') push({ type: 'tpreview', id: it.task.id }); }}
+                onPointerDown={e => H.current.begin(e, { mode: 'move', kind: 'task', item: it.task, key: it.key, col: ci, s: it.s, e: it.e, title: it.task.title, color: 'var(--muted)' })}>
+                <button className="mini-chk" onPointerDown={e => e.stopPropagation()} onClick={e => { e.stopPropagation(); act.toggleTask(it.task); }} aria-pressed={done} aria-label={it.task.title}><Icon n={done ? 'tick' : 'square'} size={13} /></button>
+                <span className="ellip" dir="auto">{it.task.title}</span>
+              </div>;
+            }
+            const ev = it.ev;
+            return <div key={it.key} role="button" tabIndex={0} className={'ev' + (ev._done ? ' done' : '') + (lifted ? ' lifted' : '')} style={{ ...pos(it), '--c': ev._color }}
+              onKeyDown={e => { if (e.key === 'Enter') push({ type: 'preview', id: ev.id, occStart: ev._s.getTime() }); }}
+              onPointerDown={e => H.current.begin(e, { mode: 'move', kind: 'event', item: ev, key: it.key, col: ci, s: it.s, e: it.e, title: ev.title, color: ev._color })}>
+              <b dir="auto">{(ev.task_id || ev.note_id) && <Icon n="link" size={11} />}{ev.repeat_rule && <Icon n="repeat" size={11} />}{ev.title}</b>
+              {it.e - it.s >= 40 && <small className="num">{F.time(ev._s)} – {F.time(ev._e)}</small>}
+              {it.realE >= it.s + 30 && <span className="rz" onPointerDown={e => { e.stopPropagation(); H.current.begin(e, { mode: 'resize', kind: 'event', item: ev, key: it.key, col: ci, s: it.s, e: it.e, title: ev.title, color: ev._color }); }} />}
+            </div>;
+          })}
+          {drag && drag.col === ci && drag.mode !== 'create' && <div className="ev ghost" style={{ top: drag.s / 60 * HOUR, height: Math.max(20, (drag.e - drag.s) / 60 * HOUR - 2), insetInlineStart: 0, width: 'calc(100% - 3px)', '--c': drag.color || COLORS[0] }}>
+            <b dir="auto">{drag.title}</b><small className="num">{fmtHM(drag.s)} – {fmtHM(drag.e)}</small>
+          </div>}
+          {drag && drag.col === ci && drag.mode === 'create' && <div className="sel" style={{ top: drag.s / 60 * HOUR, height: (drag.e - drag.s) / 60 * HOUR - 2 }}><small className="num">{fmtHM(drag.s)} – {fmtHM(drag.e)}</small></div>}
           {sameDay(c.d, now) && <div className="now" style={{ top: (now - startOfDay(now)) / MIN / 60 * HOUR }} />}
         </div>)}
       </div>
@@ -1160,7 +1643,7 @@ function TimeGrid({ days, events, chips, onSlot }) {
   </div>;
 }
 
-function MonthGrid({ days, events, chips, month, onDay }) {
+function MonthGrid({ days, events, tasks, month, onDay }) {
   const { F } = useApp();
   const today = new Date();
   return <div className="mg">
@@ -1168,7 +1651,7 @@ function MonthGrid({ days, events, chips, month, onDay }) {
     <div className="mg-grid">{days.map(d => {
       const de = addDays(d, 1);
       const evs = events.filter(e => e._s < de && e._e > d).sort((a, b) => (b.all_day - a.all_day) || (a._s - b._s));
-      const items = [...evs.map(e => ({ k: e._key, el: <EventChip e={e} /> })), ...chips.filter(x => sameDay(new Date(x.due_at), d)).map(x => ({ k: x.id, el: <TaskChip task={x} /> }))];
+      const items = [...evs.map(e => ({ k: e._key, el: <EventChip e={e} /> })), ...tasks.filter(x => sameDay(new Date(x.due_at), d)).map(x => ({ k: x.id, el: <TaskChip task={x} /> }))];
       return <div key={d.getTime()} className={'mcell' + (d.getMonth() !== month ? ' out' : '') + (sameDay(d, today) ? ' today' : '')} role="button" tabIndex={0}
         onClick={() => onDay(d)} onKeyDown={e => { if (e.key === 'Enter') onDay(d); }}>
         <span className="mnum">{d.getDate()}</span>
@@ -1177,6 +1660,226 @@ function MonthGrid({ days, events, chips, month, onDay }) {
       </div>;
     })}</div>
   </div>;
+}
+
+function ScheduleView({ days, events, tasks, onMore }) {
+  const { t, F, push, act } = useApp();
+  const today = new Date();
+  const groups = days.map(d => {
+    const de = addDays(d, 1);
+    return { d, evs: events.filter(e => e._s < de && e._e > d).sort((a, b) => (b.all_day - a.all_day) || (a._s - b._s)), tks: tasks.filter(x => sameDay(new Date(x.due_at), d)) };
+  }).filter(g => g.evs.length || g.tks.length || sameDay(g.d, today));
+  return <div className="sched">
+    {groups.map(g => <div key={g.d.getTime()} className={'sday' + (sameDay(g.d, today) ? ' today' : '')}>
+      <div className="sdate"><span className="wd">{F.wd(g.d)}</span><span className="dn">{g.d.getDate()}</span><span className="mo">{F.monShort(g.d)}</span></div>
+      <div className="sitems">
+        {!g.evs.length && !g.tks.length && <p className="hint" style={{ margin: '10px 0' }}>{t('nothingScheduled')}</p>}
+        {g.evs.map(e => <button key={e._key} className="sitem" style={{ '--c': e._color }} onClick={() => push({ type: 'preview', id: e.id, occStart: e._s.getTime() })}>
+          <i className="sbar" />
+          <span className="grow"><b dir="auto" className={e._done ? 'struck' : ''}>{e.title}</b><small>{e.all_day ? t('allDay') : `${F.time(e._s)} – ${F.time(e._e)}`}{e.category ? ` · ${e.category}` : ''}</small></span>
+          {(e.task_id || e.note_id) && <Icon n="link" size={14} />}{e.repeat_rule && <Icon n="repeat" size={14} />}
+        </button>)}
+        {g.tks.map(x => { const done = x.status === 'done'; return <div key={x.id} className="sitem">
+          <button className={'chk' + (done ? ' on' : '')} onClick={() => act.toggleTask(x)} aria-pressed={done} aria-label={x.title}>{done && <Icon n="tick" size={14} />}</button>
+          <button className="grow" style={{ textAlign: 'start' }} onClick={() => push({ type: 'tpreview', id: x.id })}><b dir="auto" className={done ? 'struck' : ''}>{x.title}</b><small>{isEndish(x.due_at) ? t('task') : `${t('task')} · ${F.time(new Date(x.due_at))}`}</small></button>
+        </div>; })}
+      </div>
+    </div>)}
+    <div style={{ textAlign: 'center', padding: 12 }}><button className="btn" onClick={onMore}>{t('loadMore')}</button></div>
+  </div>;
+}
+
+// ---------------- quick add / previews ----------------
+function QuickAdd({ m, hidden }) {
+  const { t, data, act, pop, replace, toast } = useApp();
+  const dd = (data.settings && data.settings.default_duration) || 60;
+  const cals = getCals(data);
+  const init = m.draft || {};
+  const s0 = new Date(init.start_at || nextHour(new Date()));
+  const [kind, setKind] = useState(init.kind || 'event');
+  const [title, setTitle] = useState('');
+  const [allDay, setAllDay] = useState(!!init.all_day);
+  const [start, setStart] = useState(s0);
+  const [end, setEnd] = useState(() => init.end_at ? new Date(init.end_at) : new Date(s0.getTime() + dd * MIN));
+  const [cal, setCal] = useState(() => { const last = localStorage.getItem('lastCal'); return last !== null && (last === '' || cals.some(c => c.name === last)) ? last : (cals[0] ? cals[0].name : ''); });
+  const [rule, setRule] = useState(null);
+  const [alerts, setAlerts] = useState(() => (data.settings && data.settings.default_alerts) || [10]);
+  const [prio, setPrio] = useState(0);
+  const [taskAlert, setTaskAlert] = useState(true);
+  const dur = Math.round((end - start) / MIN);
+  const setStartKeep = d => { setEnd(new Date(d.getTime() + (end - start))); setStart(d); };
+
+  const eventRow = () => {
+    const s = allDay ? startOfDay(start) : start, e = allDay ? addDays(startOfDay(start), 1) : end;
+    return { title: title.trim(), start_at: s.toISOString(), end_at: e.toISOString(), all_day: allDay, category: cal || null, color: null, repeat_rule: rule, alert_minutes: alerts, exdates: [], note_id: null, task_id: null };
+  };
+  const taskRow = () => ({ title: title.trim(), due_at: (allDay ? endOfDay(start) : start).toISOString(), priority: prio });
+  const save = async () => {
+    if (!title.trim()) return toast(t('needTitle'));
+    if (kind === 'event') {
+      if (!allDay && end <= start) return toast(t('endAfterStart'));
+      const r = await act.saveEvent(eventRow());
+      if (r) { localStorage.setItem('lastCal', cal); pop(); }
+    } else {
+      const r = await act.quickTask(taskRow(), taskAlert && !allDay);
+      if (r) pop();
+    }
+  };
+  const more = async () => {
+    if (kind === 'event') { localStorage.setItem('lastCal', cal); replace({ type: 'event', draft: eventRow() }); return; }
+    if (!title.trim()) return toast(t('needTitle'));
+    const r = await act.quickTask(taskRow(), taskAlert && !allDay);
+    if (r && r.id) replace({ type: 'task', id: r.id });
+  };
+
+  return <Sheet title={kind === 'event' ? t('newEvent') : t('newTask')} onClose={pop} hidden={hidden}
+    footer={<><button className="btn ghost" onClick={more}>{t('moreOptions')}</button><span className="spacer" /><button className="btn primary" onClick={save}>{t('save')}</button></>}>
+    <div className="seg full" style={{ marginBottom: 14 }}>
+      {['event', 'task'].map(k => <button key={k} className={kind === k ? 'on' : ''} onClick={() => setKind(k)}><Icon n={k === 'event' ? 'cal' : 'check'} size={16} />{t(k)}</button>)}
+    </div>
+    <input type="text" className="title-input" dir="auto" placeholder={kind === 'event' ? t('addTitle') : t('addTask')} value={title} onChange={e => setTitle(e.target.value)} autoFocus onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) save(); }} />
+    <label className="switch"><input type="checkbox" checked={allDay} onChange={e => setAllDay(e.target.checked)} />{t('allDay')}</label>
+    <div className="row">
+      <label className="field"><span>{kind === 'event' ? t('start') : t('due')}</span>
+        <input type={allDay ? 'date' : 'datetime-local'} value={allDay ? toDateInput(start) : toInput(start)} onChange={e => {
+          const d = fromInput(e.target.value); if (!d || isNaN(d)) return;
+          setStartKeep(allDay ? new Date(d.getTime() + (start - startOfDay(start))) : d);
+        }} /></label>
+      {kind === 'event' && !allDay && <label className="field"><span>{t('end')}</span>
+        <input type="datetime-local" value={toInput(end)} onChange={e => { const d = fromInput(e.target.value); if (d && !isNaN(d)) setEnd(d); }} /></label>}
+    </div>
+    {kind === 'event' && !allDay && <div className="chips-row" style={{ marginBottom: 14 }}>
+      {[15, 30, 45, 60, 90, 120].map(x => <button key={x} type="button" className={'pchip' + (dur === x ? ' on' : '')} onClick={() => setEnd(new Date(start.getTime() + x * MIN))}>{shortSpan(x, t)}</button>)}
+    </div>}
+    {kind === 'event' ? <>
+      <div className="field"><span>{t('calendarLbl')}</span><CalendarPicker value={cal} onChange={setCal} /></div>
+      <div className="field"><span>{t('repeat')}</span><RepeatPicker value={rule} onChange={setRule} start={start} /></div>
+      <div className="field"><span>{t('alerts')}</span><AlertEditor value={alerts} onChange={setAlerts} /></div>
+    </> : <>
+      <div className="field"><span>{t('priority')}</span><div className="seg">{[0, 1, 2, 3].map(p => <button key={p} className={prio === p ? 'on' : ''} onClick={() => setPrio(p)}>{t('p' + p)}</button>)}</div></div>
+      {!allDay && <label className="switch"><input type="checkbox" checked={taskAlert} onChange={e => setTaskAlert(e.target.checked)} />{t('alertAtDue')}</label>}
+    </>}
+  </Sheet>;
+}
+
+function ScopeModal({ m, hidden }) {
+  const { t, pop } = useApp();
+  const label = { one: 'thisEvent', following: 'thisAndFollowing', all: 'allEvents' };
+  return <Sheet title={m.title} onClose={pop} hidden={hidden}>
+    {m.options.map(o => <button key={o} className="linkrow" onClick={() => { pop(); m.onPick(o); }}>
+      <Icon n="repeat" size={18} /><span className="grow">{t(label[o])}</span><Icon n="right" size={16} flip />
+    </button>)}
+  </Sheet>;
+}
+
+function EventPreview({ m, hidden }) {
+  const { t, data, act, pop, push, replace, F, toast, lang } = useApp();
+  const ev = data.events.find(e => e.id === m.id);
+  if (!ev) return <Sheet title={t('event')} onClose={pop} hidden={hidden}><p className="empty">{t('notFound')}</p></Sheet>;
+  const len = new Date(ev.end_at) - new Date(ev.start_at);
+  const occS = m.occStart ? new Date(m.occStart) : new Date(ev.start_at), occE = new Date(occS.getTime() + len);
+  const cals = getCals(data);
+  const task = ev.task_id && data.tasks.find(x => x.id === ev.task_id);
+  const note = ev.note_id && data.notes.find(x => x.id === ev.note_id);
+  const rep = !!ev.repeat_rule;
+  const lastDay = addDays(occE, -1);
+  const when = ev.all_day
+    ? F.dateLong(occS) + (len > DAY ? ' – ' + F.dateLong(lastDay) : '')
+    : sameDay(occS, new Date(occE.getTime() - 1)) ? `${F.dateLong(occS)} · ${F.time(occS)} – ${F.time(occE)}` : `${F.dt(occS)} – ${F.dt(occE)}`;
+  const edit = () => replace({ type: 'event', id: ev.id, occStart: rep ? occS.getTime() : undefined });
+  const del = async () => {
+    if (!rep) { if (!confirm(t('confirmDelete'))) return; if (await act.deleteEvent(ev.id)) pop(); return; }
+    push({ type: 'scope', title: t('deleteEventQ'), options: ['one', 'following', 'all'], onPick: async sc => { if (await act.deleteOccurrence(ev, occS, sc)) pop(); } });
+  };
+  const dup = async () => { if (await act.duplicateEvent(ev)) { toast(t('duplicated')); pop(); } };
+  const sep = lang === 'ar' ? '، ' : ', ';
+  return <Sheet title={t('event')} onClose={pop} hidden={hidden}
+    footer={<>
+      <button className="btn danger ghost" onClick={del}><Icon n="trash" size={18} />{t('delete')}</button>
+      <span className="spacer" />
+      <button className="btn ghost" onClick={dup} aria-label={t('duplicate')}><Icon n="copy" size={18} /><span className="hide-sm">{t('duplicate')}</span></button>
+      <button className="btn primary" onClick={edit}><Icon n="edit" size={16} />{t('edit')}</button>
+    </>}>
+    <div className="pv-head">
+      <span className="pv-dot" style={{ background: evColor(ev, cals) }} />
+      <div className="grow">
+        <h2 className="pv-title" dir="auto">{ev.title}</h2>
+        <p className="pv-when">{when}</p>
+        {rep && <p className="pv-sub"><Icon n="repeat" size={15} />{describeRule(ev.repeat_rule, t, F)}</p>}
+        {ev.category && <p className="pv-sub"><Icon n="cal" size={15} />{ev.category}</p>}
+        {(ev.alert_minutes || []).length > 0 && <p className="pv-sub"><Icon n="bell" size={15} />{ev.alert_minutes.map(a => alertLabel(a, t)).join(sep)}</p>}
+      </div>
+    </div>
+    {task && <div className="linkrow">
+      <button className={'chk' + (task.status === 'done' ? ' on' : '')} onClick={() => act.toggleTask(task)} aria-pressed={task.status === 'done'} aria-label={t('markDone')}>{task.status === 'done' && <Icon n="tick" size={14} />}</button>
+      <button className={'grow ellip' + (task.status === 'done' ? ' struck' : '')} style={{ textAlign: 'start' }} dir="auto" onClick={() => push({ type: 'task', id: task.id })}>{task.title}</button>
+      <span className="muted">{t('task')}</span>
+    </div>}
+    {note && <button className="linkrow" onClick={() => push({ type: 'note', id: note.id })}><Icon n="note" size={18} /><span className="grow ellip" dir="auto">{note.title || t('untitled')}</span><span className="muted">{t('note')}</span></button>}
+    <div className="actions"><button className="btn" onClick={() => act.startTimer({ label: ev.title, task_id: ev.task_id, category: ev.category })}><Icon n="play" size={14} />{t('startTimer')}</button></div>
+  </Sheet>;
+}
+
+function TaskPreview({ m, hidden }) {
+  const { t, data, act, pop, push, replace, F } = useApp();
+  const task = data.tasks.find(x => x.id === m.id);
+  if (!task) return <Sheet title={t('task')} onClose={pop} hidden={hidden}><p className="empty">{t('notFound')}</p></Sheet>;
+  const done = task.status === 'done';
+  const d = task.due_at && new Date(task.due_at);
+  const kids = data.tasks.filter(x => x.parent_id === task.id);
+  const kd = kids.filter(x => x.status === 'done').length;
+  const del = async () => { if (!confirm(kids.length ? t('confirmDeleteTask') : t('confirmDelete'))) return; if (await act.deleteTask(task.id)) pop(); };
+  const block = () => {
+    const s = d && !isEndish(task.due_at) ? d : new Date(startOfDay(d || new Date()).getTime() + 9 * 60 * MIN);
+    replace({ type: 'event', draft: { title: task.title, task_id: task.id, start_at: s.toISOString(), end_at: new Date(s.getTime() + 60 * MIN).toISOString() } });
+  };
+  return <Sheet title={t('task')} onClose={pop} hidden={hidden}
+    footer={<>
+      <button className="btn danger ghost" onClick={del}><Icon n="trash" size={18} />{t('delete')}</button>
+      <span className="spacer" />
+      <button className="btn primary" onClick={() => replace({ type: 'task', id: task.id })}><Icon n="edit" size={16} />{t('edit')}</button>
+    </>}>
+    <div className="pv-head">
+      <button className={'chk' + (done ? ' on' : '')} onClick={() => act.toggleTask(task)} aria-pressed={done} aria-label={t('markDone')}>{done && <Icon n="tick" size={14} />}</button>
+      <div className="grow">
+        <h2 className={'pv-title' + (done ? ' struck' : '')} dir="auto">{task.title}</h2>
+        {d && <p className="pv-when">{isEndish(task.due_at) ? F.dateLong(d) : `${F.dateLong(d)} · ${F.time(d)}`}</p>}
+        {kids.length > 0 && <p className="pv-sub"><span className="prog"><i style={{ width: (kd / kids.length * 100) + '%' }} /></span>{kd}/{kids.length} {t('subtasks')}</p>}
+        {task.details && <p className="pv-sub" dir="auto" style={{ whiteSpace: 'pre-wrap' }}>{task.details}</p>}
+      </div>
+    </div>
+    <div className="actions">
+      <button className="btn" onClick={block}><Icon n="cal" size={16} />{t('timeBlock')}</button>
+      {d && <button className="btn ghost" onClick={async () => { if (await act.saveTask({ id: task.id, due_at: null })) pop(); }}><Icon n="x" size={16} />{t('removeFromCal')}</button>}
+      <button className="btn ghost" onClick={() => act.startTimer({ label: task.title, task_id: task.id })}><Icon n="play" size={14} />{t('startTimer')}</button>
+    </div>
+  </Sheet>;
+}
+
+function CalendarsModal({ m, hidden }) {
+  const { t, data, act, pop, toast } = useApp();
+  const [list, setList] = useState(() => getCals(data).map(c => ({ ...c, orig: c.name })));
+  const set = (i, patch) => setList(l => l.map((c, j) => j === i ? { ...c, ...patch } : c));
+  const save = async () => {
+    const clean = list.map(c => ({ ...c, name: c.name.trim() })).filter(c => c.name);
+    const names = clean.map(c => c.name);
+    if (new Set(names).size !== names.length) return toast(t('calDup'));
+    const renames = clean.filter(c => c.orig && c.orig !== c.name).map(c => [c.orig, c.name]);
+    if (await act.saveCalendars(clean.map(c => ({ name: c.name, color: c.color })), renames)) pop();
+  };
+  return <Sheet title={t('calendars')} onClose={pop} hidden={hidden}
+    footer={<><span className="spacer" /><button className="btn primary" onClick={save}>{t('save')}</button></>}>
+    {list.map((c, i) => <div key={i} className="cal-edit">
+      <div className="inline-row">
+        <i className="dot-c big" style={{ '--c': c.color }} />
+        <input type="text" dir="auto" value={c.name} placeholder={t('calName')} onChange={e => set(i, { name: e.target.value })} />
+        <button className="icon-btn" onClick={() => setList(l => l.filter((_, j) => j !== i))} aria-label={t('delete')}><Icon n="trash" size={18} /></button>
+      </div>
+      <div className="swatches">{COLORS.map(col => <button type="button" key={col} className={'sw' + (c.color === col ? ' on' : '')} style={{ '--c': col }} onClick={() => set(i, { color: col })} aria-label={col} />)}</div>
+    </div>)}
+    <button className="btn" onClick={() => setList(l => [...l, { name: '', color: COLORS[l.length % COLORS.length] }])}><Icon n="plus" size={18} />{t('newCal')}</button>
+    <p className="hint" style={{ marginTop: 12 }}>{t('calHint')}</p>
+  </Sheet>;
 }
 
 // ---------------- timer ----------------
@@ -1264,7 +1967,7 @@ function TimerView() {
 
 // ---------------- settings ----------------
 function SettingsView() {
-  const { t, lang, setLang, data, act, toast, F, session } = useApp();
+  const { t, lang, setLang, data, act, toast, F, session, push } = useApp();
   const s = data.settings || {};
   const [perm, setPerm] = useState(() => ('Notification' in window) ? Notification.permission : 'unsupported');
   const [subbed, setSubbed] = useState(false);
@@ -1307,6 +2010,16 @@ function SettingsView() {
         <label className="field"><span>{t('from')}</span><input type="time" value={(s.quiet_start || '').slice(0, 5)} onChange={e => act.saveSettings({ quiet_start: e.target.value || null })} /></label>
         <label className="field"><span>{t('to')}</span><input type="time" value={(s.quiet_end || '').slice(0, 5)} onChange={e => act.saveSettings({ quiet_end: e.target.value || null })} /></label>
       </div>
+    </section>
+    <section className="card">
+      <h2>{t('calendar')}</h2>
+      <div className="row">
+        <label className="field"><span>{t('defaultDuration')}</span>
+          <select value={s.default_duration || 60} onChange={e => act.saveSettings({ default_duration: Number(e.target.value) })}>
+            {[15, 30, 45, 60, 90, 120].map(x => <option key={x} value={x}>{shortSpan(x, t)}</option>)}
+          </select></label>
+      </div>
+      <div className="actions"><button className="btn" onClick={() => push({ type: 'cals' })}><Icon n="cal" size={18} />{t('manageCals')}</button></div>
     </section>
     <section className="card">
       <h2>{t('general')}</h2>
