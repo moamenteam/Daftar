@@ -343,6 +343,17 @@ select.auto,input.auto{width:auto !important;flex:none}
   .rz{height:16px}
   .tg{height:calc(100dvh - 300px - env(safe-area-inset-bottom))}
 }
+/* ===== tags ===== */
+.tagpill{display:inline-flex;align-items:center;height:18px;padding:0 7px;border-radius:999px;font-size:11px;font-weight:600;color:var(--c);background:color-mix(in srgb,var(--c) 16%,transparent);white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis}
+.pchip.tagchip.on{border-color:var(--c,var(--accent));background:color-mix(in srgb,var(--c,var(--accent)) 18%,var(--surface));color:var(--ink)}
+.pchip.tagchip.on .ic{color:var(--c,var(--accent))}
+.pchip.ghost{border-style:dashed;color:var(--muted);background:transparent}
+.fchip.sel{border-color:var(--c);background:color-mix(in srgb,var(--c) 18%,var(--surface));font-weight:600}
+.fchip .count{opacity:.6}
+.status-seg button{display:inline-flex;align-items:center;gap:6px}
+.status-seg button.on{color:var(--c)}
+.chk.doing{border-color:#3B6FD4;background:color-mix(in srgb,#3B6FD4 15%,transparent)}
+.pv-sub.meta{flex-wrap:wrap}
 @media (prefers-reduced-motion:reduce){ .sheet{animation:none} .dot{animation:none} .rot{transition:none} }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
@@ -368,6 +379,8 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').ca
 // ---------------- i18n ----------------
 const STR = {
   en: {
+    tags:'Tags', manageTags:'Edit tags', ongoing:'Ongoing', allTags:'All', newTag:'Add tag', tagName:'Tag name', tagDup:'Tag names must be different.', tagHint:'Tip: type #tag while adding a task, e.g. “Call supplier #urgent”.', addTaskHint:'Add a task (use #tag)',
+    tagTracking:'Need tracking', tagWaiting:'Waiting on others', tagUrgent:'Urgent', tagBlocked:'Blocked', tagDelegated:'Delegated', tagSomeday:'Someday',
     v_day:'Day', v_3day:'3 days', v_week:'Week', v_month:'Month', v_schedule:'Schedule', create:'Create', event:'Event', newTask:'New task', addTitle:'Add title', moreOptions:'More options', calendarLbl:'Calendar', calendars:'Calendars', manageCals:'Manage calendars', noCalendar:'Other', calDefault:'Calendar color', newCal:'Add calendar', calName:'Calendar name', calDup:'Calendar names must be different.', calHint:'Tap a calendar chip on the Calendar tab to show or hide it.',
     doesNotRepeat:'Does not repeat', weekdays:'Every workday (Sun–Thu)', weeklyOn:'Weekly on {d}', monthlyOn:'Monthly on day {n}', custom:'Custom…', every:'Every', daysU:'days', weeksU:'weeks', monthsU:'months', minutesU:'minutes', hoursU:'hours', beforeU:'before', ends:'Ends', never:'Never', onDate:'On date', afterN:'After', times:'times', everyNDays:'Every {n} days', everyNWeeks:'Every {n} weeks', everyNMonths:'Every {n} months', untilD:'until {d}', nTimes:'{n} times',
     thisEvent:'This event', thisAndFollowing:'This and following events', allEvents:'All events', editEventQ:'Save repeating event', deleteEventQ:'Delete repeating event', moveEventQ:'Move repeating event', edit:'Edit', duplicate:'Duplicate', duplicated:'Duplicated', moved:'Updated', alertAtDue:'Notify me at the due time', customAlert:'Custom…', weekBefore:'{n} week before', weekUnit:'wk', loadMore:'Show more', nothingScheduled:'Nothing planned', defaultDuration:'Default event length', removeFromCal:'Remove date', timeBlock:'Block time', markDone:'Mark done', jumpTo:'Go to date', cancel:'Cancel',
@@ -376,7 +389,7 @@ const STR = {
     today:'Today', day:'Day', week:'Week', month:'Month', allDay:'All day', prev:'Previous', next:'Next',
     newEvent:'New event', editEvent:'Event', title:'Title', start:'Start', end:'End', repeat:'Repeat', none:'None', daily:'Daily', weekly:'Weekly', monthly:'Monthly', color:'Color', alerts:'Alerts', addAlert:'Add alert', linkTo:'Link to', note:'Note', task:'Task', subtask:'Subtask', category:'Category', save:'Save', delete:'Delete', done:'Done', open:'Open', add:'Add', noLink:'Nothing', untitled:'Untitled', notFound:'This item no longer exists.',
     atStart:'At start time', minBefore:'{n} min before', hourBefore:'{n} h before', dayBefore:'{n} day before', minUnit:'min', hourUnit:'h', dayUnit:'day', startingNow:'Starting now', inX:'In {d}',
-    addTask:'Add a task', addSubtask:'Add subtask', subtasks:'Subtasks', details:'Details', due:'Due', priority:'Priority', status:'Status', todo:'To do', doing:'In progress', upcoming:'Upcoming', all:'All', completed:'Done', p0:'None', p1:'Low', p2:'Medium', p3:'High',
+    addTask:'Add a task', addSubtask:'Add subtask', subtasks:'Subtasks', details:'Details', due:'Due', priority:'Priority', status:'Status', todo:'To do', doing:'Ongoing', upcoming:'Upcoming', all:'All', completed:'Done', p0:'None', p1:'Low', p2:'Medium', p3:'High',
     addToCalendar:'Add to calendar', remindMe:'Remind me', startTimer:'Start timer', moveUp:'Move up', moveDown:'Move down', noTasks:'Nothing here. Add a task above.',
     newNote:'New note', searchNotes:'Search notes', noNotes:'No notes yet. Tap “New note” to write one.', pin:'Pin', unpin:'Unpin', tasksInNote:'Tasks in this note', writeHere:'Write here…',
     reminders:'Reminders', addReminder:'Add reminder', noReminders:'No reminders set.', in1h:'In 1 hour', tonight:'Tonight 9 PM', tomorrowAm:'Tomorrow 9 AM', orPick:'Or pick a time', futureTime:'Pick a time in the future.', reminderSet:'Reminder set', taskReminder:'Task reminder', noteReminder:'Note reminder',
@@ -385,6 +398,8 @@ const STR = {
     saved:'Saved', confirmDelete:'Delete this? This cannot be undone.', confirmDeleteTask:'Delete this task and all its subtasks?', testSent:'Test push queued. It arrives within a minute.', needTitle:'Add a title first.', endAfterStart:'End must be after start.',
   },
   ar: {
+    tags:'الوسوم', manageTags:'تعديل الوسوم', ongoing:'جارية', allTags:'الكل', newTag:'إضافة وسم', tagName:'اسم الوسم', tagDup:'يجب أن تكون أسماء الوسوم مختلفة.', tagHint:'نصيحة: اكتب #الوسم أثناء إضافة مهمة، مثل «اتصال بالمورد #عاجل».', addTaskHint:'أضف مهمة (استخدم #وسم)',
+    tagTracking:'تحتاج متابعة', tagWaiting:'بانتظار الآخرين', tagUrgent:'عاجل', tagBlocked:'متوقفة', tagDelegated:'مُسندة لغيري', tagSomeday:'لاحقًا',
     v_day:'يوم', v_3day:'3 أيام', v_week:'أسبوع', v_month:'شهر', v_schedule:'جدول', create:'إنشاء', event:'حدث', newTask:'مهمة جديدة', addTitle:'أضف عنوانًا', moreOptions:'خيارات أكثر', calendarLbl:'التقويم', calendars:'التقويمات', manageCals:'إدارة التقويمات', noCalendar:'أخرى', calDefault:'لون التقويم', newCal:'إضافة تقويم', calName:'اسم التقويم', calDup:'يجب أن تكون أسماء التقويمات مختلفة.', calHint:'اضغط على اسم التقويم في تبويب التقويم لإظهاره أو إخفائه.',
     doesNotRepeat:'لا يتكرر', weekdays:'كل يوم عمل (الأحد–الخميس)', weeklyOn:'أسبوعيًا يوم {d}', monthlyOn:'شهريًا يوم {n}', custom:'مخصص…', every:'كل', daysU:'أيام', weeksU:'أسابيع', monthsU:'أشهر', minutesU:'دقائق', hoursU:'ساعات', beforeU:'قبل', ends:'ينتهي', never:'أبدًا', onDate:'في تاريخ', afterN:'بعد', times:'مرات', everyNDays:'كل {n} أيام', everyNWeeks:'كل {n} أسابيع', everyNMonths:'كل {n} أشهر', untilD:'حتى {d}', nTimes:'{n} مرات',
     thisEvent:'هذا الحدث فقط', thisAndFollowing:'هذا الحدث والأحداث التالية', allEvents:'كل الأحداث', editEventQ:'حفظ حدث متكرر', deleteEventQ:'حذف حدث متكرر', moveEventQ:'نقل حدث متكرر', edit:'تعديل', duplicate:'تكرار', duplicated:'تم النسخ', moved:'تم التحديث', alertAtDue:'نبّهني في موعد الاستحقاق', customAlert:'مخصص…', weekBefore:'قبل {n} أسبوع', weekUnit:'أسبوع', loadMore:'عرض المزيد', nothingScheduled:'لا شيء مخطط', defaultDuration:'مدة الحدث الافتراضية', removeFromCal:'إزالة التاريخ', timeBlock:'حجز وقت', markDone:'تحديد كمنجز', jumpTo:'الانتقال إلى تاريخ', cancel:'إلغاء',
@@ -393,7 +408,7 @@ const STR = {
     today:'اليوم', day:'يوم', week:'أسبوع', month:'شهر', allDay:'طوال اليوم', prev:'السابق', next:'التالي',
     newEvent:'حدث جديد', editEvent:'الحدث', title:'العنوان', start:'البداية', end:'النهاية', repeat:'التكرار', none:'بدون', daily:'يوميًا', weekly:'أسبوعيًا', monthly:'شهريًا', color:'اللون', alerts:'التنبيهات', addAlert:'إضافة تنبيه', linkTo:'ربط بـ', note:'ملاحظة', task:'مهمة', subtask:'مهمة فرعية', category:'التصنيف', save:'حفظ', delete:'حذف', done:'تم', open:'فتح', add:'إضافة', noLink:'لا شيء', untitled:'بدون عنوان', notFound:'هذا العنصر لم يعد موجودًا.',
     atStart:'عند البدء', minBefore:'قبل {n} دقيقة', hourBefore:'قبل {n} ساعة', dayBefore:'قبل {n} يوم', minUnit:'دقيقة', hourUnit:'ساعة', dayUnit:'يوم', startingNow:'يبدأ الآن', inX:'بعد {d}',
-    addTask:'أضف مهمة', addSubtask:'أضف مهمة فرعية', subtasks:'المهام الفرعية', details:'التفاصيل', due:'موعد الاستحقاق', priority:'الأولوية', status:'الحالة', todo:'لم تبدأ', doing:'قيد التنفيذ', upcoming:'القادمة', all:'الكل', completed:'المنجزة', p0:'بدون', p1:'منخفضة', p2:'متوسطة', p3:'عالية',
+    addTask:'أضف مهمة', addSubtask:'أضف مهمة فرعية', subtasks:'المهام الفرعية', details:'التفاصيل', due:'موعد الاستحقاق', priority:'الأولوية', status:'الحالة', todo:'لم تبدأ', doing:'جارية', upcoming:'القادمة', all:'الكل', completed:'المنجزة', p0:'بدون', p1:'منخفضة', p2:'متوسطة', p3:'عالية',
     addToCalendar:'أضف إلى التقويم', remindMe:'ذكّرني', startTimer:'ابدأ المؤقت', moveUp:'نقل لأعلى', moveDown:'نقل لأسفل', noTasks:'لا شيء هنا. أضف مهمة بالأعلى.',
     newNote:'ملاحظة جديدة', searchNotes:'ابحث في الملاحظات', noNotes:'لا توجد ملاحظات بعد. اضغط «ملاحظة جديدة» للبدء.', pin:'تثبيت', unpin:'إلغاء التثبيت', tasksInNote:'مهام هذه الملاحظة', writeHere:'اكتب هنا…',
     reminders:'التذكيرات', addReminder:'إضافة تذكير', noReminders:'لا توجد تذكيرات.', in1h:'بعد ساعة', tonight:'الليلة 9 م', tomorrowAm:'غدًا 9 ص', orPick:'أو اختر وقتًا', futureTime:'اختر وقتًا في المستقبل.', reminderSet:'تم ضبط التذكير', taskReminder:'تذكير بمهمة', noteReminder:'تذكير بملاحظة',
@@ -752,7 +767,7 @@ function Main({ t, lang, setLang, session }) {
       saveNote: wrap(n => q(sb.from('notes').update({ ...pick(n, ['title', 'body', 'color', 'pinned']), updated_at: new Date().toISOString() }).eq('id', n.id))),
       deleteNote: wrap(id => q(sb.from('notes').delete().eq('id', id))),
       saveTask: wrap(tk => {
-        const row = pick(tk, ['title', 'details', 'status', 'priority', 'due_at', 'parent_id', 'note_id', 'position']);
+        const row = pick(tk, ['title', 'details', 'status', 'priority', 'due_at', 'parent_id', 'note_id', 'position', 'tags']);
         if (tk.id) return q(sb.from('tasks').update(row).eq('id', tk.id));
         return q(sb.from('tasks').insert({ ...row, position: row.position ?? Date.now() }).select().single());
       }),
@@ -782,6 +797,14 @@ function Main({ t, lang, setLang, session }) {
           await q(sb.from('reminders').insert({ task_id: saved.id, title: saved.title, body: tRef.current('taskReminder'), remind_at: saved.due_at }));
         }
         return saved;
+      }),
+      saveTags: wrap(async (list, renames, removed) => {
+        await q(sb.from('user_settings').update({ task_tags: list, updated_at: new Date().toISOString() }).eq('user_id', uid));
+        for (const tk of dataRef.current.tasks) {
+          if (!tk.tags || !tk.tags.length) continue;
+          const nt = [...new Set(tk.tags.map(n => { const r = renames.find(x => x[0] === n); return r ? r[1] : n; }).filter(n => !removed.includes(n)))];
+          if (JSON.stringify(nt) !== JSON.stringify(tk.tags)) await q(sb.from('tasks').update({ tags: nt }).eq('id', tk.id));
+        }
       }),
       saveCalendars: wrap(async (calendars, renames) => {
         await q(sb.from('user_settings').update({ calendars, updated_at: new Date().toISOString() }).eq('user_id', uid));
@@ -848,7 +871,7 @@ function Main({ t, lang, setLang, session }) {
 
 // ---------------- modal plumbing ----------------
 function ModalHost({ m, hidden }) {
-  const C = { event: EventModal, task: TaskModal, note: NoteModal, reminder: ReminderModal, quick: QuickAdd, preview: EventPreview, tpreview: TaskPreview, scope: ScopeModal, cals: CalendarsModal }[m.type];
+  const C = { event: EventModal, task: TaskModal, note: NoteModal, reminder: ReminderModal, quick: QuickAdd, preview: EventPreview, tpreview: TaskPreview, scope: ScopeModal, cals: CalendarsModal, tags: TagsModal }[m.type];
   if (!C) return null;
   return <div style={hidden ? { display: 'none' } : undefined}><C m={m} hidden={hidden} /></div>;
 }
@@ -1018,14 +1041,99 @@ function EventModal({ m, hidden }) {
   </Sheet>;
 }
 
+// ---------------- tags ----------------
+const STATUS_COLOR = { todo: '#5F7380', doing: '#3B6FD4', done: '#0F6B63' };
+const defaultTags = t => [
+  { name: t('tagTracking'), color: '#C98A12' },
+  { name: t('tagWaiting'), color: '#3B6FD4' },
+  { name: t('tagUrgent'), color: '#C24A3A' },
+  { name: t('tagBlocked'), color: '#8A4FA8' },
+  { name: t('tagDelegated'), color: '#3E8E41' },
+  { name: t('tagSomeday'), color: '#5F7380' },
+];
+const savedTags = data => (data.settings && Array.isArray(data.settings.task_tags) && data.settings.task_tags.length) ? data.settings.task_tags : null;
+const getTags = (data, t) => savedTags(data) || defaultTags(t);
+const tagColor = (tags, name) => (tags.find(x => x.name === name) || {}).color || '#5F7380';
+const normTag = s => s.toLowerCase().replace(/[\s_\-]+/g, '');
+
+function TagPills({ names, max = 3 }) {
+  const { t, data } = useApp();
+  const tags = getTags(data, t);
+  const list = names || [];
+  return <>{list.slice(0, max).map(n => <span key={n} className="tagpill" style={{ '--c': tagColor(tags, n) }} dir="auto">{n}</span>)}{list.length > max && <span>+{list.length - max}</span>}</>;
+}
+
+function TagPicker({ value, onChange }) {
+  const { t, data, act, push } = useApp();
+  const tags = getTags(data, t);
+  const v = value || [];
+  const toggle = name => {
+    if (!savedTags(data)) act.saveSettings({ task_tags: tags }); // lock in default names on first use
+    onChange(v.includes(name) ? v.filter(x => x !== name) : [...v, name]);
+  };
+  return <div className="chips-row">
+    {tags.map(tg => { const on = v.includes(tg.name); return <button type="button" key={tg.name} className={'pchip tagchip' + (on ? ' on' : '')} style={{ '--c': tg.color }} onClick={() => toggle(tg.name)} aria-pressed={on}>{on ? <Icon n="tick" size={14} /> : <i className="dot-c" />}<span dir="auto">{tg.name}</span></button>; })}
+    {v.filter(n => !tags.some(x => x.name === n)).map(n => <button type="button" key={n} className="pchip tagchip on" onClick={() => toggle(n)}><Icon n="tick" size={14} /><span dir="auto">{n}</span></button>)}
+    <button type="button" className="pchip ghost" onClick={() => push({ type: 'tags' })}><Icon n="edit" size={14} />{t('manageTags')}</button>
+  </div>;
+}
+
+function StatusSeg({ value, onChange }) {
+  const { t } = useApp();
+  return <div className="seg status-seg">{[['todo', 'todo'], ['doing', 'ongoing'], ['done', 'completed']].map(([k, l]) =>
+    <button key={k} type="button" className={value === k ? 'on' : ''} style={{ '--c': STATUS_COLOR[k] }} onClick={() => onChange(k)}><i className="dot-c" />{t(l)}</button>)}</div>;
+}
+
+function TagsModal({ m, hidden }) {
+  const { t, data, act, pop, toast } = useApp();
+  const [list, setList] = useState(() => getTags(data, t).map(c => ({ ...c, orig: c.name })));
+  const set = (i, patch) => setList(l => l.map((c, j) => j === i ? { ...c, ...patch } : c));
+  const save = async () => {
+    const clean = list.map(c => ({ ...c, name: c.name.trim() })).filter(c => c.name);
+    const names = clean.map(c => c.name);
+    if (new Set(names.map(normTag)).size !== names.length) return toast(t('tagDup'));
+    const renames = clean.filter(c => c.orig && c.orig !== c.name).map(c => [c.orig, c.name]);
+    const kept = new Set(clean.map(c => c.orig).filter(Boolean));
+    const removed = getTags(data, t).map(c => c.name).filter(n => !kept.has(n));
+    if (await act.saveTags(clean.map(c => ({ name: c.name, color: c.color })), renames, removed)) pop();
+  };
+  return <Sheet title={t('tags')} onClose={pop} hidden={hidden}
+    footer={<><span className="spacer" /><button className="btn primary" onClick={save}>{t('save')}</button></>}>
+    {list.map((c, i) => <div key={i} className="cal-edit">
+      <div className="inline-row">
+        <i className="dot-c big" style={{ '--c': c.color }} />
+        <input type="text" dir="auto" value={c.name} placeholder={t('tagName')} onChange={e => set(i, { name: e.target.value })} />
+        <button className="icon-btn" onClick={() => setList(l => l.filter((_, j) => j !== i))} aria-label={t('delete')}><Icon n="trash" size={18} /></button>
+      </div>
+      <div className="swatches">{COLORS.map(col => <button type="button" key={col} className={'sw' + (c.color === col ? ' on' : '')} style={{ '--c': col }} onClick={() => set(i, { color: col })} aria-label={col} />)}</div>
+    </div>)}
+    <button className="btn" onClick={() => setList(l => [...l, { name: '', color: COLORS[l.length % COLORS.length] }])}><Icon n="plus" size={18} />{t('newTag')}</button>
+    <p className="hint" style={{ marginTop: 12 }}>{t('tagHint')}</p>
+  </Sheet>;
+}
+
 // ---------------- tasks ----------------
-function AddTask({ parentId = null, noteId = null, dueAt = null }) {
-  const { t, act } = useApp();
+function AddTask({ parentId = null, noteId = null, dueAt = null, tags = null }) {
+  const { t, act, data } = useApp();
   const [v, setV] = useState('');
-  const add = async () => { const title = v.trim(); if (!title) return; setV(''); await act.saveTask({ title, parent_id: parentId, note_id: noteId, due_at: dueAt }); };
+  const add = async () => {
+    const all = getTags(data, t);
+    const found = [];
+    const title = v.replace(/#([^\s#]+)/g, (m0, w) => {
+      const n = normTag(w);
+      const tg = all.find(x => normTag(x.name) === n) || (all.filter(x => normTag(x.name).startsWith(n)).length === 1 ? all.find(x => normTag(x.name).startsWith(n)) : null);
+      if (tg) { found.push(tg.name); return ''; }
+      return m0;
+    }).replace(/\s+/g, ' ').trim();
+    if (!title) return;
+    setV('');
+    const tg = [...new Set([...(tags || []), ...found])];
+    if (tg.length && !savedTags(data)) act.saveSettings({ task_tags: all });
+    await act.saveTask({ title, parent_id: parentId, note_id: noteId, due_at: dueAt, tags: tg });
+  };
   return <div className="addrow">
     <Icon n="plus" size={18} />
-    <input type="text" dir="auto" value={v} placeholder={parentId ? t('addSubtask') : t('addTask')} onChange={e => setV(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) add(); }} enterKeyHint="done" />
+    <input type="text" dir="auto" value={v} placeholder={parentId ? t('addSubtask') : t('addTaskHint')} onChange={e => setV(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) add(); }} enterKeyHint="done" />
     {v.trim() && <button className="btn sm primary" onClick={add}>{t('add')}</button>}
   </div>;
 }
@@ -1036,7 +1144,7 @@ function TaskTree({ parentId = null, noteId = null }) {
   return <>{kids.map(k => <TaskRow key={k.id} task={k} />)}<AddTask parentId={parentId} noteId={parentId ? null : noteId} /></>;
 }
 
-function TaskRow({ task, showNote }) {
+function TaskRow({ task, showNote, showParent, flat }) {
   const { t, data, act, push, F } = useApp();
   const [open, setOpen] = useState(false);
   const kids = data.tasks.filter(x => x.parent_id === task.id).sort(byPos);
@@ -1045,53 +1153,69 @@ function TaskRow({ task, showNote }) {
   const ev = data.events.find(e => e.task_id === task.id);
   const rem = data.reminders.some(r => r.task_id === task.id);
   const note = showNote && task.note_id && data.notes.find(n => n.id === task.note_id);
+  const parent = showParent && task.parent_id && data.tasks.find(x => x.id === task.parent_id);
   const d = task.due_at && new Date(task.due_at);
   const endish = d && d.getHours() === 23 && d.getMinutes() === 59;
   const dueTxt = d ? (sameDay(d, new Date()) ? t('today') : F.date(d)) + (endish ? '' : ' ' + F.time(d)) : '';
   const overdue = d && !done && d < new Date();
+  const tags = task.tags || [];
+  const hasMeta = dueTxt || kids.length > 0 || ev || rem || note || parent || task.priority > 0 || tags.length || task.status === 'doing';
   return <>
     <div className="trow">
-      <button className={'chk' + (done ? ' on' : '')} onClick={() => act.toggleTask(task)} aria-label={task.title} aria-pressed={done}>{done && <Icon n="tick" size={14} />}</button>
+      <button className={'chk' + (done ? ' on' : '') + (task.status === 'doing' ? ' doing' : '')} onClick={() => act.toggleTask(task)} aria-label={task.title} aria-pressed={done}>{done && <Icon n="tick" size={14} />}</button>
       <button className="trow-main" onClick={() => push({ type: 'task', id: task.id })}>
         <span className={'ttl' + (done ? ' struck' : '')} dir="auto">{task.title}</span>
-        {(dueTxt || kids.length > 0 || ev || rem || note || task.priority > 0) && <span className="meta">
+        {hasMeta && <span className="meta">
+          {task.status === 'doing' && <span className="tagpill" style={{ '--c': STATUS_COLOR.doing }}>{t('ongoing')}</span>}
+          <TagPills names={tags} />
           {task.priority > 0 && <span className={'prio-' + task.priority}><Icon n="flag" size={13} /></span>}
           {dueTxt && <span className={overdue ? 'od' : ''}>{dueTxt}</span>}
           {kids.length > 0 && <span><span className="prog"><i style={{ width: (kd / kids.length * 100) + '%' }} /></span>{kd}/{kids.length}</span>}
           {ev && <span><Icon n="cal" size={13} />{F.time(new Date(ev.start_at))}</span>}
           {rem && <span><Icon n="bell" size={13} /></span>}
+          {parent && <span className="ellip" dir="auto"><Icon n="up" size={13} />{parent.title}</span>}
           {note && <span className="ellip" dir="auto"><Icon n="note" size={13} />{note.title || t('untitled')}</span>}
         </span>}
       </button>
-      {kids.length > 0 && <button className="icon-btn" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={t('subtasks')}><Icon n="down" size={18} className={'rot' + (open ? ' open' : '')} /></button>}
+      {!flat && kids.length > 0 && <button className="icon-btn" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={t('subtasks')}><Icon n="down" size={18} className={'rot' + (open ? ' open' : '')} /></button>}
     </div>
-    {open && <div className="subtree">{kids.map(k => <TaskRow key={k.id} task={k} />)}<AddTask parentId={task.id} /></div>}
+    {open && !flat && <div className="subtree">{kids.map(k => <TaskRow key={k.id} task={k} />)}<AddTask parentId={task.id} /></div>}
   </>;
 }
 
 function TasksView() {
   const { t, data } = useApp();
   const [filter, setFilter] = useState('today');
+  const [tag, setTag] = useState(null);
+  const tags = getTags(data, t);
   const now = new Date(), eod = addDays(startOfDay(now), 1);
-  const top = data.tasks.filter(x => !x.parent_id);
   const match = {
     today: x => x.status !== 'done' && x.due_at && new Date(x.due_at) < eod,
     upcoming: x => x.status !== 'done' && x.due_at && new Date(x.due_at) >= eod,
+    ongoing: x => x.status === 'doing',
     all: x => x.status !== 'done',
     completed: x => x.status === 'done',
   };
+  // With a tag selected, show every task (incl. subtasks) carrying it, as a flat list
+  const base = tag ? data.tasks.filter(x => (x.tags || []).includes(tag)) : data.tasks.filter(x => !x.parent_id);
   const sorter = filter === 'today' || filter === 'upcoming' ? (a, b) => new Date(a.due_at) - new Date(b.due_at)
     : filter === 'completed' ? (a, b) => new Date(b.completed_at || 0) - new Date(a.completed_at || 0) : byPos;
-  const list = top.filter(match[filter]).sort(sorter);
+  const list = base.filter(match[filter]).sort(sorter);
   const dueFor = filter === 'today' ? endOfDay(now) : filter === 'upcoming' ? endOfDay(addDays(now, 1)) : null;
+  const pickTag = n => { const next = tag === n ? null : n; setTag(next); if (next && (filter === 'today' || filter === 'upcoming')) setFilter('all'); };
+  const openCount = n => data.tasks.filter(x => x.status !== 'done' && (x.tags || []).includes(n)).length;
   return <div>
     <div className="page-head">
       <h1>{t('tasks')}</h1>
-      <div className="seg">{Object.keys(match).map(k => <button key={k} className={filter === k ? 'on' : ''} onClick={() => setFilter(k)}>{t(k)}{k !== 'completed' && <span className="count">{top.filter(match[k]).length}</span>}</button>)}</div>
+      <div className="seg">{Object.keys(match).map(k => <button key={k} className={filter === k ? 'on' : ''} onClick={() => setFilter(k)}>{t(k)}{k !== 'completed' && <span className="count">{base.filter(match[k]).length}</span>}</button>)}</div>
+    </div>
+    <div className="cal-filters">
+      <button className={'fchip' + (!tag ? ' sel' : '')} style={{ '--c': 'var(--muted)' }} onClick={() => setTag(null)}>{t('allTags')}</button>
+      {tags.map(tg => <button key={tg.name} className={'fchip' + (tag === tg.name ? ' sel' : '')} style={{ '--c': tg.color }} onClick={() => pickTag(tg.name)} aria-pressed={tag === tg.name}><i /><span dir="auto">{tg.name}</span><span className="count">{openCount(tg.name)}</span></button>)}
     </div>
     <div className="tlist">
-      {filter !== 'completed' && <AddTask dueAt={dueFor && dueFor.toISOString()} />}
-      {list.length ? list.map(x => <TaskRow key={x.id} task={x} showNote />) : <p className="empty">{t('noTasks')}</p>}
+      {filter !== 'completed' && <AddTask dueAt={dueFor && dueFor.toISOString()} tags={tag ? [tag] : null} />}
+      {list.length ? list.map(x => <TaskRow key={x.id} task={x} showNote showParent={!!tag} flat={!!tag} />) : <p className="empty">{t('noTasks')}</p>}
     </div>
   </div>;
 }
@@ -1137,10 +1261,9 @@ function TaskModal({ m, hidden }) {
     <textarea dir="auto" placeholder={t('details')} value={cur.details || ''} onChange={e => set('details', e.target.value)} />
     <div className="row">
       <label className="field"><span>{t('due')}</span><input type="datetime-local" value={cur.due_at ? toInput(new Date(cur.due_at)) : ''} onChange={e => set('due_at', e.target.value ? fromInput(e.target.value).toISOString() : null)} /></label>
-      <label className="field"><span>{t('status')}</span>
-        <select value={cur.status} onChange={e => set('status', e.target.value)}><option value="todo">{t('todo')}</option><option value="doing">{t('doing')}</option><option value="done">{t('completed')}</option></select>
-      </label>
     </div>
+    <div className="field"><span>{t('status')}</span><StatusSeg value={cur.status} onChange={v => set('status', v)} /></div>
+    <div className="field"><span>{t('tags')}</span><TagPicker value={cur.tags} onChange={v => set('tags', v)} /></div>
     <div className="field"><span>{t('priority')}</span>
       <div className="seg">{[0, 1, 2, 3].map(p => <button key={p} className={cur.priority === p ? 'on' : ''} onClick={() => set('priority', p)}>{t('p' + p)}</button>)}</div>
     </div>
@@ -1706,6 +1829,7 @@ function QuickAdd({ m, hidden }) {
   const [alerts, setAlerts] = useState(() => (data.settings && data.settings.default_alerts) || [10]);
   const [prio, setPrio] = useState(0);
   const [taskAlert, setTaskAlert] = useState(true);
+  const [ttags, setTtags] = useState([]);
   const dur = Math.round((end - start) / MIN);
   const setStartKeep = d => { setEnd(new Date(d.getTime() + (end - start))); setStart(d); };
 
@@ -1713,7 +1837,7 @@ function QuickAdd({ m, hidden }) {
     const s = allDay ? startOfDay(start) : start, e = allDay ? addDays(startOfDay(start), 1) : end;
     return { title: title.trim(), start_at: s.toISOString(), end_at: e.toISOString(), all_day: allDay, category: cal || null, color: null, repeat_rule: rule, alert_minutes: alerts, exdates: [], note_id: null, task_id: null };
   };
-  const taskRow = () => ({ title: title.trim(), due_at: (allDay ? endOfDay(start) : start).toISOString(), priority: prio });
+  const taskRow = () => ({ title: title.trim(), due_at: (allDay ? endOfDay(start) : start).toISOString(), priority: prio, tags: ttags });
   const save = async () => {
     if (!title.trim()) return toast(t('needTitle'));
     if (kind === 'event') {
@@ -1757,6 +1881,7 @@ function QuickAdd({ m, hidden }) {
       <div className="field"><span>{t('alerts')}</span><AlertEditor value={alerts} onChange={setAlerts} /></div>
     </> : <>
       <div className="field"><span>{t('priority')}</span><div className="seg">{[0, 1, 2, 3].map(p => <button key={p} className={prio === p ? 'on' : ''} onClick={() => setPrio(p)}>{t('p' + p)}</button>)}</div></div>
+      <div className="field"><span>{t('tags')}</span><TagPicker value={ttags} onChange={setTtags} /></div>
       {!allDay && <label className="switch"><input type="checkbox" checked={taskAlert} onChange={e => setTaskAlert(e.target.checked)} />{t('alertAtDue')}</label>}
     </>}
   </Sheet>;
@@ -1845,6 +1970,7 @@ function TaskPreview({ m, hidden }) {
         <h2 className={'pv-title' + (done ? ' struck' : '')} dir="auto">{task.title}</h2>
         {d && <p className="pv-when">{isEndish(task.due_at) ? F.dateLong(d) : `${F.dateLong(d)} · ${F.time(d)}`}</p>}
         {kids.length > 0 && <p className="pv-sub"><span className="prog"><i style={{ width: (kd / kids.length * 100) + '%' }} /></span>{kd}/{kids.length} {t('subtasks')}</p>}
+        {(task.status === 'doing' || (task.tags || []).length > 0) && <p className="pv-sub meta">{task.status === 'doing' && <span className="tagpill" style={{ '--c': STATUS_COLOR.doing }}>{t('ongoing')}</span>}<TagPills names={task.tags} max={10} /></p>}
         {task.details && <p className="pv-sub" dir="auto" style={{ whiteSpace: 'pre-wrap' }}>{task.details}</p>}
       </div>
     </div>
@@ -2019,7 +2145,7 @@ function SettingsView() {
             {[15, 30, 45, 60, 90, 120].map(x => <option key={x} value={x}>{shortSpan(x, t)}</option>)}
           </select></label>
       </div>
-      <div className="actions"><button className="btn" onClick={() => push({ type: 'cals' })}><Icon n="cal" size={18} />{t('manageCals')}</button></div>
+      <div className="actions"><button className="btn" onClick={() => push({ type: 'cals' })}><Icon n="cal" size={18} />{t('manageCals')}</button><button className="btn" onClick={() => push({ type: 'tags' })}><Icon n="flag" size={18} />{t('manageTags')}</button></div>
     </section>
     <section className="card">
       <h2>{t('general')}</h2>
