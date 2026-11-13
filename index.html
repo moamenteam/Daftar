@@ -379,6 +379,8 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').ca
 // ---------------- i18n ----------------
 const STR = {
   en: {
+    archive:'Archive', archived:'Done — moved to archive', archiveEmpty:'Finished tasks will appear here.', archiveHint:'Untick a task to bring it back.', clearArchive:'Clear', confirmClearArchive:'Delete all archived tasks? This cannot be undone.', allClear:'No open tasks. Add one above.', back:'Back',
+    iosStep:'Step needed:', permBlocked:'Notifications are blocked. On iPhone: Settings → Notifications → Daftar → Allow Notifications.',
     tags:'Tags', manageTags:'Edit tags', ongoing:'Ongoing', allTags:'All', newTag:'Add tag', tagName:'Tag name', tagDup:'Tag names must be different.', tagHint:'Tip: type #tag while adding a task, e.g. “Call supplier #urgent”.', addTaskHint:'Add a task (use #tag)',
     tagTracking:'Need tracking', tagWaiting:'Waiting on others', tagUrgent:'Urgent', tagBlocked:'Blocked', tagDelegated:'Delegated', tagSomeday:'Someday',
     v_day:'Day', v_3day:'3 days', v_week:'Week', v_month:'Month', v_schedule:'Schedule', create:'Create', event:'Event', newTask:'New task', addTitle:'Add title', moreOptions:'More options', calendarLbl:'Calendar', calendars:'Calendars', manageCals:'Manage calendars', noCalendar:'Other', calDefault:'Calendar color', newCal:'Add calendar', calName:'Calendar name', calDup:'Calendar names must be different.', calHint:'Tap a calendar chip on the Calendar tab to show or hide it.',
@@ -398,6 +400,8 @@ const STR = {
     saved:'Saved', confirmDelete:'Delete this? This cannot be undone.', confirmDeleteTask:'Delete this task and all its subtasks?', testSent:'Test push queued. It arrives within a minute.', needTitle:'Add a title first.', endAfterStart:'End must be after start.',
   },
   ar: {
+    archive:'الأرشيف', archived:'تم — نُقلت إلى الأرشيف', archiveEmpty:'ستظهر المهام المنجزة هنا.', archiveHint:'ألغِ التحديد لإرجاع المهمة.', clearArchive:'مسح', confirmClearArchive:'حذف كل المهام المؤرشفة؟ لا يمكن التراجع.', allClear:'لا توجد مهام مفتوحة. أضف مهمة بالأعلى.', back:'رجوع',
+    iosStep:'خطوة مطلوبة:', permBlocked:'الإشعارات محظورة. على الآيفون: الإعدادات ← الإشعارات ← دفتر ← السماح بالإشعارات.',
     tags:'الوسوم', manageTags:'تعديل الوسوم', ongoing:'جارية', allTags:'الكل', newTag:'إضافة وسم', tagName:'اسم الوسم', tagDup:'يجب أن تكون أسماء الوسوم مختلفة.', tagHint:'نصيحة: اكتب #الوسم أثناء إضافة مهمة، مثل «اتصال بالمورد #عاجل».', addTaskHint:'أضف مهمة (استخدم #وسم)',
     tagTracking:'تحتاج متابعة', tagWaiting:'بانتظار الآخرين', tagUrgent:'عاجل', tagBlocked:'متوقفة', tagDelegated:'مُسندة لغيري', tagSomeday:'لاحقًا',
     v_day:'يوم', v_3day:'3 أيام', v_week:'أسبوع', v_month:'شهر', v_schedule:'جدول', create:'إنشاء', event:'حدث', newTask:'مهمة جديدة', addTitle:'أضف عنوانًا', moreOptions:'خيارات أكثر', calendarLbl:'التقويم', calendars:'التقويمات', manageCals:'إدارة التقويمات', noCalendar:'أخرى', calDefault:'لون التقويم', newCal:'إضافة تقويم', calName:'اسم التقويم', calDup:'يجب أن تكون أسماء التقويمات مختلفة.', calHint:'اضغط على اسم التقويم في تبويب التقويم لإظهاره أو إخفائه.',
@@ -459,14 +463,25 @@ function alertLabel(m, t) {
 }
 const shortSpan = (m, t) => m < 60 ? `${m} ${t('minUnit')}` : m < 1440 ? `${+(m / 60).toFixed(2)} ${t('hourUnit')}` : m % 10080 === 0 ? `${m / 10080} ${t('weekUnit')}` : `${+(m / 1440).toFixed(2)} ${t('dayUnit')}`;
 
-// One reminder row per alert. Repeating events: the cron job rolls each row to the next occurrence.
+// One reminder row per alert. Repeating events get one row per upcoming occurrence (next 45 days),
+// topped up each day the app is opened, so the server only ever sends one-off reminders.
 function eventReminders(ev, t, F) {
-  return (ev.alert_minutes || []).map(m => {
-    const n = nextAlertTime(ev, m);
-    if (!n) return null;
-    const body = (m === 0 ? t('startingNow') : t('inX').replace('{d}', shortSpan(m, t))) + (ev.all_day ? '' : ` · ${F.time(n.occ)}`);
-    return { event_id: ev.id, title: ev.title, body, remind_at: n.at.toISOString(), repeat_rule: ev.repeat_rule || null, offset_minutes: m };
-  }).filter(Boolean);
+  const out = [];
+  const now = Date.now(), horizon = now + 45 * DAY;
+  const row = (m, at, occ) => ({ event_id: ev.id, title: ev.title, body: (m === 0 ? t('startingNow') : t('inX').replace('{d}', shortSpan(m, t))) + (ev.all_day ? '' : ` · ${F.time(occ)}`), remind_at: at.toISOString(), repeat_rule: null, offset_minutes: m });
+  (ev.alert_minutes || []).forEach(m => {
+    if (!ev.repeat_rule) { const n = nextAlertTime(ev, m); if (n) out.push(row(m, n.at, n.occ)); return; }
+    const ex = new Set(ev.exdates || []);
+    let c = 0, i = 0;
+    for (const s of occStarts(new Date(ev.start_at), ev.repeat_rule, new Date(now - 8 * DAY))) {
+      if (i++ > 3000 || c >= 45) break;
+      if (ex.has(dateKey(s))) continue;
+      const fire = s.getTime() + (ev.all_day ? 9 * 60 * MIN : 0) - m * MIN;
+      if (fire > horizon) break;
+      if (fire > now) { out.push(row(m, new Date(fire), s)); c++; }
+    }
+  });
+  return out;
 }
 
 // ---------------- recurrence ----------------
@@ -624,6 +639,7 @@ const ICONS = {
   play: 'M7 4l13 8-13 8z', stop: 'M6 6h12v12H6z',
   pin: 'M9 3h6l-1 6 4 4H6l4-4zM12 13v8',
   flag: 'M5 21V4h11l-2 4 2 4H5',
+  archive: 'M4 5h16v4H4zM6 9v10h12V9M10 13h4',
   tick: 'M5 12.5l4.5 4.5L19 7', square: 'M5 5h14v14H5z',
   copy: 'M9 9h11v11H9zM5 15H4V4h11v1',
   edit: 'M4 20h4L19 9l-4-4L4 16zM14 6l4 4',
@@ -719,6 +735,38 @@ function Main({ t, lang, setLang, session }) {
   }, [toast, uid]);
 
   useEffect(() => { loadAll(); }, [loadAll]);
+  const toppedUp = useRef(false);
+  useEffect(() => {
+    if (!ready || toppedUp.current) return;
+    toppedUp.current = true;
+    const today = dateKey(new Date());
+    if (localStorage.getItem('remTopup') === today) return;
+    (async () => {
+      try {
+        const reps = dataRef.current.events.filter(e => e.repeat_rule && (e.alert_minutes || []).length);
+        for (const ev of reps) {
+          await q(sb.from('reminders').delete().eq('event_id', ev.id).is('sent_at', null));
+          const rems = eventReminders(ev, tRef.current, FRef.current);
+          if (rems.length) await q(sb.from('reminders').insert(rems));
+        }
+        localStorage.setItem('remTopup', today);
+        if (reps.length) loadAll();
+      } catch (e) { console.warn('reminder top-up failed', e); }
+    })();
+  }, [ready, loadAll]);
+  // Keep this device registered: if notifications are allowed, make sure its subscription is saved.
+  useEffect(() => {
+    (async () => {
+      try {
+        if (!('Notification' in window) || Notification.permission !== 'granted' || !('serviceWorker' in navigator) || VAPID_PUBLIC_KEY.startsWith('YOUR')) return;
+        const reg = await navigator.serviceWorker.ready;
+        let sub = await reg.pushManager.getSubscription();
+        if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToU8(VAPID_PUBLIC_KEY) });
+        const j = sub.toJSON();
+        await sb.from('push_subscriptions').upsert({ user_id: uid, endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth }, { onConflict: 'endpoint' });
+      } catch (e) { console.warn('push register failed', e); }
+    })();
+  }, [uid]);
   useEffect(() => {
     const h = () => { if (document.visibilityState === 'visible') loadAll(); };
     document.addEventListener('visibilitychange', h);
@@ -773,6 +821,7 @@ function Main({ t, lang, setLang, session }) {
       }),
       toggleTask: wrap(tk => q(sb.from('tasks').update({ status: tk.status === 'done' ? 'todo' : 'done' }).eq('id', tk.id))),
       deleteTask: wrap(id => q(sb.from('tasks').delete().eq('id', id))),
+      deleteTasks: wrap(ids => q(sb.from('tasks').delete().in('id', ids))),
       moveTask: wrap(async (tk, dir) => {
         const sib = dataRef.current.tasks.filter(x => (x.parent_id || null) === (tk.parent_id || null) && (tk.parent_id || (x.note_id || null) === (tk.note_id || null))).sort(byPos);
         const i = sib.findIndex(x => x.id === tk.id), j = i + dir;
@@ -1144,8 +1193,8 @@ function TaskTree({ parentId = null, noteId = null }) {
   return <>{kids.map(k => <TaskRow key={k.id} task={k} />)}<AddTask parentId={parentId} noteId={parentId ? null : noteId} /></>;
 }
 
-function TaskRow({ task, showNote, showParent, flat }) {
-  const { t, data, act, push, F } = useApp();
+function TaskRow({ task, showNote, showParent, flat, archiveOnDone }) {
+  const { t, data, act, push, F, toast } = useApp();
   const [open, setOpen] = useState(false);
   const kids = data.tasks.filter(x => x.parent_id === task.id).sort(byPos);
   const done = task.status === 'done';
@@ -1162,7 +1211,7 @@ function TaskRow({ task, showNote, showParent, flat }) {
   const hasMeta = dueTxt || kids.length > 0 || ev || rem || note || parent || task.priority > 0 || tags.length || task.status === 'doing';
   return <>
     <div className="trow">
-      <button className={'chk' + (done ? ' on' : '') + (task.status === 'doing' ? ' doing' : '')} onClick={() => act.toggleTask(task)} aria-label={task.title} aria-pressed={done}>{done && <Icon n="tick" size={14} />}</button>
+      <button className={'chk' + (done ? ' on' : '') + (task.status === 'doing' ? ' doing' : '')} onClick={async () => { const r = await act.toggleTask(task); if (r && archiveOnDone && !done) toast(t('archived')); }} aria-label={task.title} aria-pressed={done}>{done && <Icon n="tick" size={14} />}</button>
       <button className="trow-main" onClick={() => push({ type: 'task', id: task.id })}>
         <span className={'ttl' + (done ? ' struck' : '')} dir="auto">{task.title}</span>
         {hasMeta && <span className="meta">
@@ -1184,38 +1233,38 @@ function TaskRow({ task, showNote, showParent, flat }) {
 }
 
 function TasksView() {
-  const { t, data } = useApp();
-  const [filter, setFilter] = useState('today');
-  const [tag, setTag] = useState(null);
-  const tags = getTags(data, t);
-  const now = new Date(), eod = addDays(startOfDay(now), 1);
-  const match = {
-    today: x => x.status !== 'done' && x.due_at && new Date(x.due_at) < eod,
-    upcoming: x => x.status !== 'done' && x.due_at && new Date(x.due_at) >= eod,
-    ongoing: x => x.status === 'doing',
-    all: x => x.status !== 'done',
-    completed: x => x.status === 'done',
+  const { t, data, act } = useApp();
+  const [archive, setArchive] = useState(false);
+  const top = data.tasks.filter(x => !x.parent_id);
+  const active = top.filter(x => x.status !== 'done').sort((a, b) => {
+    if (a.due_at && b.due_at) return new Date(a.due_at) - new Date(b.due_at);
+    if (a.due_at) return -1; if (b.due_at) return 1;
+    return byPos(a, b);
+  });
+  const done = top.filter(x => x.status === 'done').sort((a, b) => new Date(b.completed_at || 0) - new Date(a.completed_at || 0));
+  const clearAll = async () => {
+    if (!done.length || !confirm(t('confirmClearArchive'))) return;
+    await act.deleteTasks(done.map(x => x.id));
   };
-  // With a tag selected, show every task (incl. subtasks) carrying it, as a flat list
-  const base = tag ? data.tasks.filter(x => (x.tags || []).includes(tag)) : data.tasks.filter(x => !x.parent_id);
-  const sorter = filter === 'today' || filter === 'upcoming' ? (a, b) => new Date(a.due_at) - new Date(b.due_at)
-    : filter === 'completed' ? (a, b) => new Date(b.completed_at || 0) - new Date(a.completed_at || 0) : byPos;
-  const list = base.filter(match[filter]).sort(sorter);
-  const dueFor = filter === 'today' ? endOfDay(now) : filter === 'upcoming' ? endOfDay(addDays(now, 1)) : null;
-  const pickTag = n => { const next = tag === n ? null : n; setTag(next); if (next && (filter === 'today' || filter === 'upcoming')) setFilter('all'); };
-  const openCount = n => data.tasks.filter(x => x.status !== 'done' && (x.tags || []).includes(n)).length;
+  if (archive) return <div>
+    <div className="page-head">
+      <button className="icon-btn" onClick={() => setArchive(false)} aria-label={t('back')}><Icon n="left" flip /></button>
+      <h1>{t('archive')}</h1>
+      {done.length > 0 && <button className="btn ghost danger sm" onClick={clearAll}><Icon n="trash" size={16} />{t('clearArchive')}</button>}
+    </div>
+    <div className="tlist">
+      {done.length ? done.map(x => <TaskRow key={x.id} task={x} showNote />) : <p className="empty">{t('archiveEmpty')}</p>}
+    </div>
+    {done.length > 0 && <p className="hint" style={{ marginTop: 10 }}>{t('archiveHint')}</p>}
+  </div>;
   return <div>
     <div className="page-head">
       <h1>{t('tasks')}</h1>
-      <div className="seg">{Object.keys(match).map(k => <button key={k} className={filter === k ? 'on' : ''} onClick={() => setFilter(k)}>{t(k)}{k !== 'completed' && <span className="count">{base.filter(match[k]).length}</span>}</button>)}</div>
-    </div>
-    <div className="cal-filters">
-      <button className={'fchip' + (!tag ? ' sel' : '')} style={{ '--c': 'var(--muted)' }} onClick={() => setTag(null)}>{t('allTags')}</button>
-      {tags.map(tg => <button key={tg.name} className={'fchip' + (tag === tg.name ? ' sel' : '')} style={{ '--c': tg.color }} onClick={() => pickTag(tg.name)} aria-pressed={tag === tg.name}><i /><span dir="auto">{tg.name}</span><span className="count">{openCount(tg.name)}</span></button>)}
+      <button className="btn ghost sm" onClick={() => setArchive(true)}><Icon n="archive" size={18} />{t('archive')}{done.length > 0 && <span className="count">{done.length}</span>}</button>
     </div>
     <div className="tlist">
-      {filter !== 'completed' && <AddTask dueAt={dueFor && dueFor.toISOString()} tags={tag ? [tag] : null} />}
-      {list.length ? list.map(x => <TaskRow key={x.id} task={x} showNote showParent={!!tag} flat={!!tag} />) : <p className="empty">{t('noTasks')}</p>}
+      <AddTask />
+      {active.length ? active.map(x => <TaskRow key={x.id} task={x} showNote archiveOnDone />) : <p className="empty">{t('allClear')}</p>}
     </div>
   </div>;
 }
@@ -1317,7 +1366,7 @@ function ReminderModal({ m, hidden }) {
     <div className="row">
       <label className="field"><span>{t('orPick')}</span><input type="datetime-local" value={at} onChange={e => setAt(e.target.value)} /></label>
       <label className="field"><span>{t('repeat')}</span>
-        <select value={rule} onChange={e => setRule(e.target.value)}><option value="">{t('none')}</option><option value="DAILY">{t('daily')}</option><option value={WORKWEEK}>{t('weekdays')}</option><option value="WEEKLY">{t('weekly')}</option><option value="MONTHLY">{t('monthly')}</option></select>
+        <select value={rule} onChange={e => setRule(e.target.value)}><option value="">{t('none')}</option><option value="DAILY">{t('daily')}</option><option value="WEEKLY">{t('weekly')}</option><option value="MONTHLY">{t('monthly')}</option></select>
       </label>
     </div>
     <button className="btn primary" onClick={() => add()}><Icon n="plus" size={18} />{t('addReminder')}</button>
@@ -2118,9 +2167,11 @@ function SettingsView() {
     <section className="card">
       <h2>{t('notifications')}</h2>
       <p className="hint">{on ? t('notifOn') : t('notifOff')}</p>
-      {isIOS && !standalone && <p className="hint warn">{t('iosHint')}</p>}
+      {isIOS && !standalone && <p className="hint warn"><b>{t('iosStep')}</b> {t('iosHint')}</p>}
+      {perm === 'denied' && <p className="hint warn">{t('permBlocked')}</p>}
+      {perm === 'unsupported' && !(isIOS && !standalone) && <p className="hint warn">{t('pushUnsupported')}</p>}
       <div className="actions">
-        {!on && <button className="btn primary" onClick={turnOn}><Icon n="bell" size={18} />{t('turnOn')}</button>}
+        {!on && perm !== 'denied' && !(isIOS && !standalone) && <button className="btn primary" onClick={turnOn}><Icon n="bell" size={18} />{t('turnOn')}</button>}
         {perm === 'granted' && <button className="btn" onClick={testLocal}>{t('testLocal')}</button>}
         {on && <button className="btn" onClick={async () => { if (await act.testPush()) toast(t('testSent')); }}>{t('testPush')}</button>}
       </div>
